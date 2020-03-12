@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/calculator_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/calc_background"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_calculator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/MyActiobBarTheme"
+        app:titleTextColor="@android:color/white" />
+
+    <LinearLayout
+        android:id="@+id/calc_display_outline"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_firstCountry"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_divide_orange_24" />
+
+            <TextView
+                android:id="@+id/textView_firstAmount"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:gravity="center_vertical|right"
+                android:padding="20dp"
+                android:text="TextView"
+                android:textColor="@android:color/white"
+                android:textSize="30sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_secondCountry"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_divide_orange_24" />
+
+            <TextView
+                android:id="@+id/textView_secondC"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:gravity="center_vertical|right"
+                android:padding="20dp"
+                android:text="TextView"
+                android:textColor="@android:color/white"
+                android:textSize="30sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7">
+
+        <ImageButton
+            android:id="@+id/btn_dot"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_dot_white_8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_0"
+            app:layout_constraintTop_toBottomOf="@id/btn_1" />
+
+        <Button
+            android:id="@+id/btn_0"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="0"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@id/btn_dot"
+            app:layout_constraintLeft_toRightOf="@id/btn_dot"
+            app:layout_constraintRight_toLeftOf="@id/btn_del"
+            app:layout_constraintTop_toBottomOf="@id/btn_2" />
+
+        <ImageButton
+            android:id="@+id/btn_del"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_backspace_orange_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/btn_0"
+            app:layout_constraintRight_toLeftOf="@id/btn_equal"
+            app:layout_constraintTop_toBottomOf="@id/btn_3" />
+
+        <ImageButton
+            android:id="@+id/btn_equal"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_equal_orange_24"
+            app:layout_constraintBottom_toBottomOf="@id/btn_del"
+            app:layout_constraintLeft_toRightOf="@id/btn_del"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_add" />
+
+        <Button
+            android:id="@+id/btn_1"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="1"
+            app:layout_constraintBottom_toTopOf="@id/btn_dot"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_2"
+            app:layout_constraintTop_toBottomOf="@id/btn_4" />
+
+        <Button
+            android:id="@+id/btn_2"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="2"
+            app:layout_constraintBottom_toTopOf="@id/btn_0"
+            app:layout_constraintLeft_toRightOf="@id/btn_1"
+            app:layout_constraintRight_toLeftOf="@id/btn_3"
+            app:layout_constraintTop_toBottomOf="@id/btn_5" />
+
+        <Button
+            android:id="@+id/btn_3"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="3"
+            app:layout_constraintBottom_toTopOf="@id/btn_del"
+            app:layout_constraintLeft_toRightOf="@id/btn_2"
+            app:layout_constraintRight_toLeftOf="@id/btn_add"
+            app:layout_constraintTop_toBottomOf="@id/btn_6" />
+
+        <ImageButton
+            android:id="@+id/btn_add"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/btn_equal"
+            app:layout_constraintLeft_toRightOf="@id/btn_3"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_minus"
+            app:srcCompat="@drawable/ic_plus_orange_24" />
+
+        <Button
+            android:id="@+id/btn_4"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="4"
+            app:layout_constraintBottom_toTopOf="@id/btn_1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_5"
+            app:layout_constraintTop_toBottomOf="@id/btn_7" />
+
+        <Button
+            android:id="@+id/btn_5"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="5"
+            app:layout_constraintBottom_toTopOf="@id/btn_2"
+            app:layout_constraintLeft_toRightOf="@id/btn_4"
+            app:layout_constraintRight_toLeftOf="@id/btn_6"
+            app:layout_constraintTop_toBottomOf="@id/btn_8" />
+
+        <Button
+            android:id="@+id/btn_6"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="6"
+            app:layout_constraintBottom_toTopOf="@id/btn_3"
+            app:layout_constraintLeft_toRightOf="@id/btn_5"
+            app:layout_constraintRight_toLeftOf="@id/btn_minus"
+            app:layout_constraintTop_toBottomOf="@id/btn_9" />
+
+        <ImageButton
+            android:id="@+id/btn_minus"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/btn_add"
+            app:layout_constraintLeft_toRightOf="@id/btn_6"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_multiply"
+            app:srcCompat="@drawable/ic_minus_orange_24" />
+
+        <Button
+            android:id="@+id/btn_7"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="7"
+            app:layout_constraintBottom_toTopOf="@id/btn_4"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_8"
+            app:layout_constraintTop_toBottomOf="@id/btn_customize_tip" />
+
+        <Button
+            android:id="@+id/btn_8"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="8"
+            app:layout_constraintBottom_toTopOf="@id/btn_5"
+            app:layout_constraintLeft_toRightOf="@id/btn_7"
+            app:layout_constraintRight_toLeftOf="@id/btn_9"
+            app:layout_constraintTop_toBottomOf="@id/btn_customize_tip" />
+
+        <Button
+            android:id="@+id/btn_9"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="9"
+            app:layout_constraintBottom_toTopOf="@id/btn_6"
+            app:layout_constraintLeft_toRightOf="@id/btn_8"
+            app:layout_constraintRight_toLeftOf="@id/btn_multiply"
+            app:layout_constraintTop_toBottomOf="@id/btn_percentage" />
+
+        <ImageButton
+            android:id="@+id/btn_multiply"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/btn_minus"
+            app:layout_constraintLeft_toRightOf="@id/btn_9"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_divide"
+            app:srcCompat="@drawable/ic_multiply_orange_24" />
+
+        <Button
+            android:id="@+id/btn_customize_tip"
+            style="@style/MyCalculatorTextBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="Customize Tip"
+            app:layout_constraintBottom_toTopOf="@id/btn_7"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="@id/btn_8"
+            app:layout_constraintTop_toBottomOf="@id/btn_breakfast" />
+
+        <ImageButton
+            android:id="@+id/btn_percentage"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/btn_9"
+            app:layout_constraintLeft_toRightOf="@id/btn_customize_tip"
+            app:layout_constraintRight_toLeftOf="@id/btn_divide"
+            app:layout_constraintTop_toBottomOf="@id/btn_dinner"
+            app:srcCompat="@drawable/ic_percent_orange_24" />
+
+        <ImageButton
+            android:id="@+id/btn_divide"
+            style="@style/MyCalculatorNumberBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/btn_multiply"
+            app:layout_constraintLeft_toRightOf="@id/btn_percentage"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_normal"
+            app:srcCompat="@drawable/ic_divide_orange_24" />
+
+        <Button
+            android:id="@+id/btn_breakfast"
+            style="@style/MyCalculatorTextBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="Breakfast"
+            app:layout_constraintBottom_toTopOf="@id/btn_customize_tip"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/btn_lunch"
+            app:layout_constraintTop_toBottomOf="@id/spinner_triplist" />
+
+        <Button
+            android:id="@+id/btn_lunch"
+            style="@style/MyCalculatorTextBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="Lunch"
+            app:layout_constraintBottom_toTopOf="@id/btn_customize_tip"
+            app:layout_constraintLeft_toRightOf="@id/btn_breakfast"
+            app:layout_constraintRight_toLeftOf="@id/btn_dinner"
+            app:layout_constraintTop_toBottomOf="@id/spinner_triplist" />
+
+        <Button
+            android:id="@+id/btn_dinner"
+            style="@style/MyCalculatorTextBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="Dinner"
+            app:layout_constraintBottom_toTopOf="@id/btn_percentage"
+            app:layout_constraintLeft_toRightOf="@id/btn_lunch"
+            app:layout_constraintRight_toLeftOf="@id/btn_normal"
+            app:layout_constraintTop_toBottomOf="@id/spinner_triplist" />
+
+        <Button
+            android:id="@+id/btn_normal"
+            style="@style/MyCalculatorTextBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="Normal"
+            app:layout_constraintBottom_toTopOf="@id/btn_divide"
+            app:layout_constraintLeft_toRightOf="@id/btn_dinner"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_save" />
+
+        <Spinner
+            android:id="@+id/spinner_triplist"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/btn_lunch"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="@id/btn_dinner"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_save"
+            style="@style/MyCalculatorTextBtn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="Save"
+            app:layout_constraintBottom_toTopOf="@id/btn_normal"
+            app:layout_constraintLeft_toRightOf="@id/spinner_triplist"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
