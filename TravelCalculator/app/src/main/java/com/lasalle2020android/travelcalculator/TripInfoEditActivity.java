@@ -1,27 +1,27 @@
 package com.lasalle2020android.travelcalculator;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+public class TripInfoEditActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.calculator_layout);
+        setContentView(R.layout.trip_info_layout);
 
-        Toolbar mTopToolbar = findViewById(R.id.toolbar_calculator);
+        Toolbar mTopToolbar = findViewById(R.id.toolbar_tripinfo);
         setSupportActionBar(mTopToolbar);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.calculator_toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.tripinfo_toolbar_menu, menu);
         return true;
     }
 
@@ -30,17 +30,13 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_toTripList:
+            case R.id.action_saveTripInfo:
             {
-                Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), TripListActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+
             }
-                break;
+            break;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
 }

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ConstraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_tripinfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:theme="@style/MyActiobBarTheme"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/tripInfo_tripName_title"
+        style="@style/FieldTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/text_tripname"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_tripinfo" />
+
+    <EditText
+        android:id="@+id/edittext_tripinfo_tripname"
+        style="@style/SearchBarText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:ems="10"
+        android:hint="@string/text_tripname"
+        android:inputType="textPersonName"
+        app:layout_constraintLeft_toLeftOf="@id/tripInfo_tripName_title"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tripInfo_tripName_title" />
+
+    <TextView
+        android:id="@+id/tripInfo_travelcountry_title"
+        style="@style/FieldTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/text_travelcountry"
+        app:layout_constraintLeft_toLeftOf="@id/edittext_tripinfo_tripname"
+        app:layout_constraintTop_toBottomOf="@id/edittext_tripinfo_tripname" />
+
+    <Spinner
+        android:id="@+id/spinner_tripinfo_countrylist"
+        style="@style/SearchBarText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintLeft_toLeftOf="@id/tripInfo_travelcountry_title"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tripInfo_travelcountry_title" />
+
+    <TextView
+        android:id="@+id/tripInfo_travelcountry_tax_title"
+        style="@style/FieldTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/text_travelcountry_tax"
+        app:layout_constraintLeft_toLeftOf="@id/spinner_tripinfo_countrylist"
+        app:layout_constraintTop_toBottomOf="@id/spinner_tripinfo_countrylist" />
+
+    <EditText
+        android:id="@+id/editText_tripinfo_travelcountry_tax"
+        style="@style/SearchBarText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:ems="10"
+        android:hint="@string/text_travelcountry_tax"
+        android:inputType="number"
+        app:layout_constraintLeft_toLeftOf="@id/tripInfo_travelcountry_tax_title"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tripInfo_travelcountry_tax_title" />
+
+    <TextView
+        android:id="@+id/tripInfo_bf_tip_title"
+        style="@style/FieldTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/text_breakfast_tip"
+        app:layout_constraintLeft_toLeftOf="@id/editText_tripinfo_travelcountry_tax"
+        app:layout_constraintTop_toBottomOf="@id/editText_tripinfo_travelcountry_tax" />
+
+    <EditText
+        android:id="@+id/editText_tripinfo_bf_tip"
+        style="@style/SearchBarText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:ems="10"
+        android:hint="@string/text_breakfast_tip"
+        android:inputType="number"
+        app:layout_constraintLeft_toLeftOf="@id/tripInfo_bf_tip_title"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tripInfo_bf_tip_title" />
+
+    <TextView
+        android:id="@+id/tripInfo_lunch_tip_title"
+        style="@style/FieldTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/text_lunch_tip"
+        app:layout_constraintLeft_toLeftOf="@id/editText_tripinfo_bf_tip"
+        app:layout_constraintTop_toBottomOf="@id/editText_tripinfo_bf_tip" />
+
+    <EditText
+        android:id="@+id/editText_tripinfo_lunch_tip"
+        style="@style/SearchBarText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:ems="10"
+        android:hint="@string/text_lunch_tip"
+        android:inputType="number"
+        app:layout_constraintLeft_toLeftOf="@id/tripInfo_lunch_tip_title"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tripInfo_lunch_tip_title" />
+
+    <TextView
+        android:id="@+id/tripInfo_dinner_tip_title"
+        style="@style/FieldTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/text_dinner_tip"
+        app:layout_constraintLeft_toLeftOf="@id/editText_tripinfo_lunch_tip"
+        app:layout_constraintTop_toBottomOf="@id/editText_tripinfo_lunch_tip" />
+
+    <EditText
+        android:id="@+id/editText_tripinfo_dinner_tip"
+        style="@style/SearchBarText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:ems="10"
+        android:hint="@string/text_dinner_tip"
+        android:inputType="number"
+        app:layout_constraintLeft_toLeftOf="@id/tripInfo_dinner_tip_title"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tripInfo_dinner_tip_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
