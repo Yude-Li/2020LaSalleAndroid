@@ -1,24 +1,18 @@
 package com.lasalle2020android.travelcalculator;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Movie;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,10 +43,7 @@ public class TripListActivity extends AppCompatActivity {
         tripList = new ArrayList<>();
         // Get trip list from Db
         //tripList = TripInfoModel.createContactsList(20);
-        adapter = new RecycleViewAdapter(tripList);
-        tripListView.setAdapter(adapter);
-        tripListView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewOnTouchListener();
+
 
         GetListFromDb();
         PrepareListView();
@@ -69,7 +60,7 @@ public class TripListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Button action for actionBar(toolBar)
-        int id = item.getItemId(); 
+        int id = item.getItemId();
 
         switch (id) {
             case R.id.action_addTrip:
@@ -102,7 +93,18 @@ public class TripListActivity extends AppCompatActivity {
     private void GetListFromDb()
     {
         for (int i=0 ; i < 5; i++) {
+            TripInfoModel trip = new TripInfoModel();
 
+            trip.setId(i);
+            trip.setTripName("Test" + String.valueOf(i));
+            trip.setStartDate("20200315");
+            trip.setEndDate("20200318");
+            trip.setTax(15);
+            trip.setBreakfastTip(15);
+            trip.setLunchTip(18);
+            trip.setDinnerTip(20);
+
+            tripList.add(trip);
         }
     }
 
@@ -119,11 +121,19 @@ public class TripListActivity extends AppCompatActivity {
 //                }
 //            }
 //        );
+        adapter = new RecycleViewAdapter(tripList);
+        tripListView.setAdapter(adapter);
+        tripListView.setLayoutManager(new LinearLayoutManager(this));
+
+        Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.recycler_divider);
+        tripListView.addItemDecoration(new MyDividerItemDecoration(this, dividerDrawable));
+
+        recyclerViewOnTouchListener();
         adapter.notifyDataSetChanged();
     }
 
     private void showActionsDialog(final int position) {
-        CharSequence colors[] = new CharSequence[]{"Edit", "Delete"};
+        CharSequence colors[] = new CharSequence[]{getString(R.string.text_edit), getString(R.string.text_delete)};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose option");
