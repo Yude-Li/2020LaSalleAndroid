@@ -42,6 +42,11 @@
             android:name="com.lasalle2020android.travelcalculator.RecordListActivity"
             android:hardwareAccelerated="false">
         </activity>
+
+        <activity
+            android:name="com.lasalle2020android.travelcalculator.UserSettingActivity"
+            android:hardwareAccelerated="false">
+        </activity>
     </application>
 
 </manifest>
