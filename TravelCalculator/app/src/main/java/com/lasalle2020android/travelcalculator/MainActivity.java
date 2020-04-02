@@ -1,14 +1,18 @@
 package com.lasalle2020android.travelcalculator;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    Button btnSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar mTopToolbar = findViewById(R.id.toolbar_calculator);
         setSupportActionBar(mTopToolbar);
+
+        btnSave = findViewById(R.id.btn_save);
+        btnSave.setOnClickListener(this);
     }
 
     @Override
@@ -38,9 +45,31 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
                 break;
+            case R.id.action_toSetting:
+            {
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), UserSettingActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+            break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.btn_save:
+            {
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), RecordInfoEditActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+            break;
+        }
+    }
 }
