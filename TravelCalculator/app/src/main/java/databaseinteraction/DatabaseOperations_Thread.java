@@ -86,6 +86,9 @@ this.mDatabaseOperationNotifier=mDatabaseOperationNotifier;
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        // All the progress spinner showing goes here
+
+
     }
 
     @Override
