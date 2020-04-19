@@ -11,7 +11,7 @@ import java.util.List;
 
 import Model.TripInfoModel;
 
-public class DatabaseHelper  extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database Version
     private static final int DATABASE_VERSION = 1;

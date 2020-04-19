@@ -1,4 +1,4 @@
-package com.lasalle2020android.travelcalculator;
+package ViewUsage;
 
 import android.content.Context;
 import android.content.res.Resources;

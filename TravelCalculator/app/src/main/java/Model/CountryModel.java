@@ -4,10 +4,11 @@ public class CountryModel {
 
     private int Id;
     private int countryNum;
-    private int countryCode;
+    private String countryCode;
     private String displayName;
     private String currencyCode;
     private float currency;
+
 
     public int getId() {
         return Id;
@@ -25,11 +26,11 @@ public class CountryModel {
         this.countryNum = countryNumber;
     }
 
-    public int getCountryCode() {
+    public String getCountryCode() {
         return countryCode;
     }
 
-    public void setCountryCode(int code) {
+    public void setCountryCode(String code) {
         this.countryCode = code;
     }
 
