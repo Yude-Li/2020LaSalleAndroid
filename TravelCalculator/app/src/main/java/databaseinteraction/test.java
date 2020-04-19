@@ -1,4 +1,0 @@
-package databaseinteraction;
-
-class test {
-}
