@@ -15,6 +15,18 @@ Get all currency: https://free.currconv.com/api/v7/currencies?apiKey=a307308d106
 https://www.currencyconverterapi.com/docs
 */
 
+
+
+/*
+The api provided by Eurpean Central Bank
+
+GET https://api.exchangeratesapi.io/latest?symbols=USD,GBP
+
+
+
+ */
+
+
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -28,29 +40,33 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import callbacks.ServerResponseNotifier;
 import commonutilities.ComponentInfo;
 
 public class HttpServiceThread extends Thread {
 
     private Context ctx;
     private ComponentInfo componentInfo;
+    private  ServerResponseNotifier serverResponseNotifier;
 
     private HttpURLConnection connection;
     int requestNo;
     private Handler mHandler;
     private boolean interupt = false;
-    private String webResponse = "", bodyData = "", apiName = "", baseUrl = "";
+    private String webResponse = "", bodyData = "", apiName = "", baseUrl = "http://api.exchangeratesapi.io/latest?symbols=";
 
     public enum ActionMode {
         UPDATE_CURRENCY,
         CONVERT_CURRENCY
     }
 
-    public HttpServiceThread(ComponentInfo componentInfo, Context ctx, Handler mHandler, String body, int requestNo) {
+    public HttpServiceThread(ComponentInfo componentInfo, Context ctx, ServerResponseNotifier mHandler, String body, int requestNo) {
         this.componentInfo = componentInfo;
 
         this.ctx = ctx;
-        this.mHandler = mHandler;
+        //this.mHandler = mHandler;
+        this.serverResponseNotifier = mHandler;
+        this.bodyData=body;
 
         this.requestNo = requestNo;
     }
@@ -65,11 +81,12 @@ public class HttpServiceThread extends Thread {
 
     private void postMessage(String webResponse, int requestNo) {
         if (componentInfo.isActivityRunning) {
-            Message msg = new Message();
-            msg.obj = webResponse;
-            msg.arg1 = requestNo;
-            mHandler.sendMessage(msg);
+//            Message msg = new Message();
+//            msg.obj = webResponse;
+//            msg.arg1 = requestNo;
+//            mHandler.sendMessage(msg);
             // serverResponse.onServerResponse(message, requestNo);
+            serverResponseNotifier.onServerResponseRecieved(webResponse, 200, false);
         }
     }
 
@@ -90,7 +107,8 @@ public class HttpServiceThread extends Thread {
 
                     Thread.sleep(2000);
                     System.setProperty("http.keepAlive", "false");
-                    java.net.URL url = new URL(baseUrl + apiName);
+                    //java.net.URL url = new URL(baseUrl + apiName);
+                    java.net.URL url = new URL(baseUrl + bodyData);
 
                     try {
                         connection = (HttpURLConnection) url.openConnection();
@@ -98,27 +116,30 @@ public class HttpServiceThread extends Thread {
                         // TODO Auto-generated catch block
                         e1.printStackTrace();
                     }
-                    connection.setDoOutput(true);          //    setDoOutput(true) is used with POST to allow sending a body via the connection
-                    connection.setDoInput(true);           //    doInput flag to true indicates that the application intends to read data from the URL  Coonection,,,setDoOutput(true) is used for POST and PUT requests. If it is false then it is for using GET requests
-                    connection.setUseCaches(false);        //   the connection is allowed to use whatever caches it can. If false, caches are to be ignored
+                   // connection.setDoOutput(true);          //    setDoOutput(true) is used with POST to allow sending a body via the connection
+                  //  connection.setDoInput(true);           //    doInput flag to true indicates that the application intends to read data from the URL  Coonection,,,setDoOutput(true) is used for POST and PUT requests. If it is false then it is for using GET requests
+                  //  connection.setUseCaches(false);        //   the connection is allowed to use whatever caches it can. If false, caches are to be ignored
                     connection.setConnectTimeout(60000);
-                    connection.setRequestMethod("POST");
+                    //connection.setRequestMethod("POST");
+                   // connection.setRequestMethod("GET");
 
                     //   if ( Build.VERSION.SDK_INT > 13) {
                     //   connection.setRequestProperty("Connection", "close"); }
 
-                    connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                  //  connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
                     // connection.setRequestProperty("auth_token", Token);
                     // conn.setRequestProperty("Content-Type",
                     // "application/x-www-form-urlencoded;charset=UTF-8");
-                    OutputStream out = null;
-                    out = connection.getOutputStream();
-                    String body = bodyData;
-                    out.write(body.getBytes());
-                    out.close();
+//                    OutputStream out = null;
+//                    out = connection.getOutputStream();
+//                    String body = bodyData;
+//                    out.write(body.getBytes());
+//                    out.close();
                     connection.connect();
                     InputStream inputStream = null;
                     inputStream = connection.getInputStream();
+                    //readStream(inputStream);
+
                     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                     String str;
                     StringBuilder stringBuilder = new StringBuilder();

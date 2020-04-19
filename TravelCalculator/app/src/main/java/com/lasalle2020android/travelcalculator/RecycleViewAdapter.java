@@ -3,7 +3,6 @@ package com.lasalle2020android.travelcalculator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +61,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         // Get the country icon from database (or maybe drawable)
         Bitmap bitmap = BitmapFactory.decodeFile("");
         ImageView imgCountry = viewHolder.countryImg;
-        imgCountry.setImageResource(R.drawable.circle_canada);
+        imgCountry.setImageBitmap(bitmap);
 
         TextView textViewName = viewHolder.tripNameTextView;
         textViewName.setText(tripInfo.getTripName());

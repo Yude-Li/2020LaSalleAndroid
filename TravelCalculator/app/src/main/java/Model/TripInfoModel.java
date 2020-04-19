@@ -1,18 +1,10 @@
 package Model;
 
-public class TripInfoModel {
+public class TripInfoModel  {
 
-    public static final String TABLE_NAME = "trips";
 
-    public static final String COLUMN_ID = "Id";
-    public static final String COLUMN_TRIPNAME = "tripName";
-    public static final String COLUMN_TRAVELCOUNTRY = "travelCountry";
-    public static final String COLUMN_STARTDATE = "startDate";
-    public static final String COLUMN_ENDDATE = "endDate";
-    public static final String COLUMN_TAX = "tax";
-    public static final String COLUMN_BREAKFAST_TIP = "breakfastTip";
-    public static final String COLUMN_LUNCH_TIP = "lunchTip";
-    public static final String COLUMN_DINNER_TIP = "dinnerTip";
+//TripPreferenceModel
+
 
     private int Id;
     private String tripName;

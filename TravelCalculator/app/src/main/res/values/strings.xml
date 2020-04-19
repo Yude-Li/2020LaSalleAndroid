@@ -13,14 +13,4 @@
     <string name="text_dinner">Dinner</string>
     <string name="text_custom_tip_percent">Custom Tips %</string>
 
-    <string name="text_delete">Delete</string>
-    <string name="text_edit">Edit</string>
-    <string name="text_RealtimeUpdateCurrency">Realtime Update Currency</string>
-
-    <string name="text_recordname">Record Name</string>
-    <string name="currency">0.00</string>
-    <string name="date_title">Date</string>
-    <string name="trip_title">Trip</string>
-    <string name="desc_title">Description</string>
-
 </resources>
