@@ -169,6 +169,16 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
     }
 
     @Override
+    public void onDB_BootCompleted(boolean isSuccess) {
+
+    }
+
+    @Override
+    public void onDeletePerformed(boolean isSuccess) {
+
+    }
+
+    @Override
     public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
         tripList = mAllTrips;
         adapter.notifyDataSetChanged();

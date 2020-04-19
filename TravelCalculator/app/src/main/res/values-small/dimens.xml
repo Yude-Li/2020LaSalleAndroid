@@ -3,36 +3,36 @@
   <dimen name="cp_dialog_width">200dp</dimen>
   <dimen name="cp_dialog_height">300dp</dimen>
 
-  <dimen name="textview_textsize_entry_one">15sp</dimen>
-  <dimen name="textview_textsize_entry_two">15sp</dimen>
+  <dimen name="textview_textsize_entry_one">10sp</dimen>
+  <dimen name="textview_textsize_entry_two">10sp</dimen>
 
-  <dimen name="button_breakfast_textsize">15sp</dimen>
-  <dimen name="button_lunch_textsize">15sp</dimen>
-  <dimen name="button_dinner_textsize">15sp</dimen>
-  <dimen name="button_normal_textsize">15sp</dimen>
-  <dimen name="button_customizetip_textsize">15sp</dimen>
-  <dimen name="button_save_textsize">15sp</dimen>
-  <dimen name="button_one_textsize">15sp</dimen>
-  <dimen name="button_two_textsize">15sp</dimen>
-  <dimen name="button_three_textsize">15sp</dimen>
-  <dimen name="button_four_textsize">15sp</dimen>
-  <dimen name="button_five_textsize">15sp</dimen>
-  <dimen name="button_six_textsize">15sp</dimen>
-  <dimen name="button_seven_textsize">15sp</dimen>
-  <dimen name="button_eight_textsize">15sp</dimen>
-  <dimen name="button_nine_textsize">15sp</dimen>
-  <dimen name="button_zero_textsize">15sp</dimen>
-  <dimen name="button_decimal_textsize">15sp</dimen>
-  <dimen name="button_add_textsize">15sp</dimen>
-  <dimen name="button_substract_textsize">15sp</dimen>
-  <dimen name="button_multiply_textsize">15sp</dimen>
-  <dimen name="button_divide_textsize">15sp</dimen>
-  <dimen name="button_percentage_textsize">15sp</dimen>
-  <dimen name="button_equals_textsize">15sp</dimen>
-  <dimen name="button_backspace_textsize">15sp</dimen>
-
-
+  <dimen name="button_breakfast_textsize">10sp</dimen>
+  <dimen name="button_lunch_textsize">10sp</dimen>
+  <dimen name="button_dinner_textsize">10sp</dimen>
+  <dimen name="button_normal_textsize">10sp</dimen>
+  <dimen name="button_customizetip_textsize">10sp</dimen>
+  <dimen name="button_save_textsize">10sp</dimen>
+  <dimen name="button_one_textsize">10sp</dimen>
+  <dimen name="button_two_textsize">10sp</dimen>
+  <dimen name="button_three_textsize">10sp</dimen>
+  <dimen name="button_four_textsize">10sp</dimen>
+  <dimen name="button_five_textsize">10sp</dimen>
+  <dimen name="button_six_textsize">10sp</dimen>
+  <dimen name="button_seven_textsize">10sp</dimen>
+  <dimen name="button_eight_textsize">10sp</dimen>
+  <dimen name="button_nine_textsize">10sp</dimen>
+  <dimen name="button_zero_textsize">10sp</dimen>
+  <dimen name="button_decimal_textsize">10sp</dimen>
+  <dimen name="button_add_textsize">10sp</dimen>
+  <dimen name="button_substract_textsize">10sp</dimen>
+  <dimen name="button_multiply_textsize">10sp</dimen>
+  <dimen name="button_divide_textsize">10sp</dimen>
+  <dimen name="button_percentage_textsize">10sp</dimen>
+  <dimen name="button_equals_textsize">10sp</dimen>
+  <dimen name="button_backspace_textsize">10sp</dimen>
 
 
 
+
+  <dimen name="button_common_textsize">12sp</dimen>
 </resources>

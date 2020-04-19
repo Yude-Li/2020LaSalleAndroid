@@ -32,7 +32,7 @@
   <dimen name="button_backspace_textsize">15sp</dimen>
 
 
-
+  <dimen name="button_common_textsize">15sp</dimen>
 
 
 </resources>

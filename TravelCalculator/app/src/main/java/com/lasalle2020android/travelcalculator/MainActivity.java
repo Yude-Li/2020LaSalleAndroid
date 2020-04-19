@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.InputFilter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,9 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.udojava.evalex.Expression;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,11 +47,14 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
     private TextView mInputTextView_One, mInputTextView_Second;
     private Button mSave_Btn, mBreakfast_Btn, mLunch_Btn, mDinner_Btn, mCustomiseTip_Btn, mNormalTip_Btn;
 
-    private String mEnteredString;
+    private String mEnteredString = "";
+    private int maxEnteredLength;
+
+
     private CurrencyPicker mCurrencyPicker;
     private SharedPreferences mSharedPrefrences;
 
-    private boolean mCurrencySelectedFirst = false;
+    private boolean mCurrencySelectedFirst = false, isLastCharEnteredSymbol = false;
 
 
     private ComponentInfo mComponentInfo;
@@ -64,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
         mComponentInfo = (ComponentInfo) getApplicationContext();
         performDB_Create();
         instantiateViews();
-
 
 
     }
@@ -157,6 +163,12 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
     }
 
+    private void setMaxEnteredLength() {
+        InputFilter[] fArray = new InputFilter[1];
+        fArray[0] = new InputFilter.LengthFilter(maxEnteredLength);
+        mInputTextView_One.setFilters(fArray);
+
+    }
 
     private void setUI_TripSelectionChange(boolean isSelected) {
 
@@ -234,64 +246,131 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
     }
 
+    private void processInput(char inputChar) {
+
+
+        if (!isLastCharEnteredSymbol) {
+
+            mEnteredString += inputChar;
+            mInputTextView_One.setText(mEnteredString);
+
+
+        }
+
+        switch (inputChar) {
+
+            case '.':
+                isLastCharEnteredSymbol = true;
+                maxEnteredLength = mEnteredString.length() + 2;
+                setMaxEnteredLength();
+                break;
+            case '+':
+                isLastCharEnteredSymbol = true;
+                break;
+            case '-':
+                isLastCharEnteredSymbol = true;
+                break;
+            case '/':
+                isLastCharEnteredSymbol = true;
+                break;
+            case '*':
+                isLastCharEnteredSymbol = true;
+                break;
+
+            default:
+                isLastCharEnteredSymbol = false;
+                break;
+
+
+        }
+    }
+
+    private void calculateFinal() {
+
+
+        BigDecimal result = null;
+
+        Expression expression = new Expression(mEnteredString);
+        result = expression.eval();
+        mEnteredString = result + "";
+
+        mInputTextView_One.setText(mEnteredString);
+    }
+
     @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
 
 
-            case R.id.zero_btn:
+            case R.id.btn_0:
+
+
+                processInput('0');
 
                 break;
 
-            case R.id.one_btn:
-
+            case R.id.btn_1:
+                processInput('1');
                 break;
 
-            case R.id.two_btn:
-
-                break;
-
-
-            case R.id.three_btn:
-
-                break;
-            case R.id.four_Btn:
-
-                break;
-            case R.id.five_Btn:
-
-                break;
-            case R.id.six_Btn:
-
-                break;
-            case R.id.seven_Btn:
-
-                break;
-            case R.id.eight_Btn:
-
-                break;
-            case R.id.nine_Btn:
-
+            case R.id.btn_2:
+                processInput('2');
                 break;
 
 
-            case R.id.addition_Btn:
+            case R.id.btn_3:
+                processInput('3');
+                break;
+            case R.id.btn_4:
+                processInput('4');
 
+                break;
+            case R.id.btn_5:
+                processInput('5');
+                break;
+            case R.id.btn_6:
+                processInput('6');
+                break;
+            case R.id.btn_7:
+                processInput('7');
+                break;
+            case R.id.btn_8:
+                processInput('8');
+
+                break;
+            case R.id.btn_9:
+                processInput('9');
+                break;
+
+
+            case R.id.btn_add:
+                processInput('+');
 
                 break;
 
-            case R.id.substraction_Btn:
+            case R.id.btn_minus:
+                processInput('-');
 
                 break;
-            case R.id.division_Btn:
-                break;
-
-            case R.id.multiplication_Btn:
+            case R.id.btn_divide:
+                processInput('/');
 
                 break;
 
-            case R.id.backspace_Btn:
+            case R.id.btn_multiply:
+                processInput('*');
+
+                break;
+
+            case R.id.btn_dot:
+
+
+                processInput('.');
+
+                break;
+
+            case R.id.btn_del:
                 performBackSpace();
                 break;
 
@@ -307,6 +386,32 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
                 break;
 
+            case R.id.btn_customize_tip:
+
+                break;
+
+            case R.id.btn_percentage:
+
+                break;
+            case R.id.btn_breakfast:
+
+                break;
+            case R.id.btn_lunch:
+
+                break;
+
+            case R.id.btn_normal:
+
+                break;
+
+            case R.id.btn_save:
+
+                break;
+
+            case R.id.btn_equal:
+                calculateFinal();
+                break;
+
 
         }
 
@@ -317,7 +422,15 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
         if (mEnteredString.length() > 0) {
 
+
+            if ((mEnteredString.charAt(mEnteredString.length() - 1) + "").equalsIgnoreCase(".")) {
+
+                maxEnteredLength = 15;
+                setMaxEnteredLength();
+
+            }
             mEnteredString = mEnteredString.substring(0, mEnteredString.length() - 1);
+            mInputTextView_One.setText(mEnteredString);
         }
 
     }
@@ -361,6 +474,21 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
     public void onCurrencyRetrivePerformed(boolean isSuccess) {
 
 
+    }
+
+    @Override
+    public void onDB_BootCompleted(boolean isSuccess) {
+
+        if(isSuccess){
+
+            new DatabaseOperations_Thread(MainActivity.this, Constants.TABLE.TRIPINFO,
+                    Constants.DATABSE_OPERATION.FETCH_ALL, this).execute();
+        }
+
+    }
+
+    @Override
+    public void onDeletePerformed(boolean isSuccess) {
 
     }
 
@@ -373,8 +501,6 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
     @Override
     public void getExpenses_INFO(List<ExpenseModel> mAllExpense, int mCount, ExpenseModel mExpense) {
-
-
 
 
     }

@@ -37,6 +37,7 @@
             android:name=".TripInfoEditActivity"
             android:hardwareAccelerated="false"></activity>
 
+
     </application>
 
 </manifest>
