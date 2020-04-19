@@ -12,7 +12,7 @@
 
     <style name="MyActiobBarTheme">
         <item name="android:textColor">#ffffff</item>
-        <item name="android:background">#32425b</item>
+        <item name="android:background">#FA12273F</item>
         <item name="android:titleTextColor">#ffffff</item>
         <item name="android:subtitleTextColor">#ffffff</item>
     </style>
@@ -54,19 +54,6 @@
     <style name="FieldTitle">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">#E2E2E2</item>
-    </style>
-
-    <style name="SwitchStyle">
-        <item name="android:textSize">25sp</item>
-        <item name="android:textColor">#E2E2E2</item>
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:layout_marginRight">10dp</item>
-    </style>
-    <style name="SwitchInfoStyle">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">#E2E2E2</item>
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:layout_marginRight">10dp</item>
     </style>
 
 </resources>
