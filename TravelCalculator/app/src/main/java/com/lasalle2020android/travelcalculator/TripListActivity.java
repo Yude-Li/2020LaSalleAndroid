@@ -24,20 +24,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import Model.ExpenseModel;
 import Model.TripInfoModel;
 import ViewUsage.MyDividerItemDecoration;
 import ViewUsage.RecycleViewAdapter;
 import ViewUsage.RecyclerTouchListener;
+import callbacks.DatabaseOperationNotifier;
+import commonutilities.Constants;
+import databaseinteraction.DatabaseOperations_Thread;
 
-public class TripListActivity extends AppCompatActivity {
+public class TripListActivity extends AppCompatActivity implements DatabaseOperationNotifier {
 
+    // Object from view
     RecyclerView tripListView;
-    public SimpleAdapter listAdapter;
 
+    // Variable for this activity
     RecycleViewAdapter adapter;
-    ArrayList<TripInfoModel> tripList;
-    private ArrayList<HashMap<String,Object>> tripDisplayList = new ArrayList<HashMap<String,Object>>();
+    List<TripInfoModel> tripList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +53,6 @@ public class TripListActivity extends AppCompatActivity {
         setSupportActionBar(mTopToolbar);
 
         tripListView = findViewById(R.id.triplist_listview);
-
-        tripList = new ArrayList<>();
-        // Get trip list from Db
-        //tripList = TripInfoModel.createContactsList(20);
-        adapter = new RecycleViewAdapter(tripList);
-        tripListView.setAdapter(adapter);
-        tripListView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewOnTouchListener();
 
         GetListFromDb();
         PrepareListView();
@@ -106,24 +103,17 @@ public class TripListActivity extends AppCompatActivity {
 
     private void GetListFromDb()
     {
-        for (int i=0 ; i < 5; i++) {
-
-        }
+        new DatabaseOperations_Thread(TripListActivity.this, Constants.TABLE.TRIPINFO,
+                Constants.DATABSE_OPERATION.FETCH_ALL, this).execute();
     }
 
     private void PrepareListView()
     {
-//        listAdapter = new SimpleAdapter(this, tripDisplayList, R.layout.listview_row_double_img
-//                , new String[] {"icon", "tripName", "tripDate"} , new int[] {R.id.doublerow_icon, R.id.doublerow_title, R.id.doublerow_tripDate});
-//        tripListView.setAdapter(listAdapter);
-//        tripListView.setOnItemClickListener(
-//            new AdapterView.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//
-//                }
-//            }
-//        );
+        tripList = new ArrayList<>();
+        adapter = new RecycleViewAdapter(tripList);
+        tripListView.setAdapter(adapter);
+        tripListView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewOnTouchListener();
         adapter.notifyDataSetChanged();
     }
 
@@ -166,5 +156,26 @@ public class TripListActivity extends AppCompatActivity {
 
         AlertDialog alert11 = builder1.create();
         alert11.show();
+    }
+
+    @Override
+    public void onSavePerformed(boolean isCompletedSuccessfully) {
+
+    }
+
+    @Override
+    public void onCurrencyRetrivePerformed(boolean isSuccess) {
+
+    }
+
+    @Override
+    public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
+        tripList = mAllTrips;
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void getExpenses_INFO(List<ExpenseModel> mAllExpense, int mCount, ExpenseModel mExpense) {
+
     }
 }

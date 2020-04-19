@@ -8,7 +8,9 @@ public class CountryModel {
     private String displayName;
     private String currencyCode;
     private float currency;
-
+    private String currencyName;
+    private String currencySymbol;
+    private int flagId;
 
     public int getId() {
         return Id;
@@ -56,5 +58,37 @@ public class CountryModel {
 
     public void setCurrency(float currency) {
         this.currency = currency;
+    }
+
+    public int getCountryNum() {
+        return countryNum;
+    }
+
+    public void setCountryNum(int countryNum) {
+        this.countryNum = countryNum;
+    }
+
+    public String getCurrencyName() {
+        return currencyName;
+    }
+
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName;
+    }
+
+    public String getCurrencySymbol() {
+        return currencySymbol;
+    }
+
+    public void setCurrencySymbol(String currencySymbol) {
+        this.currencySymbol = currencySymbol;
+    }
+
+    public int getFlagId() {
+        return flagId;
+    }
+
+    public void setFlagId(int flagId) {
+        this.flagId = flagId;
     }
 }
