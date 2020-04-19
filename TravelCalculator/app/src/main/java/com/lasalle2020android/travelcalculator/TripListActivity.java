@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import Model.TripInfoModel;
+import ViewUsage.MyDividerItemDecoration;
+import ViewUsage.RecycleViewAdapter;
+import ViewUsage.RecyclerTouchListener;
 
 public class TripListActivity extends AppCompatActivity {
 
@@ -90,6 +93,8 @@ public class TripListActivity extends AppCompatActivity {
         tripListView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), tripListView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+
+
             }
 
             @Override
@@ -130,13 +135,36 @@ public class TripListActivity extends AppCompatActivity {
         builder.setItems(colors, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                if (which == 0) {
-//                    showNoteDialog(true, notesList.get(position), position);
-//                } else {
-//                    deleteNote(position);
-//                }
+                if (which == 0) {
+                    //showNoteDialog(true, tripList.get(position), position);
+                } else {
+                    showDeleteDialog(position);
+                }
             }
         });
         builder.show();
+    }
+
+    private void showDeleteDialog(final int position) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(getApplicationContext());
+        builder1.setMessage("Are you sure you want to delete this trip?");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                adapter.remove(position);
+                tripList.remove(position);
+                dialog.cancel();
+            }
+        });
+
+        builder1.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 }

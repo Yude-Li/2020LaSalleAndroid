@@ -1,0 +1,144 @@
+package DataConfig;
+
+import android.content.Context;
+import android.text.BoringLayout;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
+public class SettingConfigAccess {
+
+    private Context context;
+    static String SETTING_CONF = "setting.config";
+    private static String[] _files = new String[1];
+
+    public static MyCountryConfig config = new MyCountryConfig();
+
+    private enum ConfigName
+    {
+        SETTING_CONFIG("setting.config");
+
+        @SuppressWarnings("unused")
+        private final String name;
+
+        ConfigName(String s) {
+            name = s;
+        }
+    }
+
+    public SettingConfigAccess(Context currContext)
+    {
+        context = currContext;
+    }
+
+    private static class MyCountryConfig
+    {
+        boolean isFirstTime;
+        boolean updateWiFiOnly;
+    }
+
+    public void initConfigData() {
+        _files[0] = ConfigName.SETTING_CONFIG.toString();
+
+        config.isFirstTime = true;
+        config.updateWiFiOnly = true;
+        ReadSiteConfig(ConfigName.SETTING_CONFIG);
+    }
+
+    public void setIsFirstTime(Boolean isFirstTime) {
+        config.isFirstTime = isFirstTime;
+        SaveSiteConfig(ConfigName.SETTING_CONFIG);
+    }
+
+    public void setUpdateWiFiOnly(Boolean updateWiFiOnly) {
+        config.updateWiFiOnly = updateWiFiOnly;
+        SaveSiteConfig(ConfigName.SETTING_CONFIG);
+    }
+
+    public Boolean getIsFirstTime() {
+        return config.isFirstTime;
+    }
+
+    public Boolean getUpdateWiFiOnly() {
+        return config.updateWiFiOnly;
+    }
+
+    private void SaveSiteConfig(ConfigName confName)
+    {
+        try
+        {
+            BufferedWriter fos = new BufferedWriter (new OutputStreamWriter(context.openFileOutput(confName.toString(), Context.MODE_PRIVATE)));
+            WriteSiteProcess(confName, fos);
+            fos.flush();
+            fos.close();
+        }
+        catch(IOException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public void ReadSiteConfig(ConfigName confName)
+    {
+        try
+        {
+            BufferedReader fis = new BufferedReader (new InputStreamReader(context.openFileInput(confName.toString())));
+            ReadSiteProcess(confName, fis);
+            fis.close();
+        }
+        catch(IOException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    private void ReadSiteProcess(ConfigName confName, BufferedReader fis) {
+        switch(confName)
+        {
+            case SETTING_CONFIG:
+                try {
+                    boolean KeepReading = true;
+                    do
+                    {
+                        String line = fis.readLine();
+
+                        if(line == null)
+                            break;
+
+                        String[] Data;
+                        Data = line.split("=");
+
+                        if(Data[0].compareTo("IsFirstTime") == 0 && Data.length > 1) {
+                            config.isFirstTime = Boolean.valueOf(Data[1]);
+                        }
+                        else if (Data[0].compareTo("UpdateWiFiOnly") == 0 && Data.length > 1) {
+                            config.updateWiFiOnly = Boolean.valueOf(Data[1]);
+                        }
+                    }while(KeepReading);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void WriteSiteProcess(ConfigName confName, BufferedWriter fos)
+    {
+        try {
+            switch(confName)
+            {
+                case SETTING_CONFIG:
+                    fos.write("IsFirstTime=" + config.isFirstTime + '\n');
+                    fos.write("UpdateWiFiOnly=" + config.updateWiFiOnly + '\n');
+                    _files[0] = ConfigName.SETTING_CONFIG.toString();
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
