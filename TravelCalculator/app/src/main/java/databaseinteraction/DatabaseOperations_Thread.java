@@ -25,6 +25,9 @@ public class DatabaseOperations_Thread extends AsyncTask {
     private List<TripInfoModel> mAllTrips;
     private List<ExpenseModel> mAllExpenses;
     private ProgressBar_YAM mProgressDialog;
+    private TripInfoModel mTripInfoModel;
+    private ExpenseModel mExpenseModel;
+    private int rowID;
 
 
     public DatabaseOperations_Thread(Context mContext) {
@@ -51,6 +54,28 @@ public class DatabaseOperations_Thread extends AsyncTask {
 
     }
 
+    public DatabaseOperations_Thread(AppCompatActivity mActivity, Constants.TABLE mTableName,
+                                     Constants.DATABSE_OPERATION mOperation_Name,
+                                     DatabaseOperationNotifier mDatabaseOperationNotifier, TripInfoModel tripInfoModel, ExpenseModel expenseModel) {
+        this.mActivity = mActivity;
+        this.mOperation_Name = mOperation_Name;
+        this.mDatabaseOperationNotifier = mDatabaseOperationNotifier;
+        this.mTripInfoModel=tripInfoModel;
+        this.mExpenseModel= expenseModel;
+
+
+    }
+
+
+    public DatabaseOperations_Thread(AppCompatActivity mActivity, Constants.TABLE mTableName,
+                                     Constants.DATABSE_OPERATION mOperation_Name,
+                                     DatabaseOperationNotifier mDatabaseOperationNotifier,  int rowID) {
+        this.mActivity = mActivity;
+        this.mOperation_Name = mOperation_Name;
+        this.mDatabaseOperationNotifier = mDatabaseOperationNotifier;
+        this.rowID=rowID;
+
+    }
     @Override
     protected Object doInBackground(Object[] objects) {
 
@@ -77,6 +102,17 @@ public class DatabaseOperations_Thread extends AsyncTask {
                 }
 
                 break;
+            case DELETE_RECORD:
+                if (mTableName == Constants.TABLE.TRIPINFO) {
+
+                    dbOperations.deleteTrip(mTripInfoModel);
+
+                }else if (mTableName == Constants.TABLE.EXPENSE) {
+                    dbOperations.deleteExpense(mExpenseModel);
+                }
+
+
+                break;
 
 
         }
@@ -100,6 +136,11 @@ public class DatabaseOperations_Thread extends AsyncTask {
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
 
+        if(mProgressDialog!=null){
+
+            mProgressDialog.cancel();
+        }
+
         switch (mOperation_Name) {
 
             case FETCH_ALL:
@@ -122,6 +163,17 @@ public class DatabaseOperations_Thread extends AsyncTask {
 
                 }
 
+                break;
+            case DB_CREATE:
+                mDatabaseOperationNotifier.onDB_BootCompleted(true);
+                break;
+
+            case DELETE_RECORD:
+                if (mTableName == Constants.TABLE.TRIPINFO) {
+                mDatabaseOperationNotifier.onDeletePerformed(true);
+                } else if (mTableName == Constants.TABLE.EXPENSE) {
+                    mDatabaseOperationNotifier.onDeletePerformed(true);
+                }
                 break;
 
         }

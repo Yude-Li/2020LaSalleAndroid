@@ -110,9 +110,13 @@ import commonutilities.Constants;
     }
 
     public void deleteTrip(TripInfoModel trip) {
+try {
+    database.delete(Constants.TABLE_NAME_TRIPINFO, Constants.COLUMN_ID + " = ?",
+            new String[]{String.valueOf(trip.getId())});
+}catch (Exception e){
 
-        database.delete(Constants.TABLE_NAME_TRIPINFO, Constants.COLUMN_ID + " = ?",
-                new String[]{String.valueOf(trip.getId())});
+
+}
      close();
     }
 
