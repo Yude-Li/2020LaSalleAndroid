@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Model.TripInfoModel;
+import commonutilities.Constants;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -49,17 +50,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         // `id` and `timestamp` will be inserted automatically.
         // no need to add them
-        values.put(TripInfoModel.COLUMN_TRIPNAME, trip.getTripName());
-        values.put(TripInfoModel.COLUMN_TRAVELCOUNTRY, trip.getTravelCountry());
-        values.put(TripInfoModel.COLUMN_STARTDATE, trip.getStartDate());
-        values.put(TripInfoModel.COLUMN_ENDDATE, trip.getEndDate());
-        values.put(TripInfoModel.COLUMN_TAX, trip.getTax());
-        values.put(TripInfoModel.COLUMN_BREAKFAST_TIP, trip.getBreakfastTip());
-        values.put(TripInfoModel.COLUMN_LUNCH_TIP, trip.getLunchTip());
-        values.put(TripInfoModel.COLUMN_DINNER_TIP, trip.getDinnerTip());
+        values.put(Constants.COLUMN_TRIPNAME, trip.getTripName());
+        values.put(Constants.COLUMN_TRAVELCOUNTRY, trip.getTravelCountry());
+        values.put(Constants.COLUMN_STARTDATE, trip.getStartDate());
+        values.put(Constants.COLUMN_ENDDATE, trip.getEndDate());
+        values.put(Constants.COLUMN_TAX, trip.getTax());
+        values.put(Constants.COLUMN_BREAKFAST_TIP, trip.getBreakfastTip());
+        values.put(Constants.COLUMN_LUNCH_TIP, trip.getLunchTip());
+        values.put(Constants.COLUMN_DINNER_TIP, trip.getDinnerTip());
 
         // insert row
-        long id = db.insert(TripInfoModel.TABLE_NAME, null, values);
+        long id = db.insert(Constants.TABLE_NAME_TRIPINFO, null, values);
 
         // close db connection
         db.close();
@@ -72,17 +73,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // get readable database as we are not inserting anything
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TripInfoModel.TABLE_NAME,
-                new String[]{TripInfoModel.COLUMN_ID
-                           , TripInfoModel.COLUMN_TRIPNAME
-                           , TripInfoModel.COLUMN_TRAVELCOUNTRY
-                           , TripInfoModel.COLUMN_STARTDATE
-                           , TripInfoModel.COLUMN_ENDDATE
-                           , TripInfoModel.COLUMN_TAX
-                           , TripInfoModel.COLUMN_BREAKFAST_TIP
-                           , TripInfoModel.COLUMN_LUNCH_TIP
-                           , TripInfoModel.COLUMN_DINNER_TIP},
-                TripInfoModel.COLUMN_ID + "=?",
+        Cursor cursor = db.query(Constants.TABLE_NAME_TRIPINFO,
+                new String[]{Constants.COLUMN_ID
+                           , Constants.COLUMN_TRIPNAME
+                           , Constants.COLUMN_TRAVELCOUNTRY
+                           , Constants.COLUMN_STARTDATE
+                           , Constants.COLUMN_ENDDATE
+                           , Constants.COLUMN_TAX
+                           , Constants.COLUMN_BREAKFAST_TIP
+                           , Constants.COLUMN_LUNCH_TIP
+                           , Constants.COLUMN_DINNER_TIP},
+                Constants.COLUMN_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
         if (cursor != null)
@@ -90,15 +91,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // prepare note object
         TripInfoModel trip = new TripInfoModel(
-                                cursor.getInt(cursor.getColumnIndex(TripInfoModel.COLUMN_ID)),
-                                cursor.getString(cursor.getColumnIndex(TripInfoModel.COLUMN_TRIPNAME)),
-                                cursor.getInt(cursor.getColumnIndex(TripInfoModel.COLUMN_TRAVELCOUNTRY)),
-                                cursor.getString(cursor.getColumnIndex(TripInfoModel.COLUMN_STARTDATE)),
-                                cursor.getString(cursor.getColumnIndex(TripInfoModel.COLUMN_ENDDATE)),
-                                cursor.getFloat(cursor.getColumnIndex(TripInfoModel.COLUMN_TAX)),
-                                cursor.getFloat(cursor.getColumnIndex(TripInfoModel.COLUMN_BREAKFAST_TIP)),
-                                cursor.getFloat(cursor.getColumnIndex(TripInfoModel.COLUMN_LUNCH_TIP)),
-                                cursor.getFloat(cursor.getColumnIndex(TripInfoModel.COLUMN_DINNER_TIP)));
+                                cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_ID)),
+                                cursor.getString(cursor.getColumnIndex(Constants.COLUMN_TRIPNAME)),
+                                cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_TRAVELCOUNTRY)),
+                                cursor.getString(cursor.getColumnIndex(Constants.COLUMN_STARTDATE)),
+                                cursor.getString(cursor.getColumnIndex(Constants.COLUMN_ENDDATE)),
+                                cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_TAX)),
+                                cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_BREAKFAST_TIP)),
+                                cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_LUNCH_TIP)),
+                                cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_DINNER_TIP)));
 
         // close the db connection
         cursor.close();
@@ -110,8 +111,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<TripInfoModel> trips = new ArrayList<>();
 
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TripInfoModel.TABLE_NAME + " ORDER BY " +
-                TripInfoModel.COLUMN_STARTDATE + " DESC";
+        String selectQuery = "SELECT  * FROM " + Constants.TABLE_NAME_TRIPINFO + " ORDER BY " +
+                Constants.COLUMN_STARTDATE + " DESC";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -120,15 +121,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 TripInfoModel trip = new TripInfoModel();
-                trip.setId(cursor.getInt(cursor.getColumnIndex(TripInfoModel.COLUMN_ID)));
-                trip.setTripName(cursor.getString(cursor.getColumnIndex(TripInfoModel.COLUMN_TRIPNAME)));
-                trip.setTravelCountry(cursor.getInt(cursor.getColumnIndex(TripInfoModel.COLUMN_TRAVELCOUNTRY)));
-                trip.setStartDate(cursor.getString(cursor.getColumnIndex(TripInfoModel.COLUMN_STARTDATE)));
-                trip.setEndDate(cursor.getString(cursor.getColumnIndex(TripInfoModel.COLUMN_ENDDATE)));
-                trip.setTax(cursor.getFloat(cursor.getColumnIndex(TripInfoModel.COLUMN_TAX)));
-                trip.setBreakfastTip(cursor.getFloat(cursor.getColumnIndex(TripInfoModel.COLUMN_BREAKFAST_TIP)));
-                trip.setLunchTip(cursor.getFloat(cursor.getColumnIndex(TripInfoModel.COLUMN_LUNCH_TIP)));
-                trip.setDinnerTip(cursor.getFloat(cursor.getColumnIndex(TripInfoModel.COLUMN_DINNER_TIP)));
+                trip.setId(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_ID)));
+                trip.setTripName(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_TRIPNAME)));
+                trip.setTravelCountry(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_TRAVELCOUNTRY)));
+                trip.setStartDate(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_STARTDATE)));
+                trip.setEndDate(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_ENDDATE)));
+                trip.setTax(cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_TAX)));
+                trip.setBreakfastTip(cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_BREAKFAST_TIP)));
+                trip.setLunchTip(cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_LUNCH_TIP)));
+                trip.setDinnerTip(cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_DINNER_TIP)));
 
                 trips.add(trip);
             } while (cursor.moveToNext());
@@ -142,7 +143,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public int getTripsCount() {
-        String countQuery = "SELECT  * FROM " + TripInfoModel.TABLE_NAME;
+        String countQuery = "SELECT  * FROM " + Constants.TABLE_NAME_TRIPINFO;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         int count = cursor.getCount();
@@ -152,7 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void deleteTrip(TripInfoModel trip) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TripInfoModel.TABLE_NAME, TripInfoModel.COLUMN_ID + " = ?",
+        db.delete(Constants.TABLE_NAME_TRIPINFO, Constants.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(trip.getId())});
         db.close();
     }

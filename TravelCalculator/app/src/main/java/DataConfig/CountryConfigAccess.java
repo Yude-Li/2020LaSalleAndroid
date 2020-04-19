@@ -3,6 +3,9 @@ package DataConfig;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,10 +22,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 
 import Model.CountryModel;
+import commonutilities.Constants;
 
 public class CountryConfigAccess {
 
@@ -32,17 +35,17 @@ public class CountryConfigAccess {
 
     public static MyCountryConfig config = new MyCountryConfig();
 
-    private enum ConfigName
-    {
-        COUNTRY_INFO_CONFIG("countryinfo.config");
-
-        @SuppressWarnings("unused")
-        private final String name;
-
-        ConfigName(String s) {
-            name = s;
-        }
-    }
+//    private enum ConfigName
+//    {
+//        COUNTRY_INFO_CONFIG("countryinfo.config");
+//
+//        @SuppressWarnings("unused")
+//        private final String name;
+//
+//        ConfigName(String s) {
+//            name = s;
+//        }
+//    }
 
     public CountryConfigAccess(Context currContext)
     {
@@ -55,20 +58,20 @@ public class CountryConfigAccess {
     }
 
     public void initConfigData(Boolean isFirstTime) {
-        _files[0] = ConfigName.COUNTRY_INFO_CONFIG.toString();
+        _files[0] = Constants.ConfigName.COUNTRY_INFO_CONFIG.toString();
 
         config.countryList = new ArrayList<>();
-        ReadSiteConfig(ConfigName.COUNTRY_INFO_CONFIG);
+        ReadSiteConfig(Constants.ConfigName.COUNTRY_INFO_CONFIG);
 
         if (isFirstTime) {
             readJsontoList();
-            SaveSiteConfig(ConfigName.COUNTRY_INFO_CONFIG);
+            SaveSiteConfig(Constants.ConfigName.COUNTRY_INFO_CONFIG);
         }
     }
 
     public void setCurrencyUpdate(List<CountryModel> updateList) {
         config.countryList = updateList;
-        SaveSiteConfig(ConfigName.COUNTRY_INFO_CONFIG);
+        SaveSiteConfig(Constants.ConfigName.COUNTRY_INFO_CONFIG);
     }
 
     public List<CountryModel> getCountriesList() {
@@ -79,7 +82,7 @@ public class CountryConfigAccess {
         return config.countryList.get(id);
     }
 
-    private void SaveSiteConfig(ConfigName confName)
+    private void SaveSiteConfig(Constants.ConfigName confName)
     {
         try
         {
@@ -93,7 +96,7 @@ public class CountryConfigAccess {
         }
     }
 
-    public void ReadSiteConfig(ConfigName confName)
+    public void ReadSiteConfig(Constants.ConfigName confName)
     {
         try
         {
@@ -106,7 +109,7 @@ public class CountryConfigAccess {
         }
     }
 
-    private void ReadSiteProcess(ConfigName confName, BufferedReader fis) {
+    private void ReadSiteProcess(Constants.ConfigName confName, BufferedReader fis) {
         switch(confName)
         {
             case COUNTRY_INFO_CONFIG:
@@ -160,7 +163,7 @@ public class CountryConfigAccess {
         }
     }
 
-    private void WriteSiteProcess(ConfigName confName, BufferedWriter fos)
+    private void WriteSiteProcess(Constants.ConfigName confName, BufferedWriter fos)
     {
         try {
             switch(confName)
@@ -177,7 +180,7 @@ public class CountryConfigAccess {
                         fos.write("Currency=" + country.getCurrency() + '\n');
                     }
 
-                    _files[0] = ConfigName.COUNTRY_INFO_CONFIG.toString();
+                    _files[0] = Constants.ConfigName.COUNTRY_INFO_CONFIG.toString();
                     break;
             }
         } catch (IOException e) {

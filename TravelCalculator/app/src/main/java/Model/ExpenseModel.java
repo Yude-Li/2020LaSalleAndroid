@@ -18,13 +18,14 @@ private int id;
     public ExpenseModel() {
     }
 
-    public ExpenseModel(String expenseName, String date, String spendAmount, String convertedAmount, String tripId, String tripDesc) {
+    public ExpenseModel(int id, String expenseName, String date, String spendAmount, String convertedAmount, String tripId, String tripDesc) {
         this.expenseName = expenseName;
         this.date = date;
         this.spendAmount = spendAmount;
         this.convertedAmount = convertedAmount;
         this.tripId = tripId;
         this.tripExpenseDesc= tripDesc;
+        this.id=id;
 
     }
 

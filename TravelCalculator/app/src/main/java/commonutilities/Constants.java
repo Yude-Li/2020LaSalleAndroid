@@ -45,7 +45,7 @@ public class Constants {
 
     // Tables Enum
 
-    public static  enum  TABLE{
+    public   enum  TABLE{
 
         TRIPINFO,
         EXPENSE,
@@ -58,7 +58,7 @@ public class Constants {
     // Database Operation ENUM
 
 
-    public static enum DATABSE_OPERATION{
+    public enum DATABSE_OPERATION{
 
 
         ADD_RECORD,
@@ -75,7 +75,21 @@ public class Constants {
     }
 
 
+//
 
+    public  enum ConfigName
+    {
+        COUNTRY_INFO_CONFIG("countryinfo.config"),
+        SETTING_CONFIG("setting.config");
+
+
+        @SuppressWarnings("unused")
+        private final String name;
+
+        ConfigName(String s) {
+            name = s;
+        }
+    }
 
 
 

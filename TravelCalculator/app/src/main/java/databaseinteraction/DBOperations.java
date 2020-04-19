@@ -58,7 +58,7 @@ import commonutilities.Constants;
 
 
 
-
+// TRIP TABLE
 
 
     public List<TripInfoModel> getAllTrips() {
@@ -97,38 +97,6 @@ import commonutilities.Constants;
     }
 
 
-     public List<ExpenseModel> getAllExpenses() {
-         List<ExpenseModel> trips = new ArrayList<>();
-
-         // Select All Query
-         String selectQuery = "SELECT  * FROM " + Constants.TABLE_NAME_EXPENSE + " ORDER BY " +
-                 Constants.COLUMN_EXPENSE_DATE + " DESC";
-
-
-         Cursor cursor = database.rawQuery(selectQuery, null);
-
-         // looping through all rows and adding to list
-         if (cursor.moveToFirst()) {
-             do {
-                 ExpenseModel trip = new ExpenseModel();
-                 trip.setId(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_ID)));
-                 trip.setExpenseName(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_NAME)));
-                 trip.setDate(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_DATE)));
-                 trip.setSpendAmount(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_SPEND_AMOUNT)));
-                 trip.setConvertedAmount(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_CONVERTED_AMOUNT)));
-                 trip.setTripExpenseDesc(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_DESCRIPTION)));
-                 trip.setTripId(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_TRIP_ID))+"");
-
-                 trips.add(trip);
-             } while (cursor.moveToNext());
-         }
-
-         // close db connection
-         close();
-
-         // return notes list
-         return trips;
-     }
 
 
 
@@ -150,7 +118,7 @@ import commonutilities.Constants;
 
 
 
-    public TripInfoModel getTripInfo(int id) {
+    public TripInfoModel getTripPreferenceInfoByID(int id) {
         // get readable database as we are not inserting anything
 
         Cursor cursor = database.query(Constants.TABLE_NAME_TRIPINFO,
@@ -215,4 +183,120 @@ import commonutilities.Constants;
         // return newly inserted row id
         return id;
     }
-}
+
+
+
+
+    // Expense Table
+
+     public List<ExpenseModel> getAllExpenses() {
+         List<ExpenseModel> trips = new ArrayList<>();
+
+         // Select All Query
+         String selectQuery = "SELECT  * FROM " + Constants.TABLE_NAME_EXPENSE + " ORDER BY " +
+                 Constants.COLUMN_EXPENSE_DATE + " DESC";
+
+
+         Cursor cursor = database.rawQuery(selectQuery, null);
+
+         // looping through all rows and adding to list
+         if (cursor.moveToFirst()) {
+             do {
+                 ExpenseModel trip = new ExpenseModel();
+                 trip.setId(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_ID)));
+                 trip.setExpenseName(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_NAME)));
+                 trip.setDate(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_DATE)));
+                 trip.setSpendAmount(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_SPEND_AMOUNT)));
+                 trip.setConvertedAmount(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_CONVERTED_AMOUNT)));
+                 trip.setTripExpenseDesc(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_DESCRIPTION)));
+                 trip.setTripId(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_TRIP_ID))+"");
+
+                 trips.add(trip);
+             } while (cursor.moveToNext());
+         }
+
+         // close db connection
+         close();
+
+         // return notes list
+         return trips;
+     }
+
+
+     public long addExpense(ExpenseModel mExpenseModel) {
+         // get writable database as we want to write data
+
+
+         ContentValues values = new ContentValues();
+         // `id` and `timestamp` will be inserted automatically.
+         // no need to add them
+         values.put(Constants.COLUMN_EXPENSE_NAME, mExpenseModel.getExpenseName());
+         values.put(Constants.COLUMN_EXPENSE_DATE, mExpenseModel.getDate());
+         values.put(Constants.COLUMN_EXPENSE_SPEND_AMOUNT, mExpenseModel.getSpendAmount());
+         values.put(Constants.COLUMN_EXPENSE_CONVERTED_AMOUNT, mExpenseModel.getConvertedAmount());
+         values.put(Constants.COLUMN_EXPENSE_DESCRIPTION, mExpenseModel.getTripExpenseDesc());
+         values.put(Constants.COLUMN_TRIP_ID, mExpenseModel.getTripId());
+         // insert row
+         long id = database.insert(Constants.TABLE_NAME_EXPENSE, null, values);
+
+         // close db connection
+         close();
+
+         // return newly inserted row id
+         return id;
+     }
+
+
+
+     public ExpenseModel getExpenseDetailsByID(int id) {
+
+
+         Cursor cursor = database.query(Constants.TABLE_NAME_EXPENSE,
+                 new String[]{Constants.COLUMN_ID
+                         , Constants.COLUMN_EXPENSE_NAME
+                         , Constants.COLUMN_EXPENSE_DATE
+                         , Constants.COLUMN_EXPENSE_SPEND_AMOUNT
+                         , Constants.COLUMN_EXPENSE_CONVERTED_AMOUNT
+                         , Constants.COLUMN_EXPENSE_DESCRIPTION
+                         , Constants.COLUMN_TRIP_ID},
+                 Constants.COLUMN_ID + "=?",
+                 new String[]{String.valueOf(id)}, null, null, null, null);
+
+         if (cursor != null)
+             cursor.moveToFirst();
+
+
+         ExpenseModel mExpense = new ExpenseModel(
+                 cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_ID)),
+                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_NAME)),
+                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_DATE)),
+                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_SPEND_AMOUNT)),
+                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_CONVERTED_AMOUNT)),
+                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_DESCRIPTION)),
+                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_TRIP_ID)));
+
+         // close the db connection
+         close();
+
+         return mExpense;
+     }
+
+
+
+     public int getExpenseCount() {
+         String countQuery = "SELECT  * FROM " + Constants.TABLE_NAME_EXPENSE;
+
+         Cursor cursor = database.rawQuery(countQuery, null);
+         int count = cursor.getCount();
+         cursor.close();
+         return count;
+     }
+
+     public void deleteExpense(ExpenseModel expenseModel) {
+
+         database.delete(Constants.TABLE_NAME_EXPENSE, Constants.COLUMN_ID + " = ?",
+                 new String[]{String.valueOf(expenseModel.getId())});
+         close();
+     }
+
+ }

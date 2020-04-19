@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+import commonutilities.Constants;
+
 public class SettingConfigAccess {
 
     private Context context;
@@ -17,17 +19,17 @@ public class SettingConfigAccess {
 
     public static MyCountryConfig config = new MyCountryConfig();
 
-    private enum ConfigName
-    {
-        SETTING_CONFIG("setting.config");
-
-        @SuppressWarnings("unused")
-        private final String name;
-
-        ConfigName(String s) {
-            name = s;
-        }
-    }
+//    private enum ConfigName
+//    {
+//        SETTING_CONFIG("setting.config");
+//
+//        @SuppressWarnings("unused")
+//        private final String name;
+//
+//        ConfigName(String s) {
+//            name = s;
+//        }
+//    }
 
     public SettingConfigAccess(Context currContext)
     {
@@ -41,21 +43,21 @@ public class SettingConfigAccess {
     }
 
     public void initConfigData() {
-        _files[0] = ConfigName.SETTING_CONFIG.toString();
+        _files[0] = Constants.ConfigName.SETTING_CONFIG.toString();
 
         config.isFirstTime = true;
         config.updateWiFiOnly = true;
-        ReadSiteConfig(ConfigName.SETTING_CONFIG);
+        ReadSiteConfig( Constants.ConfigName.SETTING_CONFIG);
     }
 
     public void setIsFirstTime(Boolean isFirstTime) {
         config.isFirstTime = isFirstTime;
-        SaveSiteConfig(ConfigName.SETTING_CONFIG);
+        SaveSiteConfig(Constants.ConfigName.SETTING_CONFIG);
     }
 
     public void setUpdateWiFiOnly(Boolean updateWiFiOnly) {
         config.updateWiFiOnly = updateWiFiOnly;
-        SaveSiteConfig(ConfigName.SETTING_CONFIG);
+        SaveSiteConfig(Constants.ConfigName.SETTING_CONFIG);
     }
 
     public Boolean getIsFirstTime() {
@@ -66,7 +68,7 @@ public class SettingConfigAccess {
         return config.updateWiFiOnly;
     }
 
-    private void SaveSiteConfig(ConfigName confName)
+    private void SaveSiteConfig(Constants.ConfigName confName)
     {
         try
         {
@@ -80,7 +82,7 @@ public class SettingConfigAccess {
         }
     }
 
-    public void ReadSiteConfig(ConfigName confName)
+    public void ReadSiteConfig(Constants.ConfigName confName)
     {
         try
         {
@@ -93,7 +95,7 @@ public class SettingConfigAccess {
         }
     }
 
-    private void ReadSiteProcess(ConfigName confName, BufferedReader fis) {
+    private void ReadSiteProcess(Constants.ConfigName confName, BufferedReader fis) {
         switch(confName)
         {
             case SETTING_CONFIG:
@@ -126,7 +128,7 @@ public class SettingConfigAccess {
         }
     }
 
-    private void WriteSiteProcess(ConfigName confName, BufferedWriter fos)
+    private void WriteSiteProcess(Constants.ConfigName confName, BufferedWriter fos)
     {
         try {
             switch(confName)
@@ -134,7 +136,7 @@ public class SettingConfigAccess {
                 case SETTING_CONFIG:
                     fos.write("IsFirstTime=" + config.isFirstTime + '\n');
                     fos.write("UpdateWiFiOnly=" + config.updateWiFiOnly + '\n');
-                    _files[0] = ConfigName.SETTING_CONFIG.toString();
+                    _files[0] = Constants.ConfigName.SETTING_CONFIG.toString();
                     break;
             }
         } catch (IOException e) {
