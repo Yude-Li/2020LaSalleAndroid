@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 
 public class ComponentInfo extends Application {
 
-    public boolean isActivityRunning;
+    public boolean isActivityRunning=true;
 
 
 }

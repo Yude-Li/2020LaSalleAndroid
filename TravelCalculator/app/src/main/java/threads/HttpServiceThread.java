@@ -47,13 +47,13 @@ public class HttpServiceThread extends Thread {
 
     private Context ctx;
     private ComponentInfo componentInfo;
-    private  ServerResponseNotifier serverResponseNotifier;
+    private ServerResponseNotifier serverResponseNotifier;
 
     private HttpURLConnection connection;
     int requestNo;
     private Handler mHandler;
     private boolean interupt = false;
-    private String webResponse = "", bodyData = "", apiName = "", baseUrl = "http://api.exchangeratesapi.io/latest?symbols=";
+    private String webResponse = "", bodyData = "", apiName = "", baseUrl = "https://api.exchangeratesapi.io/latest?symbols=";
 
     public enum ActionMode {
         UPDATE_CURRENCY,
@@ -66,7 +66,7 @@ public class HttpServiceThread extends Thread {
         this.ctx = ctx;
         //this.mHandler = mHandler;
         this.serverResponseNotifier = mHandler;
-        this.bodyData=body;
+        this.bodyData = body;
 
         this.requestNo = requestNo;
     }
@@ -105,9 +105,7 @@ public class HttpServiceThread extends Thread {
                     Log.e("", "Request Data  - " + bodyData);
                     Log.e("", "====================================");
 
-                    Thread.sleep(2000);
-                    System.setProperty("http.keepAlive", "false");
-                    //java.net.URL url = new URL(baseUrl + apiName);
+
                     java.net.URL url = new URL(baseUrl + bodyData);
 
                     try {
@@ -116,25 +114,8 @@ public class HttpServiceThread extends Thread {
                         // TODO Auto-generated catch block
                         e1.printStackTrace();
                     }
-                   // connection.setDoOutput(true);          //    setDoOutput(true) is used with POST to allow sending a body via the connection
-                  //  connection.setDoInput(true);           //    doInput flag to true indicates that the application intends to read data from the URL  Coonection,,,setDoOutput(true) is used for POST and PUT requests. If it is false then it is for using GET requests
-                  //  connection.setUseCaches(false);        //   the connection is allowed to use whatever caches it can. If false, caches are to be ignored
                     connection.setConnectTimeout(60000);
-                    //connection.setRequestMethod("POST");
-                   // connection.setRequestMethod("GET");
 
-                    //   if ( Build.VERSION.SDK_INT > 13) {
-                    //   connection.setRequestProperty("Connection", "close"); }
-
-                  //  connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                    // connection.setRequestProperty("auth_token", Token);
-                    // conn.setRequestProperty("Content-Type",
-                    // "application/x-www-form-urlencoded;charset=UTF-8");
-//                    OutputStream out = null;
-//                    out = connection.getOutputStream();
-//                    String body = bodyData;
-//                    out.write(body.getBytes());
-//                    out.close();
                     connection.connect();
                     InputStream inputStream = null;
                     inputStream = connection.getInputStream();

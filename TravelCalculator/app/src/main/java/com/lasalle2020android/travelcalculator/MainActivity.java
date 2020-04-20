@@ -71,6 +71,12 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
         mComponentInfo = (ComponentInfo) getApplicationContext();
         performDB_Create();
+
+//        HttpServiceThread httpServiceThread = new HttpServiceThread(mComponentInfo,MainActivity.this,MainActivity.this,"USD,GBP",00);
+//        httpServiceThread.start();
+
+
+
         instantiateViews();
 
 
