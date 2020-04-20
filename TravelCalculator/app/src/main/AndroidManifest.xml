@@ -42,6 +42,9 @@
         <activity
             android:name=".ExpenseListActivity"
             android:hardwareAccelerated="false"></activity>
+        <activity
+            android:name=".UserSettingActivity"
+            android:hardwareAccelerated="false"></activity>
 
 
     </application>

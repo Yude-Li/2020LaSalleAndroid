@@ -17,5 +17,6 @@
     <string name="date_title">Date</string>
     <string name="trip_title">Trip</string>
     <string name="desc_title">Description</string>
+    <string name="text_RealtimeUpdateCurrency">Realtime Update Currency</string>
 
 </resources>

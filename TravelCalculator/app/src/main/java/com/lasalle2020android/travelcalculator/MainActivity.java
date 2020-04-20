@@ -94,6 +94,14 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
                 startActivity(intent);
             }
             break;
+            case R.id.action_toSetting:
+            {
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), UserSettingActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+            break;
         }
 
         return super.onOptionsItemSelected(item);
