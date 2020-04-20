@@ -1,15 +1,9 @@
 package databaseinteraction;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import Model.TripInfoModel;
 import commonutilities.Constants;
 
  class DatabaseHelper  extends SQLiteOpenHelper {
@@ -47,7 +41,7 @@ import commonutilities.Constants;
                 Constants.COLUMN_EXPENSE_SPEND_AMOUNT+" text not null, "+
                 Constants.COLUMN_EXPENSE_CONVERTED_AMOUNT+" text not null, " +
                 Constants.COLUMN_EXPENSE_DESCRIPTION+" text not null, "+
-                Constants.COLUMN_TRIP_ID+" integer not null, "+
+                Constants.COLUMN_TRIPNAME +" text not null, "+
 
 
                 "UNIQUE("+Constants.COLUMN_EXPENSE_NAME+", "+

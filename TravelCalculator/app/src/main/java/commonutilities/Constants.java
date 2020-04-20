@@ -34,7 +34,6 @@ public class Constants {
     public static final String COLUMN_EXPENSE_SPEND_AMOUNT = "expenseSpendAmount";
     public static final String COLUMN_EXPENSE_CONVERTED_AMOUNT = "expenseConvertedAmount"; //converted spend amount to home currency
     public static final String COLUMN_EXPENSE_DESCRIPTION = "expenseDescription";
-    public static final String COLUMN_TRIP_ID = "tripID"; //FK
 
 
 
