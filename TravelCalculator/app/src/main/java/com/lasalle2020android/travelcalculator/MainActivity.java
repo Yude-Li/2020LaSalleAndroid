@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import DataConfig.CountryConfigAccess;
 import Model.ExpenseModel;
 import Model.TripInfoModel;
 import callbacks.DatabaseOperationNotifier;
@@ -159,6 +160,11 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 //        httpServiceThread.start();
     }
 
+    private void instantiateData(){
+
+        CountryConfigAccess countryConfigAccess= new CountryConfigAccess(MainActivity.this);
+        countryConfigAccess.getCountryById(00);
+    }
     private void setInactive() {
 
     }
@@ -481,7 +487,7 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
         if(isSuccess){
 
-            new DatabaseOperations_Thread(MainActivity.this, Constants.TABLE.TRIPINFO,
+             new DatabaseOperations_Thread(MainActivity.this, Constants.TABLE.TRIPINFO,
                     Constants.DATABSE_OPERATION.FETCH_ALL, this).execute();
         }
 
