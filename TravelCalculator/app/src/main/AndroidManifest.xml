@@ -34,7 +34,10 @@
             android:name=".TripListActivity"
             android:hardwareAccelerated="false"></activity>
         <activity
-            android:name=".TripInfoEditActivity"
+        android:name=".TripInfoEditActivity"
+        android:hardwareAccelerated="false"></activity>
+        <activity
+            android:name=".ExpenseRecordEditActivity"
             android:hardwareAccelerated="false"></activity>
 
 

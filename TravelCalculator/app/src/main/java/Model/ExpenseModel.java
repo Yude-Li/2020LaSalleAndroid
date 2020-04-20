@@ -1,11 +1,29 @@
 package Model;
 
+import java.util.Date;
+
 public class ExpenseModel {
 
-    //
-private int id;
-    private String expenseName="", date="", spendAmount="", convertedAmount="", tripId="", tripExpenseDesc="";
+    private int id;
+    private String expenseName;
+    private String spendAmount;
+    private String convertedAmount;
+    private String date;
+    private String tripName;
+    private String expenseDesc;
 
+    public ExpenseModel() {
+    }
+
+    public ExpenseModel(int id, String expenseName, String spendAmount, String convertedAmount, String date, String tripName, String expenseDesc) {
+        this.id = id;
+        this.expenseName = expenseName;
+        this.spendAmount = spendAmount;
+        this.convertedAmount = convertedAmount;
+        this.date = date;
+        this.tripName = tripName;
+        this.expenseDesc = expenseDesc;
+    }
 
     public int getId() {
         return id;
@@ -15,42 +33,12 @@ private int id;
         this.id = id;
     }
 
-    public ExpenseModel() {
-    }
-
-    public ExpenseModel(int id, String expenseName, String date, String spendAmount, String convertedAmount, String tripId, String tripDesc) {
-        this.expenseName = expenseName;
-        this.date = date;
-        this.spendAmount = spendAmount;
-        this.convertedAmount = convertedAmount;
-        this.tripId = tripId;
-        this.tripExpenseDesc= tripDesc;
-        this.id=id;
-
-    }
-
-    public String getTripExpenseDesc() {
-        return tripExpenseDesc;
-    }
-
-    public void setTripExpenseDesc(String tripExpenseDesc) {
-        this.tripExpenseDesc = tripExpenseDesc;
-    }
-
     public String getExpenseName() {
         return expenseName;
     }
 
     public void setExpenseName(String expenseName) {
         this.expenseName = expenseName;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public String getSpendAmount() {
@@ -69,13 +57,27 @@ private int id;
         this.convertedAmount = convertedAmount;
     }
 
-    public String getTripId() {
-        return tripId;
+    public String getDate() {
+        return date;
     }
 
-    public void setTripId(String tripId) {
-        this.tripId = tripId;
+    public void setDate(String date) {
+        this.date = date;
     }
 
+    public String getTripName() {
+        return tripName;
+    }
 
+    public void setTripName(String tripName) {
+        this.tripName = tripName;
+    }
+
+    public String getExpenseDesc() {
+        return expenseDesc;
+    }
+
+    public void setExpenseDesc(String expenseDesc) {
+        this.expenseDesc = expenseDesc;
+    }
 }

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_expenserecord"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:theme="@style/MyActiobBarTheme"
+        app:titleTextColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/expenserecord_textview_expensename"
+        style="@style/FieldTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="@string/text_expensename"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_expenserecord"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <EditText
+        android:id="@+id/expenserecord_edittext_expensename"
+        style="@style/SearchBarText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/text_expensename"
+        app:layout_constraintTop_toTopOf="@id/expenserecord_textview_expensename"
+        app:layout_constraintBottom_toBottomOf="@id/expenserecord_textview_expensename"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="10dp"
+        />
+
+    <TextView
+        android:id="@+id/expenserecord_textview_firstcurrency"
+        style="@style/FieldTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="TextView"
+        app:layout_constraintTop_toBottomOf="@id/expenserecord_textview_expensename"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_textview_expensename"
+        />
+
+    <EditText
+        android:id="@+id/expenserecord_edittext_firstcurrency"
+        style="@style/SearchBarText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/currency"
+        android:inputType="numberDecimal"
+        app:layout_constraintTop_toTopOf="@id/expenserecord_textview_firstcurrency"
+        app:layout_constraintBottom_toBottomOf="@id/expenserecord_textview_firstcurrency"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_edittext_expensename"
+        />
+
+    <TextView
+        android:id="@+id/expenserecord_textview_secondcurrency"
+        style="@style/FieldTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="TextView"
+        app:layout_constraintTop_toBottomOf="@id/expenserecord_textview_firstcurrency"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_textview_firstcurrency"
+        />
+
+    <EditText
+        android:id="@+id/expenserecord_edittext_secondcurrency"
+        style="@style/SearchBarText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/currency"
+        android:inputType="numberDecimal"
+        app:layout_constraintTop_toTopOf="@id/expenserecord_textview_secondcurrency"
+        app:layout_constraintBottom_toBottomOf="@id/expenserecord_textview_secondcurrency"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_edittext_firstcurrency"
+        />
+
+    <TextView
+        android:id="@+id/expenserecord_textview_date"
+        style="@style/FieldTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/date_title"
+        app:layout_constraintTop_toBottomOf="@id/expenserecord_textview_secondcurrency"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_textview_secondcurrency"
+        />
+
+    <EditText
+        android:id="@+id/expenserecord_edittext_date"
+        style="@style/SearchBarText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="YYYY.MM.DD"
+        android:inputType="date"
+        app:layout_constraintTop_toTopOf="@id/expenserecord_textview_date"
+        app:layout_constraintBottom_toBottomOf="@id/expenserecord_textview_date"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_edittext_secondcurrency"
+        />
+
+    <TextView
+        android:id="@+id/expenserecord_textview_tripname"
+        style="@style/FieldTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/trip_title"
+        app:layout_constraintTop_toBottomOf="@id/expenserecord_textview_date"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_textview_date"
+        />
+
+    <EditText
+        android:id="@+id/expenserecord_edittext_tripname"
+        style="@style/SearchBarText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        app:layout_constraintTop_toTopOf="@id/expenserecord_textview_tripname"
+        app:layout_constraintBottom_toBottomOf="@id/expenserecord_textview_tripname"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_edittext_date"
+        />
+
+    <TextView
+        android:id="@+id/expenserecord_textview_desc"
+        style="@style/FieldTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/desc_title"
+        app:layout_constraintTop_toBottomOf="@id/expenserecord_textview_tripname"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_textview_tripname"
+        />
+
+
+    <EditText
+        android:id="@+id/tripedit_edittext_desc"
+        style="@style/SearchBarText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:ems="10"
+        android:hint="Expense Description"
+        android:inputType="textPersonName"
+        app:layout_constraintTop_toBottomOf="@id/expenserecord_textview_desc"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_textview_desc"
+        app:layout_constraintEnd_toEndOf="@id/expenserecord_edittext_tripname"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
