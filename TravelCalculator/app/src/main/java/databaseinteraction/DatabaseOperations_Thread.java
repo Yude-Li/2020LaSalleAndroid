@@ -102,6 +102,17 @@ public class DatabaseOperations_Thread extends AsyncTask {
                 }
 
                 break;
+            case FETCH_SELECTED:
+
+                if (mTableName == Constants.TABLE.TRIPINFO) {
+
+                    mTripInfoModel = dbOperations.getTripPreferenceInfoByID(rowID);
+
+                } else if (mTableName == Constants.TABLE.EXPENSE) {
+                    mExpenseModel = dbOperations.getExpenseDetailsByID(rowID);
+                }
+
+                break;
             case DELETE_RECORD:
                 if (mTableName == Constants.TABLE.TRIPINFO) {
 
@@ -174,6 +185,20 @@ public class DatabaseOperations_Thread extends AsyncTask {
                 } else if (mTableName == Constants.TABLE.EXPENSE) {
                     mDatabaseOperationNotifier.onDeletePerformed(true);
                 }
+
+
+
+            case FETCH_SELECTED:
+
+                if (mTableName == Constants.TABLE.TRIPINFO) {
+                    mDatabaseOperationNotifier.getTrips_INFO(null,0,mTripInfoModel);
+
+
+                } else if (mTableName == Constants.TABLE.EXPENSE) {
+                    mDatabaseOperationNotifier.getExpenses_INFO(mAllExpenses, 0, mExpenseModel);
+                }
+
+
                 break;
 
         }
