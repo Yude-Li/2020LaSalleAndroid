@@ -39,6 +39,9 @@
         <activity
             android:name=".ExpenseRecordEditActivity"
             android:hardwareAccelerated="false"></activity>
+        <activity
+            android:name=".ExpenseListActivity"
+            android:hardwareAccelerated="false"></activity>
 
 
     </application>
