@@ -419,7 +419,10 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
                 break;
 
             case R.id.btn_save:
-
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), ExpenseRecordEditActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
                 break;
 
             case R.id.btn_equal:
