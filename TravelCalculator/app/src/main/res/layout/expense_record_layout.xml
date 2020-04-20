@@ -42,52 +42,56 @@
         android:layout_marginRight="10dp"
         />
 
-    <TextView
-        android:id="@+id/expenserecord_textview_firstcurrency"
-        style="@style/FieldTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="TextView"
+    <ImageView
+        android:id="@+id/expenserecord_imageview_spendamount"
+        style="@style/MyCalculatorDisplayIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/flag_us"
+        android:scaleType="fitXY"
+        android:padding="0dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintTop_toBottomOf="@id/expenserecord_textview_expensename"
         app:layout_constraintStart_toStartOf="@id/expenserecord_textview_expensename"
         />
 
     <EditText
-        android:id="@+id/expenserecord_edittext_firstcurrency"
+        android:id="@+id/expenserecord_edittext_spendamount"
         style="@style/SearchBarText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/currency"
         android:inputType="numberDecimal"
-        app:layout_constraintTop_toTopOf="@id/expenserecord_textview_firstcurrency"
-        app:layout_constraintBottom_toBottomOf="@id/expenserecord_textview_firstcurrency"
+        app:layout_constraintTop_toTopOf="@id/expenserecord_imageview_spendamount"
+        app:layout_constraintBottom_toBottomOf="@id/expenserecord_imageview_spendamount"
         app:layout_constraintStart_toStartOf="@id/expenserecord_edittext_expensename"
         />
 
-    <TextView
-        android:id="@+id/expenserecord_textview_secondcurrency"
-        style="@style/FieldTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="TextView"
-        app:layout_constraintTop_toBottomOf="@id/expenserecord_textview_firstcurrency"
-        app:layout_constraintStart_toStartOf="@id/expenserecord_textview_firstcurrency"
+    <ImageView
+        android:id="@+id/expenserecord_textview_convertedamount"
+        style="@style/MyCalculatorDisplayIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/flag_ca"
+        android:scaleType="fitXY"
+        android:padding="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/expenserecord_imageview_spendamount"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_imageview_spendamount"
         />
 
     <EditText
-        android:id="@+id/expenserecord_edittext_secondcurrency"
+        android:id="@+id/expenserecord_edittext_convertedamount"
         style="@style/SearchBarText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/currency"
         android:inputType="numberDecimal"
-        app:layout_constraintTop_toTopOf="@id/expenserecord_textview_secondcurrency"
-        app:layout_constraintBottom_toBottomOf="@id/expenserecord_textview_secondcurrency"
-        app:layout_constraintStart_toStartOf="@id/expenserecord_edittext_firstcurrency"
+        app:layout_constraintTop_toTopOf="@id/expenserecord_textview_convertedamount"
+        app:layout_constraintBottom_toBottomOf="@id/expenserecord_textview_convertedamount"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_edittext_spendamount"
         />
 
     <TextView
@@ -95,10 +99,10 @@
         style="@style/FieldTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="@string/date_title"
-        app:layout_constraintTop_toBottomOf="@id/expenserecord_textview_secondcurrency"
-        app:layout_constraintStart_toStartOf="@id/expenserecord_textview_secondcurrency"
+        app:layout_constraintTop_toBottomOf="@id/expenserecord_textview_convertedamount"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_textview_convertedamount"
         />
 
     <EditText
@@ -111,7 +115,7 @@
         android:inputType="date"
         app:layout_constraintTop_toTopOf="@id/expenserecord_textview_date"
         app:layout_constraintBottom_toBottomOf="@id/expenserecord_textview_date"
-        app:layout_constraintStart_toStartOf="@id/expenserecord_edittext_secondcurrency"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_edittext_convertedamount"
         />
 
     <TextView
