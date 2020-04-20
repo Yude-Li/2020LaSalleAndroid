@@ -35,7 +35,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
                 android:scaleType="centerInside"
-                app:srcCompat="@drawable/country_icon_usa" />
+                app:srcCompat="@drawable/flag_us" />
 
             <TextView
                 android:id="@+id/textView_firstAmount"
@@ -63,7 +63,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
                 android:scaleType="centerInside"
-                app:srcCompat="@drawable/country_icon_canada" />
+                app:srcCompat="@drawable/flag_ca" />
 
             <TextView
                 android:id="@+id/textView_secondC"
