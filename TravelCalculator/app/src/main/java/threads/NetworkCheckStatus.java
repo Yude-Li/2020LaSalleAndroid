@@ -14,15 +14,16 @@ public class NetworkCheckStatus extends Thread {
 
     public enum CheckType{
         CHECK_CONNECTION_AVAILABLE,
-        CHECK_CONNECTIONTYPE_WIFI
+        CHECK_CONNECTIONTYPE_WIFI,
+        CHECK_ALL
     }
 
-    public void NetworkCheckStatusContext(Context context)
+    public void setContext(Context context)
     {
         myContext = context;
     }
 
-    public void NetworkCheckType(CheckType checkType)
+    public void setCheckType(CheckType checkType)
     {
         this.checkType = checkType;
     }
@@ -42,6 +43,13 @@ public class NetworkCheckStatus extends Thread {
                 isWiFi = nInfo.getType() == ConnectivityManager.TYPE_WIFI;
             }
                 break;
+            case CHECK_ALL: {
+                ConnectivityManager cm = (ConnectivityManager) myContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo nInfo = cm.getActiveNetworkInfo();
+                isConnected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
+                isWiFi = nInfo.getType() == ConnectivityManager.TYPE_WIFI;
+            }
+            break;
         }
     }
 

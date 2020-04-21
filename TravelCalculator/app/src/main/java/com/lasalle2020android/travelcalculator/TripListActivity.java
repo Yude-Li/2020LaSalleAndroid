@@ -39,7 +39,7 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
         setContentView(R.layout.trip_list_layout);
 
         Toolbar mTopToolbar = findViewById(R.id.toolbar_triplist);
-        mTopToolbar.setTitle(R.string.toolBarTitle_tripInfoEdit);
+        mTopToolbar.setTitle(R.string.toolBarTitle_tripList);
         setSupportActionBar(mTopToolbar);
 
         tripListView = findViewById(R.id.triplist_listview);

@@ -1,6 +1,7 @@
 package com.lasalle2020android.travelcalculator;
 
 import android.app.Application;
+import android.content.IntentFilter;
 import android.util.Log;
 
 import DataConfig.CountryConfigAccess;
@@ -11,12 +12,13 @@ public class MyApplication extends Application {
     SettingConfigAccess settingConfig;
     CountryConfigAccess countryConfig;
 
-    public boolean isActivityRunning=true;
+    public static boolean isActivityRunning = false;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.d("Travel", "MyApplication onCreate");
+        isActivityRunning = true;
         settingConfig = new SettingConfigAccess(getApplicationContext());
         settingConfig.initConfigData();
 
@@ -28,10 +30,26 @@ public class MyApplication extends Application {
 
             // get all currency from api
         }
+
+        registerReceiver(new MyBroadcastReceiver(), new IntentFilter("TIMEZONE_CHANGED"));
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
+    }
+
+    public static boolean isActivityVisible() {
+        return isActivityRunning; // return true or false
+    }
+
+    public static void activityResumed() {
+        isActivityRunning = true;// this will set true when activity resumed
+
+    }
+
+    public static void activityPaused() {
+        isActivityRunning = false;// this will set false when activity paused
+
     }
 }
