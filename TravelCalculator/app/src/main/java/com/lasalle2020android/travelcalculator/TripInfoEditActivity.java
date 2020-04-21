@@ -66,7 +66,7 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
         if (dataIndex != -1) { // For edit
             // Get data from db
             new DatabaseOperations_Thread(TripInfoEditActivity.this, Constants.TABLE.TRIPINFO,
-                    Constants.DATABSE_OPERATION.FETCH_SELECTED, this, dataIndex).execute();
+                    Constants.DATABASE_OPERATION.FETCH_SELECTED, this, dataIndex).execute();
         }
         else { // For create
             initialViewObjects();
@@ -120,7 +120,7 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
             {
                 if (dataIndex != -1) { // For edit, update db
                     new DatabaseOperations_Thread(TripInfoEditActivity.this, Constants.TABLE.TRIPINFO,
-                            Constants.DATABSE_OPERATION.UPDATE_RECORD, this, dataIndex).execute();
+                            Constants.DATABASE_OPERATION.UPDATE_RECORD, this, dataIndex).execute();
                 }
                 else { // For create, add db
 

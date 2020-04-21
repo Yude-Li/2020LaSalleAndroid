@@ -155,7 +155,7 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
         adapter.remove(position);
         tripList.remove(position);
         new DatabaseOperations_Thread(TripListActivity.this, Constants.TABLE.TRIPINFO,
-                Constants.DATABSE_OPERATION.DELETE_RECORD, this, position).execute();
+                Constants.DATABASE_OPERATION.DELETE_RECORD, this, position).execute();
     }
 
     // region Database callback function
