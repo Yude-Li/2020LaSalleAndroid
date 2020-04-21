@@ -3,22 +3,30 @@ package com.lasalle2020android.travelcalculator;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 public class UserSettingActivity extends AppCompatActivity {
 
-    TextView textView_RealtimeUpdate_Info;
+    Switch switchUpdateRealTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_setting_layout);
 
-        textView_RealtimeUpdate_Info = findViewById(R.id.textView_RealtimeUpdate_Info);
-
-        String updateInfo = "On: the currency is updated only while using wifi.\n" +
-                "Off: the currency is updated whenever there is a connection.";
-
-        textView_RealtimeUpdate_Info.setText(updateInfo);
+        switchUpdateRealTime = findViewById(R.id.switch_updateRealtime);
+        switchUpdateRealTime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    // User only update by wifi
+                }
+                else {
+                    // User update whenever is a connection
+                }
+            }
+        });
     }
 }
