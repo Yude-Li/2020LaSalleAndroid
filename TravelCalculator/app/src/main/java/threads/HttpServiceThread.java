@@ -29,24 +29,23 @@ GET https://api.exchangeratesapi.io/latest?symbols=USD,GBP
 
 import android.content.Context;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
+
+import com.lasalle2020android.travelcalculator.MyApplication;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import callbacks.ServerResponseNotifier;
-import commonutilities.ComponentInfo;
 
 public class HttpServiceThread extends Thread {
 
     private Context ctx;
-    private ComponentInfo componentInfo;
+    private MyApplication componentInfo;
     private ServerResponseNotifier serverResponseNotifier;
 
     private HttpURLConnection connection;
@@ -60,7 +59,7 @@ public class HttpServiceThread extends Thread {
         CONVERT_CURRENCY
     }
 
-    public HttpServiceThread(ComponentInfo componentInfo, Context ctx, ServerResponseNotifier mHandler, String body, int requestNo) {
+    public HttpServiceThread(MyApplication componentInfo, Context ctx, ServerResponseNotifier mHandler, String body, int requestNo) {
         this.componentInfo = componentInfo;
 
         this.ctx = ctx;

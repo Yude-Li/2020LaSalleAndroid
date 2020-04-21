@@ -20,6 +20,11 @@
     <string name="text_RealtimeUpdateCurrency">Realtime Update Currency</string>
     <string name="fetchDataFail">Fetch Data Fail</string>
     <string name="updateInfo">On: the currency is updated only while using wifi.\n\nOff: the currency is updated whenever there is a connection.</string>
+    <string name="notice_FillupFields">Please fill up all fields</string>
+    <string name="backWithoutSave_NoticeContent">Are you sure to give up this edit?</string>
+    <string name="backWithoutSave_NoticeTitle">Leaving Without Save</string>
+    <string name="toolBarTitle_tripInfoEdit">Trip Information</string>
+    <string name="toolBarTitle_tripList">Trip List</string>
 
 
 </resources>

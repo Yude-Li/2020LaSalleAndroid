@@ -39,6 +39,7 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
         setContentView(R.layout.trip_list_layout);
 
         Toolbar mTopToolbar = findViewById(R.id.toolbar_triplist);
+        mTopToolbar.setTitle(R.string.toolBarTitle_tripInfoEdit);
         setSupportActionBar(mTopToolbar);
 
         tripListView = findViewById(R.id.triplist_listview);
@@ -80,8 +81,11 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
         tripListView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), tripListView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-
-
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), ExpenseListActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("DataIndex", position);
+                startActivity(intent);
             }
 
             @Override
@@ -108,11 +112,11 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
     }
 
     private void showActionsDialog(final int position) {
-        CharSequence colors[] = new CharSequence[]{"Edit", "Delete"};
+        CharSequence actions[] = new CharSequence[]{"Edit", "Delete"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose option");
-        builder.setItems(colors, new DialogInterface.OnClickListener() {
+        builder.setItems(actions, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {

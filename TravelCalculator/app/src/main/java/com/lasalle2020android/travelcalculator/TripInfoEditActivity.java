@@ -1,12 +1,13 @@
 package com.lasalle2020android.travelcalculator;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +51,7 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
         setContentView(R.layout.trip_info_layout);
 
         Toolbar mTopToolbar = findViewById(R.id.toolbar_tripinfo);
+        mTopToolbar.setTitle(R.string.toolBarTitle_tripInfoEdit);
         setSupportActionBar(mTopToolbar);
 
         Intent intent = getIntent();
@@ -59,8 +61,6 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
 
         mCountryPicker = CountryPicker.newInstance("Select Country", TripInfoEditActivity.this);
         mCountryPicker.setCountryList(countryConfig.getCountriesList());
-        // mCurrencyPicker.setCurrenciesList(mSharedPrefrences.getStringSet("selectedCurrencies", new HashSet<String>()));
-
         mCountryPicker.setListener(this);
 
         if (dataIndex != -1) { // For edit
@@ -71,6 +71,55 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
         else { // For create
             initialViewObjects();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (fieldCheck()) {
+            new AlertDialog.Builder(TripInfoEditActivity.this)
+            .setTitle(R.string.backWithoutSave_NoticeTitle)
+            .setMessage(R.string.backWithoutSave_NoticeContent)
+            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    TripInfoEditActivity.super.onBackPressed();
+                }
+            })
+            .setNegativeButton(android.R.string.no, null)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.tripinfo_toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_saveTripInfo:
+            {
+                if (dataIndex != -1) { // For edit, update db
+                    new DatabaseOperations_Thread(TripInfoEditActivity.this, Constants.TABLE.TRIPINFO,
+                            Constants.DATABASE_OPERATION.UPDATE_RECORD, this, dataIndex).execute();
+                }
+                else { // For create, add db
+                    if (inputCheck()) {
+                        new DatabaseOperations_Thread(TripInfoEditActivity.this, Constants.TABLE.TRIPINFO,
+                                Constants.DATABASE_OPERATION.ADD_RECORD, this, tripInfo, null).execute();
+                    }
+                }
+            }
+            break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initialViewObjects() {
@@ -105,31 +154,13 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
         SelectTravelCountry();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.tripinfo_toolbar_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.action_saveTripInfo:
-            {
-                if (dataIndex != -1) { // For edit, update db
-                    new DatabaseOperations_Thread(TripInfoEditActivity.this, Constants.TABLE.TRIPINFO,
-                            Constants.DATABASE_OPERATION.UPDATE_RECORD, this, dataIndex).execute();
-                }
-                else { // For create, add db
-
-                }
-            }
-            break;
-        }
-
-        return super.onOptionsItemSelected(item);
+    private void clearAllFields() {
+        tripNameField.setText("");
+        countryTaxField.setText("");
+        bfTipField.setText("");
+        lnTipField.setText("");
+        DnTipField.setText("");
+        travelCountry.setText("");
     }
 
     private void SelectTravelCountry() {
@@ -146,25 +177,53 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
         });
     }
 
+    private boolean inputCheck() {
+        boolean completeInput = false;
+
+        if (fieldCheck()) {
+            completeInput = true;
+            tripInfo = new TripInfoModel();
+            tripInfo.setTripName(tripNameField.getText().toString());
+            tripInfo.setTravelCountry(selectedCountry.getId());
+            tripInfo.setTax(Float.valueOf(countryTaxField.getText().toString()));
+            tripInfo.setBreakfastTip(Float.valueOf(bfTipField.getText().toString()));
+            tripInfo.setLunchTip(Float.valueOf(lnTipField.getText().toString()));
+            tripInfo.setDinnerTip(Float.valueOf(DnTipField.getText().toString()));
+        }
+        else {
+            Toast.makeText(TripInfoEditActivity.this, R.string.notice_FillupFields, Toast.LENGTH_LONG).show();
+        }
+        return completeInput;
+    }
+
+    private boolean fieldCheck() {
+        boolean isFilled = false;
+        if (!tripNameField.getText().equals("") && !countryTaxField.getText().equals("") && !bfTipField.getText().equals("")
+                && !bfTipField.getText().equals("") && !lnTipField.getText().equals("") && !DnTipField.getText().equals("") && !travelCountry.getText().equals("")) {
+            isFilled = true;
+        }
+        return isFilled;
+    }
+
     // region Database callback function
     @Override
     public void onSavePerformed(boolean isCompletedSuccessfully) {
-
+        clearAllFields();
     }
 
     @Override
     public void onCurrencyRetrivePerformed(boolean isSuccess) {
-
+        clearAllFields();
     }
 
     @Override
     public void onDB_BootCompleted(boolean isSuccess) {
-
+        clearAllFields();
     }
 
     @Override
     public void onDeletePerformed(boolean isSuccess) {
-
+        clearAllFields();
     }
 
     @Override
@@ -197,17 +256,19 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
         selectedCountry.setCurrencySymbol(currencySymbol);
         selectedCountry.setFlagId(String.valueOf(flagDrawableResID));
 
+        travelCountry.setText(displayName);
+
         mCountryPicker.dismiss();
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        clearAllFields();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
+        clearAllFields();
     }
     // endregion
 }

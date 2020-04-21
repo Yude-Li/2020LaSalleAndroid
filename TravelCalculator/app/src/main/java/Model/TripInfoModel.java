@@ -11,7 +11,6 @@ public class TripInfoModel  {
     private int travelCountry; // country Id
     private String startDate;
     private String endDate;
-private String exchangerate="1.33";
     private float tax;
     private float breakfastTip;
     private float lunchTip;

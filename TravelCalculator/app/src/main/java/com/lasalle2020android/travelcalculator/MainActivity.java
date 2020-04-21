@@ -29,7 +29,6 @@ import Model.ExpenseModel;
 import Model.TripInfoModel;
 import callbacks.DatabaseOperationNotifier;
 import callbacks.ServerResponseNotifier;
-import commonutilities.ComponentInfo;
 import commonutilities.Constants;
 import currencies.CurrencyPicker;
 import currencies.CurrencyPickerListener;
