@@ -17,6 +17,8 @@ import org.w3c.dom.Text;
 
 import java.util.List;
 
+import DataConfig.CountryConfigAccess;
+import Model.CountryModel;
 import Model.ExpenseModel;
 import Model.TripInfoModel;
 
@@ -25,8 +27,11 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     private List<TripInfoModel> mTripList = null;
     private List<ExpenseModel> mExpenseList = null;
 
-    public RecycleViewAdapter(List<TripInfoModel> mTripList) {
+    private static Context context;
+
+    public RecycleViewAdapter(List<TripInfoModel> mTripList, Context context) {
         this.mTripList = mTripList;
+        this.context = context;
     }
 
     public RecycleViewAdapter(List<ExpenseModel> mExpenseList, int i) {
@@ -47,9 +52,9 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         public ViewHolder(View itemView) {
             super(itemView);
 
-            countryImg = (ImageView) itemView.findViewById(R.id.doublerow_icon);
-            tripNameTextView = (TextView) itemView.findViewById(R.id.doublerow_title);
-            tripDateTextView = (TextView) itemView.findViewById(R.id.doublerow_tripDate);
+            countryImg = (ImageView) itemView.findViewById(R.id.singlerow_icon_white);
+            tripNameTextView = (TextView) itemView.findViewById(R.id.singlerow_title_white);
+//            tripDateTextView = (TextView) itemView.findViewById(R.id.doublerow_tripDate);
 
             expenseNameTextView = (TextView) itemView.findViewById(R.id.text_expenseName);
             expenseSpendAmountTextView = (TextView) itemView.findViewById(R.id.text_expenseSpendAmount);
@@ -66,7 +71,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
         if (mExpenseList == null) {
             // Inflate the custom layout
-            contactView = inflater.inflate(R.layout.listview_row_double_img, parent, false);
+            contactView = inflater.inflate(R.layout.listview_row_single_img_white, parent, false);
 
         }
         else {
@@ -86,17 +91,20 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         if (mExpenseList == null) {
             TripInfoModel tripInfo = mTripList.get(position);
 
+            CountryConfigAccess countryConfig = new CountryConfigAccess(this.context);
+            CountryModel country = countryConfig.getCountryById(tripInfo.getTravelCountry());
+
             // Get the country info by the countryId
             // Get the country icon from database (or maybe drawable)
             Bitmap bitmap = BitmapFactory.decodeFile("");
             ImageView imgCountry = viewHolder.countryImg;
-            imgCountry.setImageBitmap(bitmap);
+            imgCountry.setImageResource(country.getFlagId(this.context));
 
             TextView textViewName = viewHolder.tripNameTextView;
             textViewName.setText(tripInfo.getTripName());
 
-            TextView textViewDate = viewHolder.tripDateTextView;
-            textViewDate.setText(tripInfo.getStartDate() + " - " + tripInfo.getEndDate());
+//            TextView textViewDate = viewHolder.tripDateTextView;
+//            textViewDate.setText(tripInfo.getStartDate() + " - " + tripInfo.getEndDate());
         }
         else {
             ExpenseModel expenseInfo = mExpenseList.get(position);
@@ -110,7 +118,6 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             TextView textViewConvertedAmount = viewHolder.expenseConvertedAmountTextView;
             textViewConvertedAmount.setText(expenseInfo.getConvertedAmount());
         }
-
     }
 
     // Returns the total count of items in the list

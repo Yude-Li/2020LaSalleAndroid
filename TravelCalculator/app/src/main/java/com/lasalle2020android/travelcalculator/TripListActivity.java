@@ -52,8 +52,8 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
 
         tripListView = findViewById(R.id.triplist_listview);
 
-        GetListFromDb();
         PrepareListView();
+        GetListFromDb();
         SearchBarHandler();
     }
 
@@ -108,13 +108,21 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
     {
         new DatabaseOperations_Thread(TripListActivity.this, Constants.TABLE.TRIPINFO,
                 Constants.DATABASE_OPERATION.FETCH_ALL, this).execute();
+
+        for (int i = 0 ; i < 15 ; i ++) {
+            TripInfoModel trip = new TripInfoModel();
+            trip.setTripName("Demo" + String.valueOf(i));
+            trip.setTravelCountry(136);
+
+            searchedTripList.add(trip);
+        }
     }
 
     private void PrepareListView()
     {
         tripList = new ArrayList<>();
         searchedTripList = new ArrayList<>();
-        adapter = new RecycleViewAdapter(searchedTripList);
+        adapter = new RecycleViewAdapter(searchedTripList, TripListActivity.this);
         tripListView.setAdapter(adapter);
         tripListView.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewOnTouchListener();

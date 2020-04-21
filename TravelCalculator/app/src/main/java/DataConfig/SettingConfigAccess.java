@@ -1,6 +1,7 @@
 package DataConfig;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.BoringLayout;
 
 import java.io.BufferedReader;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+import Model.CountryModel;
 import commonutilities.Constants;
 
 public class SettingConfigAccess {
@@ -17,7 +19,7 @@ public class SettingConfigAccess {
     static String SETTING_CONF = "setting.config";
     private static String[] _files = new String[1];
 
-    public static MyCountryConfig config = new MyCountryConfig();
+    public static SettingConfig config = new SettingConfig();
 
     private enum ConfigName
     {
@@ -36,10 +38,12 @@ public class SettingConfigAccess {
         context = currContext;
     }
 
-    private static class MyCountryConfig
+    private static class SettingConfig
     {
         boolean isFirstTime;
         boolean updateWiFiOnly;
+        int oriCountryId;
+//        CountryModel originalCountry;
     }
 
     public void initConfigData() {
@@ -47,6 +51,9 @@ public class SettingConfigAccess {
 
         config.isFirstTime = true;
         config.updateWiFiOnly = true;
+        config.oriCountryId = -1;
+//        config.originalCountry = new CountryModel();
+
         ReadSiteConfig( Constants.ConfigName.SETTING_CONFIG);
     }
 
@@ -60,12 +67,21 @@ public class SettingConfigAccess {
         SaveSiteConfig(Constants.ConfigName.SETTING_CONFIG);
     }
 
+    public void setOriginalCountryId(int Id) {
+        config.oriCountryId = Id;
+        SaveSiteConfig(Constants.ConfigName.SETTING_CONFIG);
+    }
+
     public Boolean getIsFirstTime() {
         return config.isFirstTime;
     }
 
     public Boolean getUpdateWiFiOnly() {
         return config.updateWiFiOnly;
+    }
+
+    public int getOriginalCountryId() {
+        return config.oriCountryId;
     }
 
     private void SaveSiteConfig(Constants.ConfigName confName)
@@ -117,6 +133,9 @@ public class SettingConfigAccess {
                         else if (Data[0].compareTo("UpdateWiFiOnly") == 0 && Data.length > 1) {
                             config.updateWiFiOnly = Boolean.valueOf(Data[1]);
                         }
+                        else if (Data[0].compareTo("OriginalCountryId") == 0 && Data.length > 1) {
+                            config.oriCountryId = Integer.valueOf(Data[1]);
+                        }
                     }while(KeepReading);
 
                 } catch (IOException e) {
@@ -136,6 +155,7 @@ public class SettingConfigAccess {
                 case SETTING_CONFIG:
                     fos.write("IsFirstTime=" + config.isFirstTime + '\n');
                     fos.write("UpdateWiFiOnly=" + config.updateWiFiOnly + '\n');
+                    fos.write("OriginalCountryId=" + config.oriCountryId + '\n');
                     _files[0] = Constants.ConfigName.SETTING_CONFIG.toString();
                     break;
             }
