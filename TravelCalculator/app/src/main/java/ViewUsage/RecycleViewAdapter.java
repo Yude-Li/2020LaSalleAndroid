@@ -13,23 +13,36 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lasalle2020android.travelcalculator.R;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
+import Model.ExpenseModel;
 import Model.TripInfoModel;
 
 public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.ViewHolder> {
 
-    private List<TripInfoModel> mTripList;
+    private List<TripInfoModel> mTripList = null;
+    private List<ExpenseModel> mExpenseList = null;
 
-    // Pass in the contact array into the constructor
-    public RecycleViewAdapter(List<TripInfoModel> trips) {
-        mTripList = trips;
+    public RecycleViewAdapter(List<TripInfoModel> mTripList) {
+        this.mTripList = mTripList;
+    }
+
+    public RecycleViewAdapter(List<ExpenseModel> mExpenseList, int i) {
+        this.mExpenseList = mExpenseList;
+        i = 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
         public ImageView countryImg;
         public TextView tripNameTextView;
         public TextView tripDateTextView;
+
+        public TextView expenseNameTextView;
+        public TextView expenseSpendAmountTextView;
+        public TextView expenseConvertedAmountTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -37,16 +50,29 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             countryImg = (ImageView) itemView.findViewById(R.id.doublerow_icon);
             tripNameTextView = (TextView) itemView.findViewById(R.id.doublerow_title);
             tripDateTextView = (TextView) itemView.findViewById(R.id.doublerow_tripDate);
+
+            expenseNameTextView = (TextView) itemView.findViewById(R.id.text_expenseName);
+            expenseSpendAmountTextView = (TextView) itemView.findViewById(R.id.text_expenseSpendAmount);
+            expenseConvertedAmountTextView = (TextView) itemView.findViewById(R.id.text_expenseConvertedAmount);
         }
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
+        View contactView;
 
-        // Inflate the custom layout
-        View contactView = inflater.inflate(R.layout.listview_row_double_img, parent, false);
+        if (mExpenseList == null) {
+            // Inflate the custom layout
+            contactView = inflater.inflate(R.layout.listview_row_double_img, parent, false);
+
+        }
+        else {
+            // Inflate the custom layout
+            contactView = inflater.inflate(R.layout.listview_expense, parent, false);
+        }
 
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(contactView);
@@ -56,25 +82,46 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     // Involves populating data into the item through holder
     @Override
     public void onBindViewHolder(RecycleViewAdapter.ViewHolder viewHolder, int position) {
-        TripInfoModel tripInfo = mTripList.get(position);
 
-        // Get the country info by the countryId
-        // Get the country icon from database (or maybe drawable)
-        Bitmap bitmap = BitmapFactory.decodeFile("");
-        ImageView imgCountry = viewHolder.countryImg;
-        imgCountry.setImageBitmap(bitmap);
+        if (mExpenseList == null) {
+            TripInfoModel tripInfo = mTripList.get(position);
 
-        TextView textViewName = viewHolder.tripNameTextView;
-        textViewName.setText(tripInfo.getTripName());
+            // Get the country info by the countryId
+            // Get the country icon from database (or maybe drawable)
+            Bitmap bitmap = BitmapFactory.decodeFile("");
+            ImageView imgCountry = viewHolder.countryImg;
+            imgCountry.setImageBitmap(bitmap);
 
-        TextView textViewDate = viewHolder.tripDateTextView;
-        textViewDate.setText(tripInfo.getStartDate() + " - " + tripInfo.getEndDate());
+            TextView textViewName = viewHolder.tripNameTextView;
+            textViewName.setText(tripInfo.getTripName());
+
+            TextView textViewDate = viewHolder.tripDateTextView;
+            textViewDate.setText(tripInfo.getStartDate() + " - " + tripInfo.getEndDate());
+        }
+        else {
+            ExpenseModel expenseInfo = mExpenseList.get(position);
+
+            TextView textViewName = viewHolder.expenseNameTextView;
+            textViewName.setText(expenseInfo.getExpenseName());
+
+            TextView textViewSpendAmount = viewHolder.expenseSpendAmountTextView;
+            textViewSpendAmount.setText(expenseInfo.getSpendAmount());
+
+            TextView textViewConvertedAmount = viewHolder.expenseConvertedAmountTextView;
+            textViewConvertedAmount.setText(expenseInfo.getConvertedAmount());
+        }
+
     }
 
     // Returns the total count of items in the list
     @Override
     public int getItemCount() {
-        return mTripList.size();
+        if (mExpenseList == null) {
+            return mTripList.size();
+        }
+        else {
+            return mExpenseList.size();
+        }
     }
 
     public void add(int position, TripInfoModel item) {
@@ -82,8 +129,19 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         notifyItemInserted(position);
     }
 
+    public void add(int position, ExpenseModel item) {
+        mExpenseList.add(item);
+        notifyItemChanged(position);
+    }
+
     public void remove(int position) {
-        mTripList.remove(position);
-        notifyItemRemoved(position);
+        if (mExpenseList == null){
+            mTripList.remove(position);
+            notifyItemRemoved(position);
+        }
+        else {
+            mExpenseList.remove(position);
+            notifyItemRemoved(position);
+        }
     }
 }
