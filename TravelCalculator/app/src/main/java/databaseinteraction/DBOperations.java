@@ -206,11 +206,11 @@ try {
                  ExpenseModel trip = new ExpenseModel();
                  trip.setId(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_ID)));
                  trip.setExpenseName(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_NAME)));
-                 trip.setDate(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_DATE)));
                  trip.setSpendAmount(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_SPEND_AMOUNT)));
                  trip.setConvertedAmount(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_CONVERTED_AMOUNT)));
-                 trip.setExpenseDesc(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_DESCRIPTION)));
-                 trip.setTripName(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_TRIPNAME))+"");
+                 trip.setDate(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_DATE)));
+                 trip.setTripId(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_TRIP_ID)));
+                 trip.setExpenseDesc(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_DESCRIPTION)) + "");
 
                  trips.add(trip);
              } while (cursor.moveToNext());
@@ -236,7 +236,7 @@ try {
          values.put(Constants.COLUMN_EXPENSE_SPEND_AMOUNT, mExpenseModel.getSpendAmount());
          values.put(Constants.COLUMN_EXPENSE_CONVERTED_AMOUNT, mExpenseModel.getConvertedAmount());
          values.put(Constants.COLUMN_EXPENSE_DESCRIPTION, mExpenseModel.getExpenseDesc());
-         values.put(Constants.COLUMN_TRIPNAME, mExpenseModel.getTripName());
+         values.put(Constants.COLUMN_TRIP_ID, mExpenseModel.getTripId());
          // insert row
          long id = database.insert(Constants.TABLE_NAME_EXPENSE, null, values);
 
@@ -255,11 +255,11 @@ try {
          Cursor cursor = database.query(Constants.TABLE_NAME_EXPENSE,
                  new String[]{Constants.COLUMN_ID
                          , Constants.COLUMN_EXPENSE_NAME
-                         , Constants.COLUMN_EXPENSE_DATE
                          , Constants.COLUMN_EXPENSE_SPEND_AMOUNT
                          , Constants.COLUMN_EXPENSE_CONVERTED_AMOUNT
-                         , Constants.COLUMN_EXPENSE_DESCRIPTION
-                         , Constants.COLUMN_TRIPNAME},
+                         , Constants.COLUMN_EXPENSE_DATE
+                         , Constants.COLUMN_TRIP_ID
+                         , Constants.COLUMN_EXPENSE_DESCRIPTION},
                  Constants.COLUMN_ID + "=?",
                  new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -270,11 +270,11 @@ try {
          ExpenseModel mExpense = new ExpenseModel(
                  cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_ID)),
                  cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_NAME)),
-                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_DATE)),
                  cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_SPEND_AMOUNT)),
                  cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_CONVERTED_AMOUNT)),
-                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_DESCRIPTION)),
-                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_TRIPNAME)));
+                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_DATE)),
+                 cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_TRIP_ID)),
+                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_DESCRIPTION)));
 
          // close the db connection
          close();

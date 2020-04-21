@@ -19,5 +19,7 @@
     <string name="desc_title">Description</string>
     <string name="text_RealtimeUpdateCurrency">Realtime Update Currency</string>
     <string name="fetchDataFail">Fetch Data Fail</string>
+    <string name="updateInfo">On: the currency is updated only while using wifi.\n\nOff: the currency is updated whenever there is a connection.</string>
+
 
 </resources>

@@ -1,6 +1,5 @@
 package databaseinteraction;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -19,7 +18,7 @@ public class DatabaseOperations_Thread extends AsyncTask {
 
     private Context mContext;
     private AppCompatActivity mActivity;
-    private Constants.DATABSE_OPERATION mOperation_Name;
+    private Constants.DATABASE_OPERATION mOperation_Name;
     private Constants.TABLE mTableName;
     private DatabaseOperationNotifier mDatabaseOperationNotifier;
     private List<TripInfoModel> mAllTrips;
@@ -35,7 +34,7 @@ public class DatabaseOperations_Thread extends AsyncTask {
     }
 
     public DatabaseOperations_Thread(Context mContext, Constants.TABLE mTableName,
-                                     Constants.DATABSE_OPERATION mOperation_Name,
+                                     Constants.DATABASE_OPERATION mOperation_Name,
                                      DatabaseOperationNotifier mDatabaseOperationNotifier) {
         this.mContext = mContext;
         this.mOperation_Name = mOperation_Name;
@@ -45,7 +44,7 @@ public class DatabaseOperations_Thread extends AsyncTask {
     }
 
     public DatabaseOperations_Thread(AppCompatActivity mActivity, Constants.TABLE mTableName,
-                                     Constants.DATABSE_OPERATION mOperation_Name,
+                                     Constants.DATABASE_OPERATION mOperation_Name,
                                      DatabaseOperationNotifier mDatabaseOperationNotifier) {
         this.mActivity = mActivity;
         this.mOperation_Name = mOperation_Name;
@@ -55,7 +54,7 @@ public class DatabaseOperations_Thread extends AsyncTask {
     }
 
     public DatabaseOperations_Thread(AppCompatActivity mActivity, Constants.TABLE mTableName,
-                                     Constants.DATABSE_OPERATION mOperation_Name,
+                                     Constants.DATABASE_OPERATION mOperation_Name,
                                      DatabaseOperationNotifier mDatabaseOperationNotifier, TripInfoModel tripInfoModel, ExpenseModel expenseModel) {
         this.mActivity = mActivity;
         this.mOperation_Name = mOperation_Name;
@@ -68,7 +67,7 @@ public class DatabaseOperations_Thread extends AsyncTask {
 
 
     public DatabaseOperations_Thread(AppCompatActivity mActivity, Constants.TABLE mTableName,
-                                     Constants.DATABSE_OPERATION mOperation_Name,
+                                     Constants.DATABASE_OPERATION mOperation_Name,
                                      DatabaseOperationNotifier mDatabaseOperationNotifier,  int rowID) {
         this.mActivity = mActivity;
         this.mOperation_Name = mOperation_Name;

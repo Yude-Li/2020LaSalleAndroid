@@ -3,7 +3,6 @@ package com.lasalle2020android.travelcalculator;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.app.Application;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -36,7 +35,6 @@ import currencies.CurrencyPicker;
 import currencies.CurrencyPickerListener;
 import currencies.ExtendedCurrency;
 import databaseinteraction.DatabaseOperations_Thread;
-import threads.HttpServiceThread;
 
 public class MainActivity extends AppCompatActivity implements ServerResponseNotifier,
         CurrencyPickerListener, AdapterView.OnItemSelectedListener, View.OnClickListener, SharedPreferences.OnSharedPreferenceChangeListener, DatabaseOperationNotifier {
@@ -117,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
 
         new DatabaseOperations_Thread(MainActivity.this, Constants.TABLE.ALL,
-                Constants.DATABSE_OPERATION.DB_CREATE, this).execute();
+                Constants.DATABASE_OPERATION.DB_CREATE, this).execute();
 
 
     }
@@ -505,7 +503,7 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
         if(isSuccess){
 
              new DatabaseOperations_Thread(MainActivity.this, Constants.TABLE.TRIPINFO,
-                    Constants.DATABSE_OPERATION.FETCH_ALL, this).execute();
+                    Constants.DATABASE_OPERATION.FETCH_ALL, this).execute();
         }
 
     }

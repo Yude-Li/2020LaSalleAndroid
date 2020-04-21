@@ -1,21 +1,12 @@
 package com.lasalle2020android.travelcalculator;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Movie;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -23,12 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import Model.ExpenseModel;
 import Model.TripInfoModel;
-import ViewUsage.MyDividerItemDecoration;
 import ViewUsage.RecycleViewAdapter;
 import ViewUsage.RecyclerTouchListener;
 import callbacks.DatabaseOperationNotifier;
@@ -105,7 +94,7 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
     private void GetListFromDb()
     {
         new DatabaseOperations_Thread(TripListActivity.this, Constants.TABLE.TRIPINFO,
-                Constants.DATABSE_OPERATION.FETCH_ALL, this).execute();
+                Constants.DATABASE_OPERATION.FETCH_ALL, this).execute();
     }
 
     private void PrepareListView()
