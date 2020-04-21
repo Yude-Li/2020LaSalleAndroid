@@ -51,13 +51,15 @@
         app:layout_constraintLeft_toLeftOf="@id/edittext_tripinfo_tripname"
         app:layout_constraintTop_toBottomOf="@id/edittext_tripinfo_tripname" />
 
-    <Spinner
-        android:id="@+id/spinner_tripinfo_countrylist"
+    <TextView
+        android:id="@+id/tripinfo_countrylist"
         style="@style/SearchBarText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginRight="20dp"
+        android:clickable="true"
+        android:editable="false"
         app:layout_constraintLeft_toLeftOf="@id/tripInfo_travelcountry_title"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tripInfo_travelcountry_title" />
@@ -69,8 +71,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/text_travelcountry_tax"
-        app:layout_constraintLeft_toLeftOf="@id/spinner_tripinfo_countrylist"
-        app:layout_constraintTop_toBottomOf="@id/spinner_tripinfo_countrylist" />
+        app:layout_constraintLeft_toLeftOf="@id/tripinfo_countrylist"
+        app:layout_constraintTop_toBottomOf="@id/tripinfo_countrylist" />
 
     <EditText
         android:id="@+id/editText_tripinfo_travelcountry_tax"

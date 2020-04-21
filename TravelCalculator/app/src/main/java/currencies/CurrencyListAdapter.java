@@ -27,8 +27,6 @@ public class CurrencyListAdapter extends BaseAdapter {
         inflater = LayoutInflater.from(context);
     }
 
-
-
     @Override
     public int getCount() {
         return currencies.size();

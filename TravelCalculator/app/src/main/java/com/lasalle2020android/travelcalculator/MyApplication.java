@@ -11,6 +11,8 @@ public class MyApplication extends Application {
     SettingConfigAccess settingConfig;
     CountryConfigAccess countryConfig;
 
+    public boolean isActivityRunning=true;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -23,6 +25,13 @@ public class MyApplication extends Application {
         countryConfig.initConfigData(fisrtTime);
         if (fisrtTime) {
             settingConfig.setIsFirstTime(false);
+
+            // get all currency from api
         }
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
     }
 }

@@ -18,5 +18,6 @@
     <string name="trip_title">Trip</string>
     <string name="desc_title">Description</string>
     <string name="text_RealtimeUpdateCurrency">Realtime Update Currency</string>
+    <string name="fetchDataFail">Fetch Data Fail</string>
 
 </resources>

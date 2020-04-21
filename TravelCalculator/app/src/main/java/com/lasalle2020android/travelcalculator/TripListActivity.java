@@ -77,6 +77,7 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), TripInfoEditActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("DataIndex", -1);
                 startActivity(intent);
             }
             break;
@@ -126,7 +127,11 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
-                    //showNoteDialog(true, tripList.get(position), position);
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), TripInfoEditActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("DataIndex", position);
+                    startActivity(intent);
                 } else {
                     showDeleteDialog(position);
                 }
@@ -142,8 +147,7 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
 
         builder1.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                adapter.remove(position);
-                tripList.remove(position);
+                deleteTrip(position);
                 dialog.cancel();
             }
         });
@@ -158,6 +162,14 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
         alert11.show();
     }
 
+    private void deleteTrip(int position) {
+        adapter.remove(position);
+        tripList.remove(position);
+        new DatabaseOperations_Thread(TripListActivity.this, Constants.TABLE.TRIPINFO,
+                Constants.DATABSE_OPERATION.DELETE_RECORD, this, position).execute();
+    }
+
+    // region Database callback function
     @Override
     public void onSavePerformed(boolean isCompletedSuccessfully) {
 
@@ -188,4 +200,5 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
     public void getExpenses_INFO(List<ExpenseModel> mAllExpense, int mCount, ExpenseModel mExpense) {
 
     }
+    // endregion
 }

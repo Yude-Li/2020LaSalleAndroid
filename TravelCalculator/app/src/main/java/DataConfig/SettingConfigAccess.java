@@ -19,17 +19,17 @@ public class SettingConfigAccess {
 
     public static MyCountryConfig config = new MyCountryConfig();
 
-//    private enum ConfigName
-//    {
-//        SETTING_CONFIG("setting.config");
-//
-//        @SuppressWarnings("unused")
-//        private final String name;
-//
-//        ConfigName(String s) {
-//            name = s;
-//        }
-//    }
+    private enum ConfigName
+    {
+        SETTING_CONFIG("setting.config");
+
+        @SuppressWarnings("unused")
+        private final String name;
+
+        ConfigName(String s) {
+            name = s;
+        }
+    }
 
     public SettingConfigAccess(Context currContext)
     {

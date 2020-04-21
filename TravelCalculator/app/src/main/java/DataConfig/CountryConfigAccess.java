@@ -35,17 +35,17 @@ public class CountryConfigAccess {
 
     public static MyCountryConfig config = new MyCountryConfig();
 
-//    private enum ConfigName
-//    {
-//        COUNTRY_INFO_CONFIG("countryinfo.config");
-//
-//        @SuppressWarnings("unused")
-//        private final String name;
-//
-//        ConfigName(String s) {
-//            name = s;
-//        }
-//    }
+    private enum ConfigName
+    {
+        COUNTRY_INFO_CONFIG("countryinfo.config");
+
+        @SuppressWarnings("unused")
+        private final String name;
+
+        ConfigName(String s) {
+            name = s;
+        }
+    }
 
     public CountryConfigAccess(Context currContext)
     {
@@ -136,7 +136,7 @@ public class CountryConfigAccess {
                             country.setId(Integer.valueOf(Data[1]));
                         }
                         else if (Data[0].compareTo("CountryNum") == 0 && Data.length > 1) {
-                            country.setCountryNumber(Integer.valueOf(Data[1]));
+                            country.setCountryNum(Integer.valueOf(Data[1]));
                         }
                         else if (Data[0].compareTo("CountryCode") == 0 && Data.length > 1) {
                             country.setCurrencyCode(Data[1]);
@@ -149,6 +149,15 @@ public class CountryConfigAccess {
                         }
                         else if (Data[0].compareTo("Currency") == 0 && Data.length > 1) {
                             country.setCurrency(Float.valueOf(Data[1]));
+                        }
+                        else if (Data[0].compareTo("CurrencyName") == 0 && Data.length > 1) {
+                            country.setCurrencyName(Data[1]);
+                        }
+                        else if (Data[0].compareTo("CurrencySymbol") == 0 && Data.length > 1) {
+                            country.setCurrencySymbol(Data[1]);
+                        }
+                        else if (Data[0].compareTo("FlagId") == 0 && Data.length > 1) {
+                            country.setFlagId(Data[1]);
                             config.countryList.add(country);
                         }
 
@@ -173,11 +182,14 @@ public class CountryConfigAccess {
                     for (int i = 0; i < config.countryList.size() ; i++) {
                         CountryModel country = config.countryList.get(i);
                         fos.write("Id=" + country.getId() + '\n');
-                        fos.write("CountryNum=" + country.getCountryNumber() + '\n');
+                        fos.write("CountryNum=" + country.getCountryNum() + '\n');
                         fos.write("CountryCode=" + country.getCurrencyCode() + '\n');
                         fos.write("DisplayName=" + country.getDisplayName() + '\n');
                         fos.write("CurrencyCode=" + country.getCurrencyCode() + '\n');
                         fos.write("Currency=" + country.getCurrency() + '\n');
+                        fos.write("CurrencyName=" + country.getCurrencyName() + '\n');
+                        fos.write("CurrencySymbol=" + country.getCurrencySymbol() + '\n');
+                        fos.write("FlagId=" + country.getFlagId(context) + '\n');
                     }
 
                     _files[0] = Constants.ConfigName.COUNTRY_INFO_CONFIG.toString();

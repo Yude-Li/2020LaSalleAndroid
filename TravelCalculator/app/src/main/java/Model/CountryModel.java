@@ -1,5 +1,7 @@
 package Model;
 
+import android.content.Context;
+
 public class CountryModel {
 
     private int Id;
@@ -10,7 +12,7 @@ public class CountryModel {
     private float currency;
     private String currencyName;
     private String currencySymbol;
-    private int flagId;
+    private String flagId;
 
     public int getId() {
         return Id;
@@ -20,20 +22,20 @@ public class CountryModel {
         Id = id;
     }
 
-    public int getCountryNumber() {
+    public int getCountryNum() {
         return countryNum;
     }
 
-    public void setCountryNumber(int countryNumber) {
-        this.countryNum = countryNumber;
+    public void setCountryNum(int countryNum) {
+        this.countryNum = countryNum;
     }
 
     public String getCountryCode() {
         return countryCode;
     }
 
-    public void setCountryCode(String code) {
-        this.countryCode = code;
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
     }
 
     public String getDisplayName() {
@@ -60,14 +62,6 @@ public class CountryModel {
         this.currency = currency;
     }
 
-    public int getCountryNum() {
-        return countryNum;
-    }
-
-    public void setCountryNum(int countryNum) {
-        this.countryNum = countryNum;
-    }
-
     public String getCurrencyName() {
         return currencyName;
     }
@@ -84,11 +78,12 @@ public class CountryModel {
         this.currencySymbol = currencySymbol;
     }
 
-    public int getFlagId() {
-        return flagId;
+    public int getFlagId(Context context) {
+        int flag = context.getResources().getIdentifier(this.flagId, "drawable", context.getPackageName());
+        return flag;
     }
 
-    public void setFlagId(int flagId) {
+    public void setFlagId(String flagId) {
         this.flagId = flagId;
     }
 }
