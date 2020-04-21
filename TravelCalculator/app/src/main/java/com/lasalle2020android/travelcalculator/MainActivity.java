@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
     private boolean mCurrencySelectedFirst = false, isLastCharEnteredSymbol = false;
 
 
-    private ComponentInfo mComponentInfo;
+    private MyApplication mComponentInfo;
 
 
     @Override
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
         Toolbar mTopToolbar = findViewById(R.id.toolbar_calculator);
         setSupportActionBar(mTopToolbar);
 
-        mComponentInfo = (ComponentInfo) getApplicationContext();
+        mComponentInfo = (MyApplication) getApplicationContext();
         performDB_Create();
 
 //        HttpServiceThread httpServiceThread = new HttpServiceThread(mComponentInfo,MainActivity.this,MainActivity.this,"USD,GBP",00);
