@@ -37,11 +37,11 @@ import commonutilities.Constants;
                 + Constants.TABLE_NAME_EXPENSE
                 + " (_id integer primary key autoincrement, "+
                 Constants.COLUMN_EXPENSE_NAME+" text not null, "+
-                Constants.COLUMN_EXPENSE_DATE+" text not null, "+
                 Constants.COLUMN_EXPENSE_SPEND_AMOUNT+" text not null, "+
                 Constants.COLUMN_EXPENSE_CONVERTED_AMOUNT+" text not null, " +
+                Constants.COLUMN_TRIP_ID +" integer not null, "+
+                Constants.COLUMN_EXPENSE_DATE+" text not null, "+
                 Constants.COLUMN_EXPENSE_DESCRIPTION+" text not null, "+
-                Constants.COLUMN_TRIPNAME +" text not null, "+
 
 
                 "UNIQUE("+Constants.COLUMN_EXPENSE_NAME+", "+

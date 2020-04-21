@@ -1,7 +1,5 @@
 package Model;
 
-import java.util.Date;
-
 public class ExpenseModel {
 
     private int id;
@@ -9,19 +7,19 @@ public class ExpenseModel {
     private String spendAmount;
     private String convertedAmount;
     private String date;
-    private String tripName;
+    private int tripId;
     private String expenseDesc;
 
     public ExpenseModel() {
     }
 
-    public ExpenseModel(int id, String expenseName, String spendAmount, String convertedAmount, String date, String tripName, String expenseDesc) {
+    public ExpenseModel(int id, String expenseName, String spendAmount, String convertedAmount, String date, int tripId, String expenseDesc) {
         this.id = id;
         this.expenseName = expenseName;
         this.spendAmount = spendAmount;
         this.convertedAmount = convertedAmount;
         this.date = date;
-        this.tripName = tripName;
+        this.tripId = tripId;
         this.expenseDesc = expenseDesc;
     }
 
@@ -65,12 +63,12 @@ public class ExpenseModel {
         this.date = date;
     }
 
-    public String getTripName() {
-        return tripName;
+    public int getTripId() {
+        return tripId;
     }
 
-    public void setTripName(String tripName) {
-        this.tripName = tripName;
+    public void setTripId(int tripId) {
+        this.tripId = tripId;
     }
 
     public String getExpenseDesc() {
