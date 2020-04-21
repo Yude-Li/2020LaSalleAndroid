@@ -69,7 +69,7 @@ public class CountryPicker extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.currency_picker, null);
+        View view = inflater.inflate(R.layout.country_picker, null);
         Bundle args = getArguments();
         if (args != null && getDialog() != null) {
             String dialogTitle = args.getString("dialogTitle");
