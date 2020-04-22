@@ -201,7 +201,7 @@ instantiateData();
 
         if (isSelected) {
 
-            mCustomiseTip_Btn.setEnabled(false);
+            mCustomiseTip_Btn.setEnabled(true);
             mSpinnerTripList.setEnabled(true);
             mCurrencySelectionImage_One.setEnabled(false);
             mCurrencySelectionImage_Second.setEnabled(false);
@@ -548,6 +548,10 @@ instantiateData();
           //  mCurrencySelectionImage_Second.setEnabled(false);
             //mCurrencySelectionImage_One.setEnabled(false);
 
+        }else{
+
+
+            setUI_TripSelectionChange(false);
         }
 
 

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "412476398636",
+    "firebase_url": "https://travel-calculator-2dbe7.firebaseio.com",
+    "project_id": "travel-calculator-2dbe7",
+    "storage_bucket": "travel-calculator-2dbe7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:412476398636:android:dc61120eb92ec29ed3c589",
+        "android_client_info": {
+          "package_name": "com.lasalle2020android.travelcalculator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "412476398636-qmptqg0vnv5304tmuvmjn7lv9v6upbf9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTrMsTRvIRSB5kqvKz9_WySGy1I9GkmcY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "412476398636-qmptqg0vnv5304tmuvmjn7lv9v6upbf9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
