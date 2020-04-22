@@ -29,14 +29,14 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
     private static Context context;
 
-    public RecycleViewAdapter(List<TripInfoModel> mTripList, Context context) {
+    public RecycleViewAdapter(List<TripInfoModel> mTripList, Context context, int type) {
         this.mTripList = mTripList;
         this.context = context;
     }
 
-    public RecycleViewAdapter(List<ExpenseModel> mExpenseList, int i) {
+    public RecycleViewAdapter(List<ExpenseModel> mExpenseList, Context context) {
         this.mExpenseList = mExpenseList;
-        i = 0;
+        this.context = context;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

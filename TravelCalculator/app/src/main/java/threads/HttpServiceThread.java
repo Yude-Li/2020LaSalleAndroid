@@ -31,15 +31,30 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lasalle2020android.travelcalculator.MyApplication;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
+import DataConfig.CountryConfigAccess;
+import DataConfig.SettingConfigAccess;
 import callbacks.ServerResponseNotifier;
 
 public class HttpServiceThread extends Thread {
@@ -52,8 +67,12 @@ public class HttpServiceThread extends Thread {
     int requestNo;
     private Handler mHandler;
     private boolean interupt = false;
-    private String webResponse = "", bodyData = "", apiName = "", baseUrl = "https://api.exchangeratesapi.io/latest?symbols=";
+    private String  bodyData = "", apiName = "", baseUrl = "https://api.exchangeratesapi.io/latest?symbols=";
 
+    private String travelCurrencyName = "";
+    private String originalCurrencyName = "";
+
+    ActionMode actionMode;
     public enum ActionMode {
         UPDATE_CURRENCY,
         CONVERT_CURRENCY
@@ -70,12 +89,23 @@ public class HttpServiceThread extends Thread {
         this.requestNo = requestNo;
     }
 
-    public void setConversionCurrency(String newCurrency) {
+    public HttpServiceThread(Context ctx, MyApplication componentInfo, ActionMode actionMode) {
+        this.ctx = ctx;
+        this.componentInfo = componentInfo;
+        this.actionMode = actionMode;
+    }
 
+    public void setConversionCurrencyBase(String newCurrency) {
+        // Update currency base on the original country
+        SettingConfigAccess settingConfigAccess = new SettingConfigAccess(this.ctx);
+        CountryConfigAccess countryConfigAccess = new CountryConfigAccess(this.ctx);
+
+        this.originalCurrencyName = countryConfigAccess.getCountryById(settingConfigAccess.getOriginalCountryId()).getCurrencyName();
     }
 
     public void setConversionCurrency(String currCurrency, String newCurrency) {
-
+        this.travelCurrencyName = newCurrency;
+        this.originalCurrencyName = currCurrency;
     }
 
     private void postMessage(String webResponse, int requestNo) {
@@ -89,67 +119,158 @@ public class HttpServiceThread extends Thread {
         }
     }
 
-    @Override
-    public void run() {
-        if (interupt == false) {
+//    @Override
+//    public void run() {
+//        if (interupt == false) {
+//
+//            String URL = "";
+//
+//            if (!interupt) {
+//
+//                try {
+//
+//                    Log.e("", "=========== HTTP REQUEST===========");
+//                    Log.e("", "Request Name  - " + apiName);
+//                    Log.e("", "Request Data  - " + bodyData);
+//                    Log.e("", "====================================");
+//
+//
+//                    java.net.URL url = new URL(baseUrl + bodyData);
+//
+//                    try {
+//                        connection = (HttpURLConnection) url.openConnection();
+//                    } catch (IOException e1) {
+//                        // TODO Auto-generated catch block
+//                        e1.printStackTrace();
+//                    }
+//                    connection.setConnectTimeout(60000);
+//
+//                    connection.connect();
+//                    InputStream inputStream = null;
+//                    inputStream = connection.getInputStream();
+//                    //readStream(inputStream);
+//
+//                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+//                    String str;
+//                    StringBuilder stringBuilder = new StringBuilder();
+//
+//                    while ((str = reader.readLine()) != null) {
+//                        stringBuilder.append(str);
+//                        webResponse = stringBuilder.toString();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                Log.i("http end-" + requestNo, "Resquest Json --> " + bodyData);
+//                // Log.e("http end-" + requestNo, "Response Json  - image -> " + webResponse);
+//
+//                Log.i("", "=========== HTTP REQUEST===========");
+//                Log.i("", "Request Name  -   " + apiName);
+//                Log.i("", "Request Data  -   " + bodyData);
+//                Log.i("", "Response Data -   " + webResponse);
+//                Log.i("", "====================================");
+//                // Log.e("webResponse=========",webResponse);
+//
+//                connection.disconnect();
+//                connection = null;
+//
+//
+//            }
+//
+//            Log.i("" + requestNo, webResponse);
+//            postMessage(webResponse, requestNo);
+//        }
+//    }
 
-            String URL = "";
-
-            if (!interupt) {
-
+    public void run()
+    {
+        switch (actionMode) {
+            case UPDATE_CURRENCY: {
                 try {
-
-                    Log.e("", "=========== HTTP REQUEST===========");
-                    Log.e("", "Request Name  - " + apiName);
-                    Log.e("", "Request Data  - " + bodyData);
-                    Log.e("", "====================================");
-
-
-                    java.net.URL url = new URL(baseUrl + bodyData);
-
-                    try {
-                        connection = (HttpURLConnection) url.openConnection();
-                    } catch (IOException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
+                    URL url = new URL("https://api.exchangeratesapi.io/latest?base=" + this.originalCurrencyName);
+                    connection = (HttpURLConnection) url.openConnection();
                     connection.setConnectTimeout(60000);
-
-                    connection.connect();
-                    InputStream inputStream = null;
-                    inputStream = connection.getInputStream();
-                    //readStream(inputStream);
-
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                    String str;
-                    StringBuilder stringBuilder = new StringBuilder();
-
-                    while ((str = reader.readLine()) != null) {
-                        stringBuilder.append(str);
-                        webResponse = stringBuilder.toString();
+                    int responseCode = connection.getResponseCode();
+                    if (responseCode == 200) {
+                        InputStream input = connection.getInputStream();
+                        String response = streamToString(input);
+                        Log.d("GetCurrency", response);
+                        parseAllCurrencyJson(response);
                     }
-                } catch (Exception e) {
+                    connection.disconnect();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Log.i("http end-" + requestNo, "Resquest Json --> " + bodyData);
-                // Log.e("http end-" + requestNo, "Response Json  - image -> " + webResponse);
+            }
+            break;
+            case CONVERT_CURRENCY: {
+                try {
+                    //https://api.exchangeratesapi.io/latest?base=USD&symbols=GBP
+                    URL url = new URL(" https://api.exchangeratesapi.io/latest?base=" + this.originalCurrencyName + "&symbols=" + this.travelCurrencyName);
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.setConnectTimeout(60000);
+                    int responseCode = connection.getResponseCode();
+                    if (responseCode == 200) {
+                        InputStream input = connection.getInputStream();
+                        String response = streamToString(input);
+                        Log.d("GetCurrency", response);
+                        postMessage(response, responseCode);
+                    }
+                    connection.disconnect();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            break;
+        }
+    }
 
-                Log.i("", "=========== HTTP REQUEST===========");
-                Log.i("", "Request Name  -   " + apiName);
-                Log.i("", "Request Data  -   " + bodyData);
-                Log.i("", "Response Data -   " + webResponse);
-                Log.i("", "====================================");
-                // Log.e("webResponse=========",webResponse);
 
-                connection.disconnect();
-                connection = null;
-
-
+    public void parseAllCurrencyJson(String jsonString) {
+        try {
+            JSONObject jsonGet = new JSONObject(jsonString);
+            String rates = jsonGet.getString("rates");
+            JSONObject jsonRate = new JSONObject(rates);
+            Iterator<String> keysItr = jsonRate.keys();
+            List<ApiCurrencyModel> rateList = new ArrayList<>();
+            while(keysItr.hasNext()) {
+                String key = keysItr.next();
+                Double value = Double.valueOf(jsonRate.get(key).toString());
+                ApiCurrencyModel apiCurrencyModel = new ApiCurrencyModel(key, value);
+                rateList.add(apiCurrencyModel);
             }
 
-            Log.i("" + requestNo, webResponse);
-            postMessage(webResponse, requestNo);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+    }
+
+    public void parseConvertCurrencyJson(String jsonString) {
+
+    }
+
+    public static String streamToString(InputStream is) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+        String line;
+        while ((line = rd.readLine()) != null) {
+            sb.append(line);
+        }
+        return sb.toString();
+    }
+}
+
+class ApiCurrencyModel {
+    private String currencyCode;
+    private double currencyRate;
+
+    public ApiCurrencyModel(String currencyCode, double currencyRate) {
+        this.currencyCode = currencyCode;
+        this.currencyRate = currencyRate;
     }
 }
 

@@ -115,14 +115,14 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
         }
 
         mExpenseList.clear();
-        mExpenseList = filteredExpenseList;
+        mExpenseList.addAll(filteredExpenseList);
 
         adapter.notifyDataSetChanged();
     }
 
     private void PrepareListView(){
         mExpenseList = new ArrayList<>();
-        adapter = new RecycleViewAdapter(mExpenseList, 0);
+        adapter = new RecycleViewAdapter(mExpenseList, ExpenseListActivity.this);
 
         expenseListView.setAdapter(adapter);
         expenseListView.setLayoutManager(new LinearLayoutManager(this));

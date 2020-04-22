@@ -128,7 +128,7 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
     {
         tripList = new ArrayList<>();
         searchedTripList = new ArrayList<>();
-        adapter = new RecycleViewAdapter(searchedTripList, TripListActivity.this);
+        adapter = new RecycleViewAdapter(searchedTripList, TripListActivity.this, 1);
         tripListView.setAdapter(adapter);
         tripListView.setLayoutManager(new LinearLayoutManager(this));
         Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.recycler_divider);

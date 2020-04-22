@@ -51,7 +51,7 @@ public class SettingConfigAccess {
 
         config.isFirstTime = true;
         config.updateWiFiOnly = true;
-        config.oriCountryId = -1;
+        config.oriCountryId = 18;
 //        config.originalCountry = new CountryModel();
 
         ReadSiteConfig( Constants.ConfigName.SETTING_CONFIG);
