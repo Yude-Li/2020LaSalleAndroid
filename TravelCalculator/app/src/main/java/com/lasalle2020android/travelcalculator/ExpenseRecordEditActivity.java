@@ -3,9 +3,10 @@ package com.lasalle2020android.travelcalculator;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.SharedPreferences;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -17,36 +18,48 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Date;
+import java.util.List;
 
+import DataConfig.CountryConfigAccess;
+import DataConfig.SettingConfigAccess;
+import Model.CountryModel;
 import Model.ExpenseModel;
 import Model.TripInfoModel;
-import currencies.CurrencyPicker;
-import currencies.CurrencyPickerListener;
-import currencies.ExtendedCurrency;
+import callbacks.DatabaseOperationNotifier;
+import commonutilities.Constants;
+import databaseinteraction.DatabaseOperations_Thread;
 
-public class ExpenseRecordEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener, TextWatcher,
-        CurrencyPickerListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class ExpenseRecordEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
+        DatabaseOperationNotifier {
 
-    private ImageView firstCountryImg, secondCountryImg;
-    private EditText expenseNameEditText, spendAmountEditText, expenseDescEditText;
+    // View Objects
+    private ImageView travelCountryImg, originalCountryImg;
+    private EditText expenseNameEditText, spendAmountEditText, expenseDescEditText, dateEditText;
     private TextView convertedAmountTextView;
     private Spinner tripListSpinner;
 
-    private CurrencyPicker mCurrencyPicker;
-    private SharedPreferences mSharedPreferences;
-    private boolean mCurrencySelectedFirst = false;
+    private CountryConfigAccess countryConfig;
+    private SettingConfigAccess settingConfig;
 
-    ArrayList<TripInfoModel> listOfTrips;
-    ArrayList<String> listOfTripNames;
-    ArrayAdapter<String> tripInfoAdapter;
+    private ExpenseModel mExpenseInfo = null;
 
+    // Variables dealing with spinner
+    private TripInfoModel mTripInfo = null;
+    private List<TripInfoModel> mTripList;
+    private ArrayAdapter<String> tripInfoAdapter;
+    private ArrayList<String> listOfTripName;
 
-    private ExpenseModel mExpenseModel;
-    // Date will be a pop-up dialog
+    // expense list position, get from expense list activity
+    private int dataIndex = -1;
 
+    // get from main activity
+    private int mTripId = -1;
+    private String mSpendAmount = "", mConvertedAmount = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,60 +67,261 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
         setContentView(R.layout.expense_record_layout);
 
         Toolbar mTopToolbar = findViewById(R.id.toolbar_expenserecord);
+        mTopToolbar.setTitle(R.string.toolBarTitle_expenseRecordEdit);
         setSupportActionBar(mTopToolbar);
 
+        receiveData();
         initialize();
-    //    receiveData();
+        AmountHandler();
+    }
+
+    private void receiveData() {
+
+        Intent intent = getIntent();
+        dataIndex = intent.getIntExtra("DataIndex", -1);
+        mTripId = intent.getIntExtra("tripId", -1);
+
+        if (dataIndex != -1) { // edit
+            // Get expense data from db
+            new DatabaseOperations_Thread(ExpenseRecordEditActivity.this, Constants.TABLE.EXPENSE,
+                    Constants.DATABASE_OPERATION.FETCH_SELECTED, this, dataIndex).execute();
+        }
+        else if (mTripId != -1){ // save expense from main activity
+            mSpendAmount = intent.getStringExtra("spendAmount");
+            mConvertedAmount = intent.getStringExtra("convertedAmount");
+        }
+//        else { // create a new expense
+//
+//        }
     }
 
     private void initialize() {
 
-        firstCountryImg = findViewById(R.id.expenserecord_imageview_firstcountry);
-        firstCountryImg.setOnClickListener(this);
-        secondCountryImg = findViewById(R.id.expenserecord_imageview_secondcountry);
-        secondCountryImg.setOnClickListener(this);
+        travelCountryImg = findViewById(R.id.expenserecord_imageview_travelcountry);
+
+        countryConfig = new CountryConfigAccess(ExpenseRecordEditActivity.this);
+        settingConfig = new SettingConfigAccess(ExpenseRecordEditActivity.this);
+
+        originalCountryImg = findViewById(R.id.expenserecord_imageview_originalcountry);
+        originalCountryImg.setImageResource(GetFlagId(null, settingConfig.getOriginalCountryId()));
 
         expenseNameEditText = findViewById(R.id.expenserecord_edittext_expensename);
-        spendAmountEditText = findViewById(R.id.expenserecord_edittext_spendamount);
-        spendAmountEditText.addTextChangedListener(this);
         expenseDescEditText = findViewById(R.id.expenserecord_edittext_desc);
-
+        spendAmountEditText = findViewById(R.id.expenserecord_edittext_spendamount);
         convertedAmountTextView = findViewById(R.id.expenserecord_textview_convertedamount);
 
         tripListSpinner = findViewById(R.id.expenserecord_spinner_tripname);
         tripListSpinner.setOnItemSelectedListener(this);
 
-        listOfTrips = new ArrayList<TripInfoModel>();
-        ////********** get data from MainActivity
+        // Date maybe will be a pop-up dialog
+        Date dNow = new Date();
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy/MM/dd");
+        dateEditText = findViewById(R.id.expenserecord_edittext_date);
+        dateEditText.setText(ft.format(dNow));
 
+        mTripList = new ArrayList<>();
+        GetTripListFromDb();
 
-        ArrayList<ExtendedCurrency> nc = new ArrayList<>();
-        for (ExtendedCurrency c : ExtendedCurrency.getAllCurrencies()) {
-            nc.add(c);
+        if (dataIndex != -1 ){ // edit
+            initialViewObjectsWithValue(mExpenseInfo);
+            SetupTripSpinner(mExpenseInfo);
         }
-
-        mCurrencyPicker = CurrencyPicker.newInstance("Select Currency");
-        mCurrencyPicker.setCurrenciesList(nc);
-
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(ExpenseRecordEditActivity.this);
-        mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
-
-        mCurrencyPicker.setListener(this);
+        else if (mTripId != -1){ // save
+            initialViewObjectsWithValue(null);
+            SetupTripSpinner(null);
+        }
+        else { // create
+            initialViewObjectsWithoutValue();
+            SetupTripSpinner(null);
+        }
 
     }
 
-    private void receiveData() {
-        // get All the data from MainActivity
-        // 1. first & second currency amount
-        // 2. first & second country id
-        // 3. trip id from trip spinner
+    private int GetFlagId(TripInfoModel trip, int originalCountryId){
 
-        // And also fetch all the trip list from database to spinner
+        for (CountryModel c: countryConfig.getCountriesList()) {
+            if (originalCountryId != -1) {
+                if (c.getId() == originalCountryId) {
+                    return c.getFlagId(ExpenseRecordEditActivity.this);
+                }
+            }
+            else {
+                if (c.getId() == trip.getTravelCountry()) {
+                    return c.getFlagId(ExpenseRecordEditActivity.this);
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    private void GetTripListFromDb() {
+        // For Spinner
+        new DatabaseOperations_Thread(ExpenseRecordEditActivity.this, Constants.TABLE.TRIPINFO,
+                Constants.DATABASE_OPERATION.FETCH_ALL, this).execute();
+    }
+
+    private void initialViewObjectsWithValue(ExpenseModel expenseInfo) {
+        tripListSpinner.setEnabled(false);
+
+        if (expenseInfo != null) {
+            // editing
+            spendAmountEditText.setEnabled(true);
+            convertedAmountTextView.setEnabled(true);
+
+            expenseNameEditText.setText(expenseInfo.getExpenseName());
+            spendAmountEditText.setText(expenseInfo.getSpendAmount());
+            convertedAmountTextView.setText(expenseInfo.getConvertedAmount());
+            expenseDescEditText.setText(expenseInfo.getExpenseDesc());
+        }
+        else {
+            // saving
+            spendAmountEditText.setEnabled(false);
+            convertedAmountTextView.setEnabled(false);
+
+            spendAmountEditText.setText(mSpendAmount);
+            convertedAmountTextView.setText(mConvertedAmount);
+        }
+    }
+
+    private void initialViewObjectsWithoutValue(){
+        // creating
+        tripListSpinner.setEnabled(true);
+        spendAmountEditText.setEnabled(true);
+        convertedAmountTextView.setEnabled(true);
+    }
+
+    private void SetupTripSpinner(ExpenseModel expenseInfo) {
+        listOfTripName = new ArrayList<>();
+
+        if (dataIndex != -1) { // edit
+            mTripInfo = GetTrip(expenseInfo.getTripId(), -1);
+            listOfTripName.add(mTripInfo.getTripName());
+
+            // Get Travel Country Flag
+            travelCountryImg.setImageResource(GetFlagId(mTripInfo, -1));
+        }
+        else if (mTripId != -1) { // save
+            mTripInfo = GetTrip( mTripId, -1);
+            listOfTripName.add(mTripInfo.getTripName());
+
+            // Get Travel Country Flag
+            travelCountryImg.setImageResource(GetFlagId(mTripInfo, -1));
+        }
+        else {
+            for (TripInfoModel trip: mTripList) {
+                listOfTripName.add(trip.getTripName());
+            }
+        }
 
         // this adapter display all the name of trips from database
-        tripInfoAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, listOfTripNames);
+        tripInfoAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, listOfTripName);
         tripInfoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tripListSpinner.setAdapter(tripInfoAdapter);
+    }
+
+    private TripInfoModel GetTrip(int tripId, int position) {
+        String tripName = "";
+
+        if (position != -1) {
+            tripName = (String) tripListSpinner.getItemAtPosition(position);
+            // or listOfTripName.get(position);
+        }
+
+        for (TripInfoModel trip: mTripList) {
+            if (tripName != "" && trip.getTripName() == tripName) { // get from spinner
+                return trip;
+            }
+            if (trip.getId() == tripId) { // get from other activity
+                return trip;
+            }
+        }
+
+        return null;
+    }
+
+    private boolean inputCheck() {
+        if (fieldCheck()) {
+            mExpenseInfo = new ExpenseModel();
+            mExpenseInfo.setExpenseName(expenseNameEditText.getText().toString());
+            mExpenseInfo.setTripId(mTripInfo.getId());
+            mExpenseInfo.setSpendAmount(spendAmountEditText.getText().toString());
+            mExpenseInfo.setConvertedAmount(convertedAmountTextView.getText().toString());
+            mExpenseInfo.setDate(expenseDescEditText.getText().toString());
+            mExpenseInfo.setExpenseDesc(expenseDescEditText.getText().toString());
+            return true;
+        }
+        else {
+            Toast.makeText(ExpenseRecordEditActivity.this, "Please fill up all data", Toast.LENGTH_LONG).show();
+            return false;
+        }
+    }
+
+    private boolean fieldCheck() {
+        if (  !expenseNameEditText.getText().equals("")
+           && !spendAmountEditText.getText().equals("")
+           && !convertedAmountTextView.getText().equals("")
+           && !dateEditText.getText().equals("")
+           && tripListSpinner.getSelectedItem() != null
+           // && !expenseDescEditText.getText().equals("") no need to check
+           )
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private void AmountHandler() {
+        spendAmountEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                double spendAmount = 0.0, convertedAmount = 0.0;
+
+                if (!spendAmountEditText.getText().toString().equals("")){
+                    spendAmount = Double.valueOf(spendAmountEditText.getText().toString());
+                }
+
+                // convert spendAmount to convertedAmount
+
+                // convertedAmountTextView.setText(String.valueOf(convertedAmount));
+            }
+        });
+    }
+
+    private void showSaveSuccessDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle(R.string.notice_saveSuccessTitle);
+        alertDialog.setMessage(R.string.notice_expenseSaveSuccessContent);
+
+        alertDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                dialog.cancel();
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), ExpenseListActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
+        alertDialog.show();
+    }
+
+    private void clearAllFields() {
+        expenseNameEditText.setText("");
+        spendAmountEditText.setText("");
+        convertedAmountTextView.setText("");
+        dateEditText.setText("");
+        expenseDescEditText.setText("");
     }
 
     @Override
@@ -123,7 +337,27 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
         switch (id) {
             case R.id.action_saveExpenseRecord:
             {
-                // add to data base
+                if (dataIndex != -1) { // edit the expense, update to db
+                    // ************ inputCheck();
+
+                    new DatabaseOperations_Thread(ExpenseRecordEditActivity.this, Constants.TABLE.EXPENSE,
+                            Constants.DATABASE_OPERATION.UPDATE_RECORD, this, dataIndex).execute();
+
+                }
+                else if (mTripId != -1) { // save from Main Activity, add to db
+                    if (inputCheck()) {
+                        new DatabaseOperations_Thread(ExpenseRecordEditActivity.this, Constants.TABLE.EXPENSE,
+                                Constants.DATABASE_OPERATION.ADD_RECORD, this, null, mExpenseInfo).execute();
+                        showSaveSuccessDialog();
+                    }
+                }
+                else { // create a new expense, add to db
+                    if (inputCheck()) {
+                        new DatabaseOperations_Thread(ExpenseRecordEditActivity.this, Constants.TABLE.EXPENSE,
+                                Constants.DATABASE_OPERATION.ADD_RECORD, this, null, mExpenseInfo).execute();
+                        showSaveSuccessDialog();
+                    }
+               }
             }
             break;
         }
@@ -131,111 +365,75 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
         return super.onOptionsItemSelected(item);
     }
 
+    // AdapterView.OnItemSelectedListener
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // only for creating
         switch (view.getId()){
             case R.id.expenserecord_spinner_tripname:
-                setUI_TripSelectionChange(position > 0 ? true : false);
-                /* handle if user select the spinner manually
-                // 1. show the selected trip
-                // 2. change the first & second country flag
-                TripInfoModel trip = listOfTrips.get(position);
-                */
-
+                mTripInfo = GetTrip(-1, position);
+                travelCountryImg.setImageResource(GetFlagId(mTripInfo, -1));
                 break;
-        }
-    }
-
-    private void setUI_TripSelectionChange(boolean isSelected) {
-
-        tripListSpinner.setEnabled(true);
-
-        if (isSelected) {
-            firstCountryImg.setEnabled(false);
-            secondCountryImg.setEnabled(false);
-        }
-        else {
-            firstCountryImg.setEnabled(true);
-            secondCountryImg.setEnabled(true);
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
 
+    // DatabaseOperationNotifier
+    @Override
+    public void onSavePerformed(boolean isCompletedSuccessfully) {
+        clearAllFields();
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.expenserecord_imageview_firstcountry:
-                mCurrencyPicker.show(getSupportFragmentManager(), "CURRENCY_PICKER");
-                mCurrencySelectedFirst = true;
-                break;
-            case R.id.expenserecord_imageview_secondcountry:
-                mCurrencyPicker.show(getSupportFragmentManager(), "CURRENCY_PICKER");
-                mCurrencySelectedFirst = false;
-                break;
-        }
-
+    public void onCurrencyRetrivePerformed(boolean isSuccess) {
+        // ???
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+    public void onDB_BootCompleted(boolean isSuccess) {
+        // maybe get expense db from here
     }
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+    public void onDeletePerformed(boolean isSuccess) {
+        clearAllFields();
     }
 
     @Override
-    public void afterTextChanged(Editable s) {
-        String expenseName = "", expenseDesc = "";
-
-        if (!expenseNameEditText.getText().toString().equals("")){
-            expenseName = expenseNameEditText.getText().toString();
-        }
-
-        if (!expenseDescEditText.getText().toString().equals("")){
-            expenseDesc = expenseDescEditText.getText().toString();
-        }
-
-
-        double spendAmount = 0.0;
-
-        if (!spendAmountEditText.getText().toString().equals("")){
-            spendAmount = Double.valueOf(spendAmountEditText.getText().toString());
-        }
-
-        double convertedAmount = 0.0;
-
-        // convert spendAmount to convertedAmount
-
-        // convertedAmountTextView.setText("" + String.valueOf(convertedAmount));
+    public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
+        mTripList = mAllTrips;
     }
 
     @Override
-    public void onSelectCurrency(String name, String code, String symbol, int flagDrawableResID) {
-        if (mCurrencySelectedFirst){
-            firstCountryImg.setImageResource(flagDrawableResID);
+    public void getExpenses_INFO(List<ExpenseModel> mAllExpense, int mCount, ExpenseModel mExpense) {
+        if (mExpense != null) {
+            mExpenseInfo = mExpense;
         }
         else {
-            secondCountryImg.setImageResource(flagDrawableResID);
+            Toast.makeText(ExpenseRecordEditActivity.this, getString(R.string.fetchDataFail), Toast.LENGTH_SHORT).show();
         }
-
-        mCurrencySelectedFirst = !mCurrencySelectedFirst;
-        mCurrencyPicker.dismiss();
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals("selectedCurrency")){
-            // mTextView.setText(sharedPreferences.getString(key, ""));
+    public void onBackPressed() {
+        if (fieldCheck()){
+            new AlertDialog.Builder(ExpenseRecordEditActivity.this)
+                    .setTitle(R.string.backWithoutSave_NoticeTitle)
+                    .setMessage(R.string.backWithoutSave_NoticeContent)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            ExpenseRecordEditActivity.super.onBackPressed();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
-        if (key.equals("selectedCurrencies")){
-            mCurrencyPicker.setCurrenciesList(mSharedPreferences.getStringSet("selectedCurrencies", new HashSet<String>()));
+        else {
+            super.onBackPressed();
         }
     }
 }

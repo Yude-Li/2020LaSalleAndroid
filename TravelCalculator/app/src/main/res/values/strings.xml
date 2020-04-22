@@ -30,6 +30,9 @@
     <string name="notice_saveSuccessTitle">Save Success</string>
     <string name="notice_saveSuccessContent">This trip is successfully saved in database</string>
     <string name="deleteSuccess">Delete Successfully</string>
+    <string name="toolBarTitle_expenseRecordEdit">Expense Record</string>
+    <string name="toolBarTitle_expenseList">Expense Record List</string>
+    <string name="notice_expenseSaveSuccessContent">This expense is successfully saved in database</string>
 
 
 </resources>
