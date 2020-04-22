@@ -51,25 +51,19 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
         mTopToolbar.setTitle(R.string.toolBarTitle_expenseList);
         setSupportActionBar(mTopToolbar);
 
-        int dataIndex = -1;
         Intent intent = getIntent();
-        dataIndex = intent.getIntExtra("DataIndex", -1);
+        mTripId = intent.getIntExtra("tripId", -1);
 
         // get trip info from db
-        if (dataIndex != -1) {
+        if (mTripId != -1) {
             new DatabaseOperations_Thread(ExpenseListActivity.this, Constants.TABLE.TRIPINFO,
-                    Constants.DATABASE_OPERATION.FETCH_SELECTED, this, dataIndex).execute();
+                    Constants.DATABASE_OPERATION.FETCH_SELECTED, this, mTripId).execute();
         }
 
         expenseListView = findViewById(R.id.expenselist_listview);
 
-        mExpenseList = new ArrayList<>();
-
+        PrepareListView();
         GetAllExpenseListFromDb();
-
-        GetCorrectExpenseList();
-
-        PrepareListView(mExpenseList);
 
         SearchBarHandler();
     }
@@ -92,7 +86,8 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), ExpenseRecordEditActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("DataIndex", -1);
+                intent.putExtra("expenseId", -1);
+                intent.putExtra("tripId", mTripId);
                 startActivity(intent);
                 finish();
             }
@@ -110,25 +105,24 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
 
     private void GetCorrectExpenseList() {
         // compare trip id to filter the expense list
-        if (mExpenseList != null) {
-            List<ExpenseModel> filteredExpenseList = new ArrayList<>();
+        List<ExpenseModel> filteredExpenseList = new ArrayList<>();
 
-            for (ExpenseModel e : mExpenseList) {
-                // get the list which correspond trip id
-                if (e.getTripId() == mTripId) {
-                    filteredExpenseList.add(e);
-                }
-            }
-
-            if (filteredExpenseList != null) {
-                mExpenseList.clear();
-                mExpenseList = filteredExpenseList;
+        for (ExpenseModel e : mExpenseList) {
+            // get the list which correspond trip id
+            if (e.getTripId() == mTripId) {
+                filteredExpenseList.add(e);
             }
         }
+
+        mExpenseList.clear();
+        mExpenseList = filteredExpenseList;
+
+        adapter.notifyDataSetChanged();
     }
 
-    private void PrepareListView(List<ExpenseModel> expenseList){
-        adapter = new RecycleViewAdapter(expenseList, 0);
+    private void PrepareListView(){
+        mExpenseList = new ArrayList<>();
+        adapter = new RecycleViewAdapter(mExpenseList, 0);
 
         expenseListView.setAdapter(adapter);
         expenseListView.setLayoutManager(new LinearLayoutManager(this));
@@ -163,11 +157,14 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
         builder.setItems(actions, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ExpenseModel expense = mExpenseList.get(position);
+
                 if (which == 0) {
                     Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), ExpenseRecordEditActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("DataIndex", position); // + 1
+                    intent.putExtra("expenseId", expense.getId()); // + 1
+                    intent.putExtra("tripId", mTripId);
                     startActivity(intent);
                     finish();
                 }
@@ -266,12 +263,7 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
 
     @Override
     public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
-        if (mTrip != null) {
-            mTripId = mTrip.getId();
-        }
-//        else {
-//            Toast.makeText(ExpenseListActivity.this, getString(R.string.fetchDataFail), Toast.LENGTH_SHORT).show();
-//        }
+
     }
 
     @Override
@@ -281,6 +273,8 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
             mExpenseList.addAll(mAllExpense);
 
             adapter.notifyDataSetChanged();
+
+            GetCorrectExpenseList();
         }
     }
 

@@ -44,7 +44,7 @@
         />
 
     <TextView
-        android:id="@+id/expenserecord_textview_tripname"
+        android:id="@+id/expenserecord_textview_triptitle"
         style="@style/FieldTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,15 +54,15 @@
         app:layout_constraintStart_toStartOf="@id/expenserecord_textview_expensename"
         />
 
-    <Spinner
-        android:id="@+id/expenserecord_spinner_tripname"
-        style="@style/SearchBarText"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="@id/expenserecord_textview_tripname"
-        app:layout_constraintBottom_toBottomOf="@id/expenserecord_textview_tripname"
+    <TextView
+        android:id="@+id/expenserecord_textview_tripname"
+        style="@style/FieldTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Trip Name"
+        app:layout_constraintTop_toTopOf="@id/expenserecord_textview_triptitle"
+        app:layout_constraintBottom_toBottomOf="@id/expenserecord_textview_triptitle"
         app:layout_constraintStart_toStartOf="@id/expenserecord_edittext_date"
-        app:layout_constraintEnd_toEndOf="@id/expenserecord_edittext_date"
         />
 
     <ImageView
@@ -74,8 +74,8 @@
         android:scaleType="fitXY"
         android:padding="0dp"
         android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@id/expenserecord_textview_tripname"
-        app:layout_constraintStart_toStartOf="@id/expenserecord_textview_tripname"
+        app:layout_constraintTop_toBottomOf="@id/expenserecord_textview_triptitle"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_textview_triptitle"
         />
 
     <EditText
@@ -109,7 +109,7 @@
         style="@style/FieldTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/currency"
+        android:hint="@string/currency"
         app:layout_constraintTop_toTopOf="@id/expenserecord_imageview_originalcountry"
         app:layout_constraintBottom_toBottomOf="@id/expenserecord_imageview_originalcountry"
         app:layout_constraintStart_toStartOf="@id/expenserecord_edittext_spendamount"
@@ -162,7 +162,7 @@
         android:inputType="textPersonName"
         app:layout_constraintTop_toBottomOf="@id/expenserecord_textview_desc"
         app:layout_constraintStart_toStartOf="@id/expenserecord_textview_desc"
-        app:layout_constraintEnd_toEndOf="@id/expenserecord_spinner_tripname"
+        app:layout_constraintEnd_toEndOf="@id/expenserecord_edittext_date"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"

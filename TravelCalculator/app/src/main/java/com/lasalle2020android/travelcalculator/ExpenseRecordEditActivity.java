@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,31 +33,29 @@ import callbacks.DatabaseOperationNotifier;
 import commonutilities.Constants;
 import databaseinteraction.DatabaseOperations_Thread;
 
-public class ExpenseRecordEditActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener,
-        DatabaseOperationNotifier {
+public class ExpenseRecordEditActivity extends AppCompatActivity implements DatabaseOperationNotifier, TextWatcher {
 
     // View Objects
     private ImageView travelCountryImg, originalCountryImg;
     private EditText expenseNameEditText, spendAmountEditText, expenseDescEditText, dateEditText;
-    private TextView convertedAmountTextView;
-    private Spinner tripListSpinner;
+    private TextView tripNameTextView, convertedAmountTextView;
+    //private Spinner tripListSpinner;
 
     private CountryConfigAccess countryConfig;
     private SettingConfigAccess settingConfig;
 
-    private ExpenseModel mExpenseInfo = null;
+    private ExpenseModel mExpenseInfo = new ExpenseModel();
+    private TripInfoModel mTripInfo = new TripInfoModel();
 
-    // Variables dealing with spinner
-    private TripInfoModel mTripInfo = null;
-    private List<TripInfoModel> mTripList;
-    private ArrayAdapter<String> tripInfoAdapter;
-    private ArrayList<String> listOfTripName;
+    //private List<TripInfoModel> mTripList;
+    //private ArrayAdapter<String> tripInfoAdapter;
+    //private ArrayList<String> listOfTripName;
 
     // expense list position, get from expense list activity
-    private int dataIndex = -1;
+    private int mExpenseId = -1, mTripId = -1;
 
     // get from main activity
-    private int mTripId = -1;
+    private int mTripIdFromMain = -1;
     private String mSpendAmount = "", mConvertedAmount = "";
 
     @Override
@@ -70,48 +67,36 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
         mTopToolbar.setTitle(R.string.toolBarTitle_expenseRecordEdit);
         setSupportActionBar(mTopToolbar);
 
-        receiveData();
-        initialize();
-        AmountHandler();
-    }
-
-    private void receiveData() {
-
-        Intent intent = getIntent();
-        dataIndex = intent.getIntExtra("DataIndex", -1);
-        mTripId = intent.getIntExtra("tripId", -1);
-
-        if (dataIndex != -1) { // edit
-            // Get expense data from db
-            new DatabaseOperations_Thread(ExpenseRecordEditActivity.this, Constants.TABLE.EXPENSE,
-                    Constants.DATABASE_OPERATION.FETCH_SELECTED, this, dataIndex).execute();
-        }
-        else if (mTripId != -1){ // save expense from main activity
-            mSpendAmount = intent.getStringExtra("spendAmount");
-            mConvertedAmount = intent.getStringExtra("convertedAmount");
-        }
-//        else { // create a new expense
-//
-//        }
-    }
-
-    private void initialize() {
-
-        travelCountryImg = findViewById(R.id.expenserecord_imageview_travelcountry);
-
         countryConfig = new CountryConfigAccess(ExpenseRecordEditActivity.this);
         settingConfig = new SettingConfigAccess(ExpenseRecordEditActivity.this);
 
-        originalCountryImg = findViewById(R.id.expenserecord_imageview_originalcountry);
-        originalCountryImg.setImageResource(GetFlagId(null, settingConfig.getOriginalCountryId()));
+        receiveDataFromAnotherActivity();
+        GetTripFromDb();
+    }
 
+    private void receiveDataFromAnotherActivity() {
+
+        Intent intent = getIntent();
+        mExpenseId = intent.getIntExtra("expenseId", -1);
+        mTripId = intent.getIntExtra("tripId", -1);
+        mTripIdFromMain = intent.getIntExtra("tripIdFromMain", -1);
+
+        if (mExpenseId != -1) { // edit
+            new DatabaseOperations_Thread(ExpenseRecordEditActivity.this, Constants.TABLE.EXPENSE,
+                    Constants.DATABASE_OPERATION.FETCH_SELECTED, this, mExpenseId).execute();
+        }
+        else if (mTripIdFromMain != -1){ // save expense from main activity
+            mSpendAmount = intent.getStringExtra("spendAmount");
+            mConvertedAmount = intent.getStringExtra("convertedAmount");
+        }
+    }
+
+    private void initialize() {
         expenseNameEditText = findViewById(R.id.expenserecord_edittext_expensename);
         expenseDescEditText = findViewById(R.id.expenserecord_edittext_desc);
         spendAmountEditText = findViewById(R.id.expenserecord_edittext_spendamount);
+        spendAmountEditText.addTextChangedListener(this);
         convertedAmountTextView = findViewById(R.id.expenserecord_textview_convertedamount);
-
-        tripListSpinner = findViewById(R.id.expenserecord_spinner_tripname);
-        tripListSpinner.setOnItemSelectedListener(this);
 
         // Date maybe will be a pop-up dialog
         Date dNow = new Date();
@@ -119,22 +104,24 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
         dateEditText = findViewById(R.id.expenserecord_edittext_date);
         dateEditText.setText(ft.format(dNow));
 
-        mTripList = new ArrayList<>();
-        GetTripListFromDb();
+        tripNameTextView = findViewById(R.id.expenserecord_textview_tripname);
+        tripNameTextView.setText(mTripInfo.getTripName());
 
-        if (dataIndex != -1 ){ // edit
+        travelCountryImg = findViewById(R.id.expenserecord_imageview_travelcountry);
+        originalCountryImg = findViewById(R.id.expenserecord_imageview_originalcountry);
+
+        travelCountryImg.setImageResource(GetFlagId(mTripInfo, -1));
+        originalCountryImg.setImageResource(GetFlagId(null, settingConfig.getOriginalCountryId()));
+
+        if (mExpenseId != -1 ){ // edit
             initialViewObjectsWithValue(mExpenseInfo);
-            SetupTripSpinner(mExpenseInfo);
         }
-        else if (mTripId != -1){ // save
+        else if (mTripIdFromMain != -1){ // save
             initialViewObjectsWithValue(null);
-            SetupTripSpinner(null);
         }
         else { // create
             initialViewObjectsWithoutValue();
-            SetupTripSpinner(null);
         }
-
     }
 
     private int GetFlagId(TripInfoModel trip, int originalCountryId){
@@ -155,14 +142,12 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
         return -1;
     }
 
-    private void GetTripListFromDb() {
-        // For Spinner
+    private void GetTripFromDb() {
         new DatabaseOperations_Thread(ExpenseRecordEditActivity.this, Constants.TABLE.TRIPINFO,
-                Constants.DATABASE_OPERATION.FETCH_ALL, this).execute();
+                Constants.DATABASE_OPERATION.FETCH_SELECTED, this, mTripId).execute();
     }
 
     private void initialViewObjectsWithValue(ExpenseModel expenseInfo) {
-        tripListSpinner.setEnabled(false);
 
         if (expenseInfo != null) {
             // editing
@@ -186,65 +171,15 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
 
     private void initialViewObjectsWithoutValue(){
         // creating
-        tripListSpinner.setEnabled(true);
         spendAmountEditText.setEnabled(true);
         convertedAmountTextView.setEnabled(true);
-    }
-
-    private void SetupTripSpinner(ExpenseModel expenseInfo) {
-        listOfTripName = new ArrayList<>();
-
-        if (dataIndex != -1) { // edit
-            mTripInfo = GetTrip(expenseInfo.getTripId(), -1);
-            listOfTripName.add(mTripInfo.getTripName());
-
-            // Get Travel Country Flag
-            travelCountryImg.setImageResource(GetFlagId(mTripInfo, -1));
-        }
-        else if (mTripId != -1) { // save
-            mTripInfo = GetTrip( mTripId, -1);
-            listOfTripName.add(mTripInfo.getTripName());
-
-            // Get Travel Country Flag
-            travelCountryImg.setImageResource(GetFlagId(mTripInfo, -1));
-        }
-        else {
-            for (TripInfoModel trip: mTripList) {
-                listOfTripName.add(trip.getTripName());
-            }
-        }
-
-        // this adapter display all the name of trips from database
-        tripInfoAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, listOfTripName);
-        tripInfoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        tripListSpinner.setAdapter(tripInfoAdapter);
-    }
-
-    private TripInfoModel GetTrip(int tripId, int position) {
-        String tripName = "";
-
-        if (position != -1) {
-            tripName = (String) tripListSpinner.getItemAtPosition(position);
-            // or listOfTripName.get(position);
-        }
-
-        for (TripInfoModel trip: mTripList) {
-            if (tripName != "" && trip.getTripName() == tripName) { // get from spinner
-                return trip;
-            }
-            if (trip.getId() == tripId) { // get from other activity
-                return trip;
-            }
-        }
-
-        return null;
     }
 
     private boolean inputCheck() {
         if (fieldCheck()) {
             mExpenseInfo = new ExpenseModel();
             mExpenseInfo.setExpenseName(expenseNameEditText.getText().toString());
-            mExpenseInfo.setTripId(mTripInfo.getId());
+            mExpenseInfo.setTripId(mTripId);
             mExpenseInfo.setSpendAmount(spendAmountEditText.getText().toString());
             mExpenseInfo.setConvertedAmount(convertedAmountTextView.getText().toString());
             mExpenseInfo.setDate(expenseDescEditText.getText().toString());
@@ -262,40 +197,12 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
            && !spendAmountEditText.getText().equals("")
            && !convertedAmountTextView.getText().equals("")
            && !dateEditText.getText().equals("")
-           && tripListSpinner.getSelectedItem() != null
-           // && !expenseDescEditText.getText().equals("") no need to check
            )
         {
             return true;
         }
+
         return false;
-    }
-
-    private void AmountHandler() {
-        spendAmountEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                double spendAmount = 0.0, convertedAmount = 0.0;
-
-                if (!spendAmountEditText.getText().toString().equals("")){
-                    spendAmount = Double.valueOf(spendAmountEditText.getText().toString());
-                }
-
-                // convert spendAmount to convertedAmount
-
-                // convertedAmountTextView.setText(String.valueOf(convertedAmount));
-            }
-        });
     }
 
     private void showSaveSuccessDialog() {
@@ -309,6 +216,7 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), ExpenseListActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("tripId", mTripId);
                 startActivity(intent);
                 finish();
             }
@@ -337,14 +245,14 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
         switch (id) {
             case R.id.action_saveExpenseRecord:
             {
-                if (dataIndex != -1) { // edit the expense, update to db
+                if (mExpenseId != -1) { // edit the expense, update to db
                     // ************ inputCheck();
 
                     new DatabaseOperations_Thread(ExpenseRecordEditActivity.this, Constants.TABLE.EXPENSE,
-                            Constants.DATABASE_OPERATION.UPDATE_RECORD, this, dataIndex).execute();
+                            Constants.DATABASE_OPERATION.UPDATE_RECORD, this, mExpenseId).execute();
 
                 }
-                else if (mTripId != -1) { // save from Main Activity, add to db
+                else if (mTripIdFromMain != -1) { // save from Main Activity, add to db
                     if (inputCheck()) {
                         new DatabaseOperations_Thread(ExpenseRecordEditActivity.this, Constants.TABLE.EXPENSE,
                                 Constants.DATABASE_OPERATION.ADD_RECORD, this, null, mExpenseInfo).execute();
@@ -363,22 +271,6 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    // AdapterView.OnItemSelectedListener
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // only for creating
-        switch (view.getId()){
-            case R.id.expenserecord_spinner_tripname:
-                mTripInfo = GetTrip(-1, position);
-                travelCountryImg.setImageResource(GetFlagId(mTripInfo, -1));
-                break;
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
     }
 
     // DatabaseOperationNotifier
@@ -404,8 +296,13 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
 
     @Override
     public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
-        mTripList.clear();
-        mTripList.addAll(mAllTrips);
+        if (mTrip != null) {
+            mTripInfo = mTrip;
+            initialize();
+        }
+        else {
+            Toast.makeText(ExpenseRecordEditActivity.this, getString(R.string.fetchDataFail), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -431,6 +328,7 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
                             Intent intent = new Intent();
                             intent.setClass(getApplicationContext(), ExpenseListActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra("tripId", mTripId);
                             startActivity(intent);
                             finish();
                         }
@@ -443,9 +341,34 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), ExpenseListActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("tripId", mTripId);
             startActivity(intent);
             finish();
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        double spendAmount = 0.0, convertedAmount = 0.0;
+
+        if (!spendAmountEditText.getText().toString().equals("")){
+            spendAmount = Double.valueOf(spendAmountEditText.getText().toString());
+        }
+
+        convertedAmount = spendAmount;
+        // convert spendAmount to convertedAmount
+
+        convertedAmountTextView.setText(String.valueOf(convertedAmount));
     }
 }
