@@ -205,10 +205,26 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
         return isFilled;
     }
 
+    private void showSaveSuccessDialog() {
+        androidx.appcompat.app.AlertDialog.Builder builder1 = new androidx.appcompat.app.AlertDialog.Builder(getApplicationContext());
+        builder1.setTitle(R.string.notice_saveSuccessTitle);
+        builder1.setMessage(R.string.notice_saveSuccessContent);
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.cancel();
+            }
+        });
+        androidx.appcompat.app.AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
+
     // region Database callback function
     @Override
     public void onSavePerformed(boolean isCompletedSuccessfully) {
         clearAllFields();
+        showSaveSuccessDialog();
     }
 
     @Override

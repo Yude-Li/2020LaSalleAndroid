@@ -41,4 +41,31 @@
         android:layout_marginTop="50dp"
         />
 
+    <TextView
+        android:id="@+id/textView_orginialCountry"
+        style="@style/FieldTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Original Country"
+        android:textSize="25sp"
+        app:layout_constraintTop_toBottomOf="@id/textView_RealtimeUpdate_Info"
+        app:layout_constraintStart_toStartOf="@id/textView_RealtimeUpdate_Info"
+        android:layout_marginTop="40sp"
+        />
+
+    <TextView
+        android:id="@+id/usersetting_textview_countrylist"
+        style="@style/SearchBarText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:editable="false"
+        app:layout_constraintTop_toBottomOf="@id/textView_orginialCountry"
+        app:layout_constraintStart_toStartOf="@id/textView_orginialCountry"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20sp"
+        android:layout_marginRight="20dp"
+        />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

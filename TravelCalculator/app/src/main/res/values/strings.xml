@@ -25,6 +25,11 @@
     <string name="backWithoutSave_NoticeTitle">Leaving Without Save</string>
     <string name="toolBarTitle_tripInfoEdit">Trip Information</string>
     <string name="toolBarTitle_tripList">Trip List</string>
+    <string name="notice_deleteTripConfirm">Are you sure you want to delete this trip?</string>
+    <string name="notice_deleteConfirmTitle">Delete Confirm</string>
+    <string name="notice_saveSuccessTitle">Save Success</string>
+    <string name="notice_saveSuccessContent">This trip is successfully saved in database</string>
+    <string name="deleteSuccess">Delete Successfully</string>
 
 
 </resources>
