@@ -214,6 +214,11 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
         alertDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 dialog.cancel();
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), TripListActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
             }
         });
         alertDialog.show();

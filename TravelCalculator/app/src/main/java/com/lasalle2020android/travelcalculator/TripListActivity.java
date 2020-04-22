@@ -60,6 +60,8 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
         SearchBarHandler();
     }
 
+
+
     // Toolbar btns action
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -81,6 +83,7 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("DataIndex", -1);
                 startActivity(intent);
+                this.finish();
             }
             break;
         }
@@ -98,6 +101,7 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("DataIndex", position);
                 startActivity(intent);
+                finish();
             }
 
             @Override
@@ -177,6 +181,7 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("DataIndex", position);
                     startActivity(intent);
+                    finish();
                 } else {
                     showDeleteDialog(position);
                 }
@@ -207,7 +212,6 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
     private void deleteTrip(int position) {
         adapter.remove(position);
         tripList.remove(position);
-        searchedTripList.remove(position);
         new DatabaseOperations_Thread(TripListActivity.this, Constants.TABLE.TRIPINFO,
                 Constants.DATABASE_OPERATION.DELETE_RECORD, this, position).execute();
     }
