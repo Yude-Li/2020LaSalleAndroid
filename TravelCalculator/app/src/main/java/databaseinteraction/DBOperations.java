@@ -63,7 +63,7 @@ import commonutilities.Constants;
 
         // Select All Query
         String selectQuery = "SELECT  * FROM " + Constants.TABLE_NAME_TRIPINFO + " ORDER BY " +
-                Constants.COLUMN_STARTDATE + " DESC";
+                Constants.COLUMN_ID + " DESC";
 
 
         Cursor cursor = database.rawQuery(selectQuery, null);
@@ -74,7 +74,7 @@ import commonutilities.Constants;
             do {
                 TripInfoModel trip = new TripInfoModel();
                 int coiIndex= cursor.getColumnIndex(Constants.COLUMN_ID);
-                trip.setId((int)cursor.getLong(1));
+                trip.setId((int)cursor.getLong(cursor.getColumnIndex(Constants.COLUMN_ID)));
                 trip.setTripName(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_TRIPNAME)));
                 trip.setTravelCountry(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_TRAVELCOUNTRY)));
                 trip.setStartDate(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_STARTDATE)));

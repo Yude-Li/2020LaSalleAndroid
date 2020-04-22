@@ -39,7 +39,7 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
     TextView travelCountry;
 
     // Variables
-    int dataIndex = -1;
+    int tripId = -1;
     TripInfoModel tripInfo = null;
     CountryModel selectedCountry = null;
     CountryConfigAccess countryConfig;
@@ -55,7 +55,7 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
         setSupportActionBar(mTopToolbar);
 
         Intent intent = getIntent();
-        dataIndex = intent.getIntExtra("DataIndex", -1);
+        tripId = intent.getIntExtra("tripId", -1);
 
         countryConfig = new CountryConfigAccess(TripInfoEditActivity.this);
 
@@ -63,10 +63,10 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
         mCountryPicker.setCountryList(countryConfig.getCountriesList());
         mCountryPicker.setListener(this);
 
-        if (dataIndex != -1) { // For edit
+        if (tripId != -1) { // For edit
             // Get data from db
             new DatabaseOperations_Thread(TripInfoEditActivity.this, Constants.TABLE.TRIPINFO,
-                    Constants.DATABASE_OPERATION.FETCH_SELECTED, this, dataIndex).execute();
+                    Constants.DATABASE_OPERATION.FETCH_SELECTED, this, tripId).execute();
         }
         else { // For create
             initialViewObjects();
@@ -116,9 +116,9 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
         switch (id) {
             case R.id.action_saveTripInfo:
             {
-                if (dataIndex != -1) { // For edit, update db
+                if (tripId != -1) { // For edit, update db
                     new DatabaseOperations_Thread(TripInfoEditActivity.this, Constants.TABLE.TRIPINFO,
-                            Constants.DATABASE_OPERATION.UPDATE_RECORD, this, dataIndex).execute();
+                            Constants.DATABASE_OPERATION.UPDATE_RECORD, this, tripId).execute();
                 }
                 else { // For create, add db
                     if (inputCheck()) {
@@ -181,7 +181,7 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
             public void onClick(View v)
             {
                 // User can not edit travel country
-                if (dataIndex != -1) {  return; }
+                if (tripId != -1) {  return; }
 
                 mCountryPicker.show(getSupportFragmentManager(), "COUNTRY_PICKER");
             }

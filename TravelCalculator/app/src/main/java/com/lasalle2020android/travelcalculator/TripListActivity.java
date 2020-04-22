@@ -60,8 +60,6 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
         SearchBarHandler();
     }
 
-
-
     // Toolbar btns action
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -81,7 +79,7 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), TripInfoEditActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("DataIndex", -1);
+                intent.putExtra("tripId", -1);
                 startActivity(intent);
                 this.finish();
             }
@@ -96,10 +94,11 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
         tripListView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), tripListView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
+                TripInfoModel trip = searchedTripList.get(position);
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), ExpenseListActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("DataIndex", position);
+                intent.putExtra("tripId", trip.getId());
                 startActivity(intent);
                 finish();
             }
@@ -175,15 +174,16 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
         builder.setItems(actions, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                TripInfoModel trip = searchedTripList.get(position);
                 if (which == 0) {
                     Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), TripInfoEditActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("DataIndex", position+1);
+                    intent.putExtra("tripId", trip.getId());
                     startActivity(intent);
                     finish();
                 } else {
-                    showDeleteDialog(position+1);
+                    showDeleteDialog(trip.getId());
                 }
             }
         });
