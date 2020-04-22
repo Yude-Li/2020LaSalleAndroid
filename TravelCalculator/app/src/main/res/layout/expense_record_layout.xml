@@ -65,7 +65,7 @@
         />
 
     <ImageView
-        android:id="@+id/expenserecord_imageview_firstcountry"
+        android:id="@+id/expenserecord_imageview_travelcountry"
         style="@style/MyCalculatorDisplayIcon"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -85,13 +85,13 @@
         android:ems="10"
         android:hint="@string/currency"
         android:inputType="numberDecimal"
-        app:layout_constraintTop_toTopOf="@id/expenserecord_imageview_firstcountry"
-        app:layout_constraintBottom_toBottomOf="@id/expenserecord_imageview_firstcountry"
+        app:layout_constraintTop_toTopOf="@id/expenserecord_imageview_travelcountry"
+        app:layout_constraintBottom_toBottomOf="@id/expenserecord_imageview_travelcountry"
         app:layout_constraintStart_toStartOf="@id/expenserecord_edittext_expensename"
         />
 
     <ImageView
-        android:id="@+id/expenserecord_imageview_secondcountry"
+        android:id="@+id/expenserecord_imageview_originalcountry"
         style="@style/MyCalculatorDisplayIcon"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -99,8 +99,8 @@
         android:scaleType="fitXY"
         android:padding="0dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/expenserecord_imageview_firstcountry"
-        app:layout_constraintStart_toStartOf="@id/expenserecord_imageview_firstcountry"
+        app:layout_constraintTop_toBottomOf="@id/expenserecord_imageview_travelcountry"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_imageview_travelcountry"
         />
 
     <TextView
@@ -109,8 +109,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/currency"
-        app:layout_constraintTop_toTopOf="@id/expenserecord_imageview_secondcountry"
-        app:layout_constraintBottom_toBottomOf="@id/expenserecord_imageview_secondcountry"
+        app:layout_constraintTop_toTopOf="@id/expenserecord_imageview_originalcountry"
+        app:layout_constraintBottom_toBottomOf="@id/expenserecord_imageview_originalcountry"
         app:layout_constraintStart_toStartOf="@id/expenserecord_edittext_spendamount"
         />
 
@@ -121,8 +121,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/date_title"
-        app:layout_constraintTop_toBottomOf="@id/expenserecord_imageview_secondcountry"
-        app:layout_constraintStart_toStartOf="@id/expenserecord_imageview_secondcountry"
+        app:layout_constraintTop_toBottomOf="@id/expenserecord_imageview_originalcountry"
+        app:layout_constraintStart_toStartOf="@id/expenserecord_imageview_originalcountry"
         />
 
     <EditText
