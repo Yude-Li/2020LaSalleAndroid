@@ -9,27 +9,29 @@
 
     <TextView
         android:id="@+id/text_expenseName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="3"
         android:textColor="@android:color/background_light"
-        android:textSize="25dp"
+        android:textSize="25sp"
         android:padding="10dp"
         android:hint="Expense Name"
         />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/text_expenseSpendAmount"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.6"
+            android:layout_weight="1"
             android:hint="$100.00"
             android:textColor="@android:color/background_light"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:layout_marginTop="5dp"
             />
 
@@ -37,10 +39,10 @@
             android:id="@+id/text_expenseConvertedAmount"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.6"
+            android:layout_weight="1"
             android:hint="$100.00"
             android:textColor="@android:color/background_light"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:layout_marginTop="5dp"
             />
 
@@ -48,11 +50,11 @@
 
     <TextView
         android:id="@+id/text_expenseDate"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1.5"
         android:textColor="@android:color/background_light"
-        android:textSize="18dp"
-        android:padding="10dp"
+        android:textSize="18sp"
         android:hint="2020/04/20"
         />
 
