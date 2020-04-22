@@ -79,13 +79,13 @@ public class CountryPicker extends DialogFragment {
             int height = getResources().getDimensionPixelSize(R.dimen.cp_dialog_height);
             getDialog().getWindow().setLayout(width, height);
         }
-        searchEditText = (EditText) view.findViewById(R.id.currency_code_picker_search);
-        countryListView = (ListView) view.findViewById(R.id.currency_code_picker_listview);
+        searchEditText = (EditText) view.findViewById(R.id.country_picker_search);
+        countryListView = (ListView) view.findViewById(R.id.country_picker_listview);
 
         selectedCountriesList = new ArrayList<>(countriesList.size());
         selectedCountriesList.addAll(countriesList);
 
-        adapter = new CountryListAdapter(getActivity(), selectedCountriesList);
+        adapter = new CountryListAdapter(mContext, selectedCountriesList);
         countryListView.setAdapter(adapter);
 
         countryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

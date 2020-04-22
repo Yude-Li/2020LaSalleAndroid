@@ -114,6 +114,7 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
                     if (inputCheck()) {
                         new DatabaseOperations_Thread(TripInfoEditActivity.this, Constants.TABLE.TRIPINFO,
                                 Constants.DATABASE_OPERATION.ADD_RECORD, this, tripInfo, null).execute();
+                        showSaveSuccessDialog();
                     }
                 }
             }
@@ -206,25 +207,22 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
     }
 
     private void showSaveSuccessDialog() {
-        androidx.appcompat.app.AlertDialog.Builder builder1 = new androidx.appcompat.app.AlertDialog.Builder(getApplicationContext());
-        builder1.setTitle(R.string.notice_saveSuccessTitle);
-        builder1.setMessage(R.string.notice_saveSuccessContent);
-        builder1.setCancelable(true);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle(R.string.notice_saveSuccessTitle);
+        alertDialog.setMessage(R.string.notice_saveSuccessContent);
 
-        builder1.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
+        alertDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
                 dialog.cancel();
             }
         });
-        androidx.appcompat.app.AlertDialog alert11 = builder1.create();
-        alert11.show();
+        alertDialog.show();
     }
 
     // region Database callback function
     @Override
     public void onSavePerformed(boolean isCompletedSuccessfully) {
         clearAllFields();
-        showSaveSuccessDialog();
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.lasalle2020android.travelcalculator;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +27,7 @@ import java.util.Locale;
 import Model.CountryModel;
 import Model.ExpenseModel;
 import Model.TripInfoModel;
+import ViewUsage.MyDividerItemDecoration;
 import ViewUsage.RecycleViewAdapter;
 import ViewUsage.RecyclerTouchListener;
 import callbacks.DatabaseOperationNotifier;
@@ -109,13 +112,13 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
         new DatabaseOperations_Thread(TripListActivity.this, Constants.TABLE.TRIPINFO,
                 Constants.DATABASE_OPERATION.FETCH_ALL, this).execute();
 
-        for (int i = 0 ; i < 15 ; i ++) {
-            TripInfoModel trip = new TripInfoModel();
-            trip.setTripName("Demo" + String.valueOf(i));
-            trip.setTravelCountry(136);
-
-            searchedTripList.add(trip);
-        }
+//        for (int i = 0 ; i < 15 ; i ++) {
+//            TripInfoModel trip = new TripInfoModel();
+//            trip.setTripName("Demo" + String.valueOf(i));
+//            trip.setTravelCountry(136);
+//
+//            searchedTripList.add(trip);
+//        }
     }
 
     private void PrepareListView()
@@ -125,6 +128,8 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
         adapter = new RecycleViewAdapter(searchedTripList, TripListActivity.this);
         tripListView.setAdapter(adapter);
         tripListView.setLayoutManager(new LinearLayoutManager(this));
+        Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.recycler_divider);
+        tripListView.addItemDecoration(new MyDividerItemDecoration(this, dividerDrawable));
         recyclerViewOnTouchListener();
         adapter.notifyDataSetChanged();
     }
@@ -181,25 +186,22 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
     }
 
     private void showDeleteDialog(final int position) {
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(getApplicationContext());
-        builder1.setTitle(R.string.notice_deleteConfirmTitle);
-        builder1.setMessage(R.string.notice_deleteTripConfirm);
-        builder1.setCancelable(true);
-        builder1.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle(R.string.notice_deleteConfirmTitle);
+        alertDialog.setMessage(R.string.notice_deleteTripConfirm);
+
+        alertDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
                 deleteTrip(position);
                 dialog.cancel();
             }
         });
-
-        builder1.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.cancel();
-                }
-            });
-
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
+        alertDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
     }
 
     private void deleteTrip(int position) {

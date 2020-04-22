@@ -79,7 +79,8 @@ public class CountryConfigAccess {
     }
 
     public CountryModel getCountryById(int id) {
-        return config.countryList.get(id);
+
+        return config.countryList.get(id-1);
     }
 
     private void SaveSiteConfig(Constants.ConfigName confName)
