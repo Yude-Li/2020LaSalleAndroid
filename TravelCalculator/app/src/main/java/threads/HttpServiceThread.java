@@ -85,7 +85,7 @@ public class HttpServiceThread extends Thread {
 //            msg.arg1 = requestNo;
 //            mHandler.sendMessage(msg);
             // serverResponse.onServerResponse(message, requestNo);
-            serverResponseNotifier.onServerResponseRecieved(webResponse, 200, false);
+            serverResponseNotifier.onServerResponseRecieved(null, 200, false);
         }
     }
 

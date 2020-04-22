@@ -69,10 +69,12 @@ import commonutilities.Constants;
         Cursor cursor = database.rawQuery(selectQuery, null);
 
         // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.getCount() > 0
+                && cursor.moveToFirst()) {
             do {
                 TripInfoModel trip = new TripInfoModel();
-                trip.setId(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_ID)));
+                int coiIndex= cursor.getColumnIndex(Constants.COLUMN_ID);
+                trip.setId((int)cursor.getLong(1));
                 trip.setTripName(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_TRIPNAME)));
                 trip.setTravelCountry(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_TRAVELCOUNTRY)));
                 trip.setStartDate(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_STARTDATE)));
@@ -268,7 +270,7 @@ try {
 
 
          ExpenseModel mExpense = new ExpenseModel(
-                 cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_ID)),
+                 cursor.getInt((int)cursor.getLong(1)),
                  cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_NAME)),
                  cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_SPEND_AMOUNT)),
                  cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_CONVERTED_AMOUNT)),

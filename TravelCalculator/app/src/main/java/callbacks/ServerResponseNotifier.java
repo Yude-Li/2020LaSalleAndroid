@@ -1,6 +1,8 @@
 package callbacks;
 
+import Model.ApiResponseModel;
+
 public interface ServerResponseNotifier {
 
-    void onServerResponseRecieved(String response, int resultCode, boolean useResponseDirectly);
+    void onServerResponseRecieved(ApiResponseModel response, int resultCode, boolean useResponseDirectly);
 }

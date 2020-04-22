@@ -39,6 +39,8 @@ public class DatabaseOperations_Thread extends AsyncTask {
         this.mContext = mContext;
         this.mOperation_Name = mOperation_Name;
         this.mDatabaseOperationNotifier = mDatabaseOperationNotifier;
+        this.mTableName=mTableName;
+
 
 
     }
@@ -49,6 +51,8 @@ public class DatabaseOperations_Thread extends AsyncTask {
         this.mActivity = mActivity;
         this.mOperation_Name = mOperation_Name;
         this.mDatabaseOperationNotifier = mDatabaseOperationNotifier;
+        this.mTableName=mTableName;
+
 
 
     }
@@ -61,6 +65,7 @@ public class DatabaseOperations_Thread extends AsyncTask {
         this.mDatabaseOperationNotifier = mDatabaseOperationNotifier;
         this.mTripInfoModel=tripInfoModel;
         this.mExpenseModel= expenseModel;
+        this.mTableName=mTableName;
 
 
     }
@@ -73,18 +78,20 @@ public class DatabaseOperations_Thread extends AsyncTask {
         this.mOperation_Name = mOperation_Name;
         this.mDatabaseOperationNotifier = mDatabaseOperationNotifier;
         this.rowID=rowID;
+        this.mTableName=mTableName;
+
 
     }
     @Override
     protected Object doInBackground(Object[] objects) {
 
         DBOperations dbOperations = new DBOperations(mActivity);
-
+        dbOperations.open();
         switch (mOperation_Name) {
 
             case DB_CREATE:
 
-                dbOperations.open();
+
                 dbOperations.close();
 
                 break;
@@ -119,6 +126,15 @@ public class DatabaseOperations_Thread extends AsyncTask {
 
                 }else if (mTableName == Constants.TABLE.EXPENSE) {
                     dbOperations.deleteExpense(mExpenseModel);
+                }
+
+            case ADD_RECORD:
+                if (mTableName == Constants.TABLE.TRIPINFO) {
+
+                    dbOperations.addTrip(mTripInfoModel);
+
+                }else if (mTableName == Constants.TABLE.EXPENSE) {
+                    dbOperations.addExpense(mExpenseModel);
                 }
 
 
@@ -164,16 +180,7 @@ public class DatabaseOperations_Thread extends AsyncTask {
                 }
                 break;
 
-            case ADD_RECORD:
 
-                if (mTableName == Constants.TABLE.TRIPINFO) {
-
-
-                } else if (mTableName == Constants.TABLE.EXPENSE) {
-
-                }
-
-                break;
             case DB_CREATE:
                 mDatabaseOperationNotifier.onDB_BootCompleted(true);
                 break;
@@ -199,6 +206,16 @@ public class DatabaseOperations_Thread extends AsyncTask {
 
 
                 break;
+
+            case ADD_RECORD:
+                if (mTableName == Constants.TABLE.TRIPINFO) {
+
+                    mDatabaseOperationNotifier.onSavePerformed(true);
+
+                }else if (mTableName == Constants.TABLE.EXPENSE) {
+                    mDatabaseOperationNotifier.onSavePerformed(true);
+                }
+
 
         }
 

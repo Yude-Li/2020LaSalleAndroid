@@ -8,10 +8,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -25,11 +27,13 @@ import java.util.HashSet;
 import java.util.List;
 
 import DataConfig.CountryConfigAccess;
+import Model.ApiResponseModel;
 import Model.ExpenseModel;
 import Model.TripInfoModel;
 import callbacks.DatabaseOperationNotifier;
 import callbacks.ServerResponseNotifier;
 import commonutilities.Constants;
+import commonutilities.SpinnerAdapter;
 import currencies.CurrencyPicker;
 import currencies.CurrencyPickerListener;
 import currencies.ExtendedCurrency;
@@ -164,17 +168,23 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
         // mCurrencyPicker.setCurrenciesList(mSharedPrefrences.getStringSet("selectedCurrencies", new HashSet<String>()));
 
         mCurrencyPicker.setListener(this);
-
+instantiateData();
 
 //        HttpServiceThread httpServiceThread= new HttpServiceThread(mComponentInfo, MainActivity.this,
 //                MainActivity.this, "USD,INR",101);
 //        httpServiceThread.start();
     }
 
+
+
     private void instantiateData(){
 
-        CountryConfigAccess countryConfigAccess= new CountryConfigAccess(MainActivity.this);
-        countryConfigAccess.getCountryById(00);
+//        CountryConfigAccess countryConfigAccess= new CountryConfigAccess(MainActivity.this);
+//        countryConfigAccess.getCountryById(00);
+
+        new DatabaseOperations_Thread(MainActivity.this, Constants.TABLE.TRIPINFO,
+                Constants.DATABASE_OPERATION.FETCH_ALL, this).execute();
+
     }
     private void setInactive() {
 
@@ -222,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
     }
 
     @Override
-    public void onServerResponseRecieved(String response, int resultCode, boolean useResponseDirectly) {
+    public void onServerResponseRecieved(ApiResponseModel response, int resultCode, boolean useResponseDirectly) {
 
         if (useResponseDirectly) {
 
@@ -291,6 +301,9 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
                 isLastCharEnteredSymbol = true;
                 break;
             case '*':
+                isLastCharEnteredSymbol = true;
+                break;
+            case '%':
                 isLastCharEnteredSymbol = true;
                 break;
 
@@ -408,6 +421,8 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
                 break;
 
             case R.id.btn_percentage:
+                processInput('%');
+
 
                 break;
             case R.id.btn_breakfast:
@@ -515,6 +530,25 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
     @Override
     public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
 
+
+        if(mAllTrips!=null){
+
+            TripInfoModel[] tripInfoModels = mAllTrips.toArray(new TripInfoModel[mAllTrips.size()]);
+
+            Log.e("sac","sks"+mAllTrips);
+
+
+            SpinnerAdapter spinnerArrayAdapter = new SpinnerAdapter(this,
+                    android.R.layout.simple_spinner_item, tripInfoModels);
+
+
+            mSpinnerTripList.setAdapter(spinnerArrayAdapter);
+                  //  mCurrencySelectionImage_Second.setImageResource( mComponentInfo.countryConfig.getCountryById(((TripInfoModel)mSpinnerTripList.getSelectedItem()).getTravelCountry()).getFlagId(MainActivity.this));
+
+          //  mCurrencySelectionImage_Second.setEnabled(false);
+            //mCurrencySelectionImage_One.setEnabled(false);
+
+        }
 
 
     }
