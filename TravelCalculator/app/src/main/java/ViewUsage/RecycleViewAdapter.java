@@ -48,6 +48,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
         public TextView expenseNameTextView;
         public TextView expenseSpendAmountTextView;
         public TextView expenseConvertedAmountTextView;
+        public TextView expenseDateTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -59,6 +60,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             expenseNameTextView = (TextView) itemView.findViewById(R.id.text_expenseName);
             expenseSpendAmountTextView = (TextView) itemView.findViewById(R.id.text_expenseSpendAmount);
             expenseConvertedAmountTextView = (TextView) itemView.findViewById(R.id.text_expenseConvertedAmount);
+            expenseDateTextView = (TextView) itemView.findViewById(R.id.text_expenseDate);
         }
     }
 
@@ -117,6 +119,9 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
 
             TextView textViewConvertedAmount = viewHolder.expenseConvertedAmountTextView;
             textViewConvertedAmount.setText(expenseInfo.getConvertedAmount());
+
+            TextView textViewDate = viewHolder.expenseDateTextView;
+            textViewDate.setText(expenseInfo.getDate());
         }
     }
 
