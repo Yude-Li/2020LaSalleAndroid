@@ -196,10 +196,10 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
             tripInfo = new TripInfoModel();
             tripInfo.setTripName(tripNameField.getText().toString());
             tripInfo.setTravelCountry(selectedCountry.getId());
-            tripInfo.setTax(Float.valueOf(countryTaxField.getText().toString()));
-            tripInfo.setBreakfastTip(Float.valueOf(bfTipField.getText().toString()));
-            tripInfo.setLunchTip(Float.valueOf(lnTipField.getText().toString()));
-            tripInfo.setDinnerTip(Float.valueOf(DnTipField.getText().toString()));
+            tripInfo.setTax(Integer.valueOf(countryTaxField.getText().toString()));
+            tripInfo.setBreakfastTip(Integer.valueOf(bfTipField.getText().toString()));
+            tripInfo.setLunchTip(Integer.valueOf(lnTipField.getText().toString()));
+            tripInfo.setDinnerTip(Integer.valueOf(DnTipField.getText().toString()));
         }
         else {
             Toast.makeText(TripInfoEditActivity.this, R.string.notice_FillupFields, Toast.LENGTH_LONG).show();
@@ -238,6 +238,7 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
     @Override
     public void onSavePerformed(boolean isCompletedSuccessfully) {
         clearAllFields();
+//        Toast.makeText(TripInfoEditActivity.this, getString(R.string.fetchDataFail), Toast.LENGTH_SHORT).show();
     }
 
     @Override

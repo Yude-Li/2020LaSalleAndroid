@@ -183,7 +183,7 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
                     startActivity(intent);
                     finish();
                 } else {
-                    showDeleteDialog(position);
+                    showDeleteDialog(position+1);
                 }
             }
         });

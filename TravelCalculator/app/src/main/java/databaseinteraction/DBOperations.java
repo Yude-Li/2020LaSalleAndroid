@@ -79,10 +79,10 @@ import commonutilities.Constants;
                 trip.setTravelCountry(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_TRAVELCOUNTRY)));
                 trip.setStartDate(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_STARTDATE)));
                 trip.setEndDate(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_ENDDATE)));
-                trip.setTax(cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_TAX)));
-                trip.setBreakfastTip(cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_BREAKFAST_TIP)));
-                trip.setLunchTip(cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_LUNCH_TIP)));
-                trip.setDinnerTip(cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_DINNER_TIP)));
+                trip.setTax(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_TAX)));
+                trip.setBreakfastTip(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_BREAKFAST_TIP)));
+                trip.setLunchTip(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_LUNCH_TIP)));
+                trip.setDinnerTip(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_DINNER_TIP)));
 
                 trips.add(trip);
             } while (cursor.moveToNext());
@@ -146,10 +146,10 @@ try {
                 cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_TRAVELCOUNTRY)),
                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_STARTDATE)),
                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_ENDDATE)),
-                cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_TAX)),
-                cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_BREAKFAST_TIP)),
-                cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_LUNCH_TIP)),
-                cursor.getFloat(cursor.getColumnIndex(Constants.COLUMN_DINNER_TIP)));
+                cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_TAX)),
+                cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_BREAKFAST_TIP)),
+                cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_LUNCH_TIP)),
+                cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_DINNER_TIP)));
 
         // close the db connection
       close();

@@ -11,15 +11,15 @@ public class TripInfoModel  {
     private int travelCountry; // country Id
     private String startDate;
     private String endDate;
-    private float tax;
-    private float breakfastTip;
-    private float lunchTip;
-    private float dinnerTip;
+    private int tax;
+    private int breakfastTip;
+    private int lunchTip;
+    private int dinnerTip;
 
     public TripInfoModel() {
     }
 
-    public TripInfoModel(int id, String tripName, int travelCountry, String startDate, String endDate, float tax, float breakfastTip, float lunchTip, float dinnerTip) {
+    public TripInfoModel(int id, String tripName, int travelCountry, String startDate, String endDate, int tax, int breakfastTip, int lunchTip, int dinnerTip) {
         Id = id;
         this.tripName = tripName;
         this.travelCountry = travelCountry;
@@ -77,7 +77,7 @@ public class TripInfoModel  {
         return tax;
     }
 
-    public void setTax(float tax) {
+    public void setTax(int tax) {
         this.tax = tax;
     }
 
@@ -85,7 +85,7 @@ public class TripInfoModel  {
         return breakfastTip;
     }
 
-    public void setBreakfastTip(float breakfastTip) {
+    public void setBreakfastTip(int breakfastTip) {
         this.breakfastTip = breakfastTip;
     }
 
@@ -93,7 +93,7 @@ public class TripInfoModel  {
         return lunchTip;
     }
 
-    public void setLunchTip(float lunchTip) {
+    public void setLunchTip(int lunchTip) {
         this.lunchTip = lunchTip;
     }
 
@@ -101,7 +101,7 @@ public class TripInfoModel  {
         return dinnerTip;
     }
 
-    public void setDinnerTip(float dinnerTip) {
+    public void setDinnerTip(int dinnerTip) {
         this.dinnerTip = dinnerTip;
     }
 }
