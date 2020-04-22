@@ -404,7 +404,8 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
 
     @Override
     public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
-        mTripList = mAllTrips;
+        mTripList.clear();
+        mTripList.addAll(mAllTrips);
     }
 
     @Override
@@ -426,6 +427,12 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             ExpenseRecordEditActivity.super.onBackPressed();
+
+                            Intent intent = new Intent();
+                            intent.setClass(getApplicationContext(), ExpenseListActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
                         }
                     })
                     .setNegativeButton(android.R.string.no, null)
@@ -433,6 +440,11 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
                     .show();
         }
         else {
+            Intent intent = new Intent();
+            intent.setClass(getApplicationContext(), ExpenseListActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
             super.onBackPressed();
         }
     }
