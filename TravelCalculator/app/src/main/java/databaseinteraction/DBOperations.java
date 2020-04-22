@@ -123,7 +123,7 @@ try {
 
     public TripInfoModel getTripPreferenceInfoByID(int id) {
         // get readable database as we are not inserting anything
-
+        String selection = Constants.COLUMN_ID+" = '"+ id+"'";
         Cursor cursor = database.query(Constants.TABLE_NAME_TRIPINFO,
                 new String[]{Constants.COLUMN_ID
                         , Constants.COLUMN_TRIPNAME
@@ -134,15 +134,14 @@ try {
                         , Constants.COLUMN_BREAKFAST_TIP
                         , Constants.COLUMN_LUNCH_TIP
                         , Constants.COLUMN_DINNER_TIP},
-                Constants.COLUMN_ID + "=?",
-                new String[]{String.valueOf(id)}, null, null, null, null);
+                selection, null, null, null, null);
 
         if (cursor != null)
             cursor.moveToFirst();
 
         // prepare note object
         TripInfoModel trip = new TripInfoModel(
-                cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_ID)),
+                cursor.getInt((int)cursor.getLong(1)),
                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_TRIPNAME)),
                 cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_TRAVELCOUNTRY)),
                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_STARTDATE)),

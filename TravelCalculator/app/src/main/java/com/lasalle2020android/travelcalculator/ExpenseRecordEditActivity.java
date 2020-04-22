@@ -21,6 +21,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import Model.ExpenseModel;
 import Model.TripInfoModel;
 import currencies.CurrencyPicker;
 import currencies.CurrencyPickerListener;
@@ -42,6 +43,8 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
     ArrayList<String> listOfTripNames;
     ArrayAdapter<String> tripInfoAdapter;
 
+
+    private ExpenseModel mExpenseModel;
     // Date will be a pop-up dialog
 
 
@@ -54,7 +57,7 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Adap
         setSupportActionBar(mTopToolbar);
 
         initialize();
-        receiveData();
+    //    receiveData();
     }
 
     private void initialize() {
