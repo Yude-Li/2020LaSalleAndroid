@@ -127,7 +127,7 @@ public class DatabaseOperations_Thread extends AsyncTask {
                 }else if (mTableName == Constants.TABLE.EXPENSE) {
                     dbOperations.deleteExpense(mExpenseModel);
                 }
-
+                break;
             case ADD_RECORD:
                 if (mTableName == Constants.TABLE.TRIPINFO) {
 

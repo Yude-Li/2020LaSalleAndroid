@@ -179,7 +179,7 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
                     Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), TripInfoEditActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("DataIndex", position);
+                    intent.putExtra("DataIndex", position+1);
                     startActivity(intent);
                     finish();
                 } else {
@@ -239,11 +239,13 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
 
     @Override
     public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
-        tripList.clear();
-        tripList.addAll(mAllTrips);
-        searchedTripList.clear();
-        searchedTripList.addAll(tripList);
-        adapter.notifyDataSetChanged();
+        if (mAllTrips != null) {
+            tripList.clear();
+            tripList.addAll(mAllTrips);
+            searchedTripList.clear();
+            searchedTripList.addAll(tripList);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override

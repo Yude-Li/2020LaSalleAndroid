@@ -82,6 +82,11 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     TripInfoEditActivity.super.onBackPressed();
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), TripListActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
                 }
             })
             .setNegativeButton(android.R.string.no, null)
@@ -89,6 +94,11 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
             .show();
         }
         else {
+            Intent intent = new Intent();
+            intent.setClass(getApplicationContext(), TripListActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
             super.onBackPressed();
         }
     }

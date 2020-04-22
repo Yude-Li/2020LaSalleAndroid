@@ -5,7 +5,7 @@ public class Constants {
     public static final int DATABASE_VERSION = 1;
 
     //Common COlumns
-    public static final String COLUMN_ID = "Id";
+    public static final String COLUMN_ID = "_id";
 
 
     /// TripInfoModel Table
