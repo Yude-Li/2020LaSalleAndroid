@@ -3,12 +3,14 @@ package com.lasalle2020android.travelcalculator;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,6 +26,7 @@ import java.util.Locale;
 
 import Model.ExpenseModel;
 import Model.TripInfoModel;
+import ViewUsage.MyDividerItemDecoration;
 import ViewUsage.RecycleViewAdapter;
 import ViewUsage.RecyclerTouchListener;
 import callbacks.DatabaseOperationNotifier;
@@ -110,7 +113,7 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
         if (mExpenseList != null) {
             List<ExpenseModel> filteredExpenseList = new ArrayList<>();
 
-            for (ExpenseModel e: mExpenseList) {
+            for (ExpenseModel e : mExpenseList) {
                 // get the list which correspond trip id
                 if (e.getTripId() == mTripId) {
                     filteredExpenseList.add(e);
@@ -129,6 +132,9 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
 
         expenseListView.setAdapter(adapter);
         expenseListView.setLayoutManager(new LinearLayoutManager(this));
+
+        Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.recycler_divider);
+        expenseListView.addItemDecoration(new MyDividerItemDecoration(this, dividerDrawable));
 
         recyclerViewOnTouchListener();
 
@@ -161,12 +167,12 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
                     Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), ExpenseRecordEditActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("DataIndex", position);
+                    intent.putExtra("DataIndex", position); // + 1
                     startActivity(intent);
                     finish();
                 }
                 else {
-                    showDeleteDialog(position);
+                    showDeleteDialog(position); // + 1
                 }
             }
         });
@@ -175,25 +181,24 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
     }
     
     private void showDeleteDialog(final int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-        builder.setMessage("Are you sure to delete this expense?");
-        builder.setCancelable(true);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle(R.string.notice_deleteConfirmTitle);
+        alertDialog.setMessage(R.string.notice_deleteExpenseConfirm);
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
+        alertDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
                 deleteExpense(position);
                 dialog.cancel();
             }
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
+        alertDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
 
-        AlertDialog alert = builder.create();
-        alert.show();
+        alertDialog.show();
     }
 
     private void deleteExpense(int position) {
@@ -264,9 +269,9 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
         if (mTrip != null) {
             mTripId = mTrip.getId();
         }
-        else {
-            Toast.makeText(ExpenseListActivity.this, getString(R.string.fetchDataFail), Toast.LENGTH_SHORT).show();
-        }
+//        else {
+//            Toast.makeText(ExpenseListActivity.this, getString(R.string.fetchDataFail), Toast.LENGTH_SHORT).show();
+//        }
     }
 
     @Override
@@ -277,8 +282,15 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
 
             adapter.notifyDataSetChanged();
         }
-        else {
-            Toast.makeText(ExpenseListActivity.this, getString(R.string.fetchDataFail), Toast.LENGTH_LONG).show();
-        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.setClass(getApplicationContext(), TripListActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+        ExpenseListActivity.super.onBackPressed();
     }
 }
