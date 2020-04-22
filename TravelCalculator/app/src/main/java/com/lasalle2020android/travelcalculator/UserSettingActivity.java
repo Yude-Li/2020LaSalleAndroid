@@ -32,6 +32,11 @@ public class UserSettingActivity extends AppCompatActivity implements CountryPic
         switchUpdateRealTime = findViewById(R.id.switch_updateRealtime);
 
         settingConfig = new SettingConfigAccess(getApplicationContext());
+        // Give a default country id first time
+        // 18 is Canada.
+        if (settingConfig.getIsFirstTime()){
+            settingConfig.setOriginalCountryId(18);
+        }
 
         switchUpdateRealTime.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
