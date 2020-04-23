@@ -38,7 +38,7 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
     private RecyclerView expenseListView;
     
     private RecycleViewAdapter adapter;
-    private List<ExpenseModel> mExpenseList;
+    private List<ExpenseModel> mExpenseList, mSearchedExpenseList;
 
     private int mTripId = -1;
     
@@ -105,24 +105,22 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
 
     private void GetCorrectExpenseList() {
         // compare trip id to filter the expense list
-        List<ExpenseModel> filteredExpenseList = new ArrayList<>();
+        mSearchedExpenseList.clear();
 
         for (ExpenseModel e : mExpenseList) {
             // get the list which correspond trip id
             if (e.getTripId() == mTripId) {
-                filteredExpenseList.add(e);
+                mSearchedExpenseList.add(e);
             }
         }
-
-        mExpenseList.clear();
-        mExpenseList.addAll(filteredExpenseList);
 
         adapter.notifyDataSetChanged();
     }
 
     private void PrepareListView(){
         mExpenseList = new ArrayList<>();
-        adapter = new RecycleViewAdapter(mExpenseList, ExpenseListActivity.this);
+        mSearchedExpenseList = new ArrayList<>();
+        adapter = new RecycleViewAdapter(mSearchedExpenseList, ExpenseListActivity.this);
 
         expenseListView.setAdapter(adapter);
         expenseListView.setLayoutManager(new LinearLayoutManager(this));
@@ -157,7 +155,7 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
         builder.setItems(actions, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ExpenseModel expense = mExpenseList.get(position);
+                ExpenseModel expense = mSearchedExpenseList.get(position);
 
                 if (which == 0) {
                     Intent intent = new Intent();
@@ -227,16 +225,13 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
 
     @SuppressLint("DefaultLocale")
     private void searchExpense(String text) {
-        List<ExpenseModel> mSearchedExpenseList = new ArrayList<>();
+        mSearchedExpenseList.clear();
 
         for (ExpenseModel e: mExpenseList){
             if (e.getExpenseName().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())){
                 mSearchedExpenseList.add(e);
             }
         }
-
-        mExpenseList.clear();
-        mExpenseList = mSearchedExpenseList;
 
         adapter.notifyDataSetChanged();
     }
@@ -271,6 +266,9 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
         if (mAllExpense != null){
             mExpenseList.clear();
             mExpenseList.addAll(mAllExpense);
+
+            mSearchedExpenseList.clear();
+            mSearchedExpenseList.addAll(mExpenseList);
 
             adapter.notifyDataSetChanged();
 
