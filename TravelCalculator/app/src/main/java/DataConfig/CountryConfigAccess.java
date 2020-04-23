@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-import Model.ApiCurrencyModel;
+import Model.ApiResponseModel;
 import Model.CountryModel;
 import commonutilities.Constants;
 import threads.HttpServiceThread;
@@ -67,7 +67,7 @@ public class CountryConfigAccess {
         if (isFirstTime) {
             readJsontoList();
 
-            HttpServiceThread httpServiceThread = new HttpServiceThread(context, HttpServiceThread.ActionMode.UPDATE_CURRENCY);
+            HttpServiceThread httpServiceThread = new HttpServiceThread(context, Constants.ActionMode.UPDATE_CURRENCY);
 //            httpServiceThread.setCurrencyBase();
             httpServiceThread.start();
             try{
@@ -76,11 +76,11 @@ public class CountryConfigAccess {
 
             // Store the country which the currency code is in the rate list
             List<CountryModel> tempCountryList = new ArrayList<>();
-            List<ApiCurrencyModel> rateList = new ArrayList<>();
+            List<ApiResponseModel> rateList = new ArrayList<>();
             rateList.addAll(httpServiceThread.GetAllCurrencyList()); //
-            for (ApiCurrencyModel currency: rateList){
-                config.countryList.stream().filter(o -> o.getCurrencyCode().equals(currency.getCurrencyCode())).forEach((entry) -> {
-                    entry.setCurrency(currency.getCurrencyRate());
+            for (ApiResponseModel currency: rateList){
+                config.countryList.stream().filter(o -> o.getCurrencyCode().equals(currency.getCurrencyBaseCode())).forEach((entry) -> {
+                    entry.setCurrency(currency.getCurrencyRateConvert());
                     tempCountryList.add(entry);
                 });
             }
