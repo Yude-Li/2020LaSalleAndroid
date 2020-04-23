@@ -79,7 +79,7 @@ public class CountryConfigAccess {
             List<ApiResponseModel> rateList = new ArrayList<>();
             rateList.addAll(httpServiceThread.GetAllCurrencyList()); //
             for (ApiResponseModel currency: rateList){
-                config.countryList.stream().filter(o -> o.getCurrencyCode().equals(currency.getCurrencyBaseCode())).forEach((entry) -> {
+                config.countryList.stream().filter(o -> o.getCurrencyCode().equals(currency.getCurrencyCode())).forEach((entry) -> {
                     entry.setCurrency(currency.getCurrencyRateConvert());
                     tempCountryList.add(entry);
                 });
@@ -105,7 +105,6 @@ public class CountryConfigAccess {
         CountryModel find = config.countryList.stream().filter(o -> o.getId() == id).findFirst().get();
 
         return find;
-
     }
 
     private void SaveSiteConfig(Constants.ConfigName confName)

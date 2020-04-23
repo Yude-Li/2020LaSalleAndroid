@@ -244,6 +244,16 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
             tripList.addAll(mAllTrips);
             searchedTripList.clear();
             searchedTripList.addAll(tripList);
+
+            for (int i = 0; i < tripList.size(); i++) {
+                if (tripList.get(i).getId() == 99999)
+                {
+                    tripList.remove(i);
+                    searchedTripList.remove(i);
+                    break;
+                }
+            }
+
             adapter.notifyDataSetChanged();
         }
     }

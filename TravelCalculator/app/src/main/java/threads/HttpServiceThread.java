@@ -71,7 +71,7 @@ public class HttpServiceThread extends Thread {
         this.serverResponseNotifier = mHandler;
     }
 
-    public HttpServiceThread(Context context, Constants.ActionMode updateCurrency) {
+    public HttpServiceThread(Context context, Constants.ActionMode actionMode) {
         this.ctx = ctx;
         this.actionMode = actionMode;
     }
@@ -170,8 +170,8 @@ public class HttpServiceThread extends Thread {
             while(keysItr.hasNext()) {
                 String key = keysItr.next();
                 Double value = Double.valueOf(jsonRate.get(key).toString());
-                // ApiCurrencyModel apiCurrencyModel = new ApiCurrencyModel(key, value);
-                //rateList.add(apiCurrencyModel);
+                ApiResponseModel apiCurrencyModel = new ApiResponseModel(key, value);
+                this.rateList.add(apiCurrencyModel);
             }
 
         } catch (JSONException e) {
@@ -207,7 +207,7 @@ public class HttpServiceThread extends Thread {
     }
 
     public List<ApiResponseModel> GetAllCurrencyList() {
-        return rateList;
+        return this.rateList;
     }
 }
 
