@@ -12,15 +12,17 @@ import com.lasalle2020android.travelcalculator.R;
 
 import java.util.List;
 
+import Model.CountryModel;
+
 /**
  * Created by Bugalia on 24/03/2020.
  */
 public class CurrencyListAdapter extends BaseAdapter {
     private Context mContext;
-    List<ExtendedCurrency> currencies;
+    List<CountryModel> currencies;
     LayoutInflater inflater;
 
-    public CurrencyListAdapter(Context context, List<ExtendedCurrency> currencies) {
+    public CurrencyListAdapter(Context context, List<CountryModel> currencies) {
         super();
         this.mContext = context;
         this.currencies = currencies;
@@ -44,17 +46,17 @@ public class CurrencyListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        ExtendedCurrency currency = currencies.get(position);
+        CountryModel currency = currencies.get(position);
 
         if (view == null)
             view = inflater.inflate(R.layout.row, null);
 
         Cell cell = Cell.from(view);
-        cell.textView.setText(currency.getName());
+        cell.textView.setText(currency.getCurrencyName());
 
-        currency.loadFlagByCode(mContext);
-        if (currency.getFlag() != -1)
-            cell.imageView.setImageResource(currency.getFlag());
+        int flagId=currency.getFlagId(mContext);
+        if (flagId != -1)
+            cell.imageView.setImageResource(flagId);
         return view;
     }
 
