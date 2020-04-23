@@ -2,6 +2,7 @@ package com.lasalle2020android.travelcalculator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -93,5 +94,15 @@ public class UserSettingActivity extends AppCompatActivity implements CountryPic
         settingConfig.setOriginalCountryId(Id);
 
         mCountryPicker.dismiss();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.setClass(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+        UserSettingActivity.super.onBackPressed();
     }
 }
