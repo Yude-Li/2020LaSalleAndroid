@@ -27,7 +27,7 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
     private List<TripInfoModel> mTripList = null;
     private List<ExpenseModel> mExpenseList = null;
 
-    private static Context context;
+    private  Context context;
 
     public RecycleViewAdapter(List<TripInfoModel> mTripList, Context context, int type) {
         this.mTripList = mTripList;
@@ -94,16 +94,18 @@ public class RecycleViewAdapter extends RecyclerView.Adapter<RecycleViewAdapter.
             TripInfoModel tripInfo = mTripList.get(position);
 
             CountryConfigAccess countryConfig = new CountryConfigAccess(this.context);
-            CountryModel country = countryConfig.getCountryById(tripInfo.getTravelCountry());
+            if(tripInfo.getTravelCountry()!=9999) {
+                CountryModel country = countryConfig.getCountryById(tripInfo.getTravelCountry());
 
-            // Get the country info by the countryId
-            // Get the country icon from database (or maybe drawable)
-            Bitmap bitmap = BitmapFactory.decodeFile("");
-            ImageView imgCountry = viewHolder.countryImg;
-            imgCountry.setImageResource(country.getFlagId(this.context));
+                // Get the country info by the countryId
+                // Get the country icon from database (or maybe drawable)
+                Bitmap bitmap = BitmapFactory.decodeFile("");
+                ImageView imgCountry = viewHolder.countryImg;
+                imgCountry.setImageResource(country.getFlagId(this.context));
 
-            TextView textViewName = viewHolder.tripNameTextView;
-            textViewName.setText(tripInfo.getTripName());
+                TextView textViewName = viewHolder.tripNameTextView;
+                textViewName.setText(tripInfo.getTripName());
+            }
 
 //            TextView textViewDate = viewHolder.tripDateTextView;
 //            textViewDate.setText(tripInfo.getStartDate() + " - " + tripInfo.getEndDate());

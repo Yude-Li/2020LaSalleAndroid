@@ -239,14 +239,15 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
 
     @Override
     public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
-        if (mAllTrips != null) {
+        if (mAllTrips != null && mAllTrips.size()>1) {
+
             tripList.clear();
             tripList.addAll(mAllTrips);
             searchedTripList.clear();
             searchedTripList.addAll(tripList);
 
             for (int i = 0; i < tripList.size(); i++) {
-                if (tripList.get(i).getId() == 99999)
+                if (tripList.get(i).getId() == 9999)
                 {
                     tripList.remove(i);
                     searchedTripList.remove(i);

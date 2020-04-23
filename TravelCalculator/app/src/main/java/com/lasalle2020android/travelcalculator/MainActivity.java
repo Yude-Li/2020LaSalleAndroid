@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.udojava.evalex.Expression;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -280,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 if(view!=null) {
-    switch (view.getId()) {
+    switch (parent.getId()) {
 
         case R.id.spinner_triplist:
 
@@ -292,6 +293,9 @@ if(view!=null) {
                 setUI_TripSelectionChange(false);
 
             } else {
+
+                mCurrencySelectionImage_Second.setImageResource(mComponentInfo.countryConfig.getCountryById(mTripInfoModel.getTravelCountry()).getFlagId(MainActivity.this));
+
                 setUI_TripSelectionChange(true);
 
             }
@@ -358,10 +362,24 @@ if(mEnteredString.contains("+")||mEnteredString.contains("-")||mEnteredString.co
         mEnteredString=mEnteredString;
         Expression expression = new Expression(mEnteredString);
         result = expression.eval();
+    result= result.setScale(2, RoundingMode.CEILING);
         mEnteredString = result + "";}
 
         mInputTextView_One.setText(mEnteredString);
     }
+
+    private String calculateFinal(float tip,String amount) {
+
+      String ret="";
+        BigDecimal result = null;
+        Expression expression = new Expression(amount+"*"+tip+"/"+"100");
+        result = expression.eval();
+        result= result.setScale(2, RoundingMode.CEILING);
+
+
+      return ret+result;
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -462,20 +480,44 @@ if(mEnteredString.contains("+")||mEnteredString.contains("-")||mEnteredString.co
 
                 break;
             case R.id.btn_breakfast:
-
+                calculateFinal();
+                mInputTextView_Second.setText(calculateFinal(mTripInfoModel.getBreakfastTip(),mEnteredString));
                 break;
             case R.id.btn_lunch:
+      calculateFinal();
+                mInputTextView_Second.setText(calculateFinal(mTripInfoModel.getLunchTip(),mEnteredString));
+
+                break;
+            case R.id.btn_dinner:
+                calculateFinal();
+                mInputTextView_Second.setText(calculateFinal(mTripInfoModel.getDinnerTip(),mEnteredString));
 
                 break;
 
             case R.id.btn_normal:
-
+                calculateFinal();
+                mInputTextView_Second.setText(calculateFinal(mTripInfoModel.getLunchTip(),mEnteredString));
                 break;
 
             case R.id.btn_save:
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), ExpenseRecordEditActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+calculateFinal();
+                Bundle bundle = new Bundle();
+                CountryModel model= mComponentInfo.countryConfig.getCountryById(mComponentInfo.settingConfig.getOriginalCountryId());
+
+                bundle.putString("baseCurrency",model.getCurrencyCode());
+                bundle.putInt("baseCountryId",model.getCountryNum());
+                bundle.putString("destinationCurrency",countryTwoString);
+                bundle.putInt("destinationCountryId", mTripInfoModel.getTravelCountry());
+                bundle.putString("spendAmount",mEnteredString);
+                bundle.putString("convertedAmount",mInputTextView_Second.getText().toString());
+                bundle.putString("currentDate","");
+                bundle.putInt("tripId",mTripInfoModel.getId());
+                bundle.putInt("expenseId",-1);
+                bundle.putInt("tripIdFromMain",1);
+                intent.putExtra("bundle",bundle);
                 startActivity(intent);
                 break;
 

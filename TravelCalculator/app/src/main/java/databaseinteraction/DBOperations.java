@@ -61,8 +61,8 @@ import commonutilities.Constants;
     public List<TripInfoModel> getAllTrips() {
         List<TripInfoModel> trips = new ArrayList<>();
         TripInfoModel trip = new TripInfoModel();
-        trip.setId(99999);
-        trip.setTravelCountry(999999);
+        trip.setId(9999);
+        trip.setTravelCountry(9999);
         trip.setTripName("Select Trip");
         trip.setStartDate("");
         trips.add(trip);

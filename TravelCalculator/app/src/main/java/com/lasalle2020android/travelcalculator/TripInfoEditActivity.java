@@ -258,7 +258,7 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
 
     @Override
     public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
-        if (mTrip != null) {
+        if (mTrip != null && mAllTrips.size()>1) {
             initialViewObjectsWithValue(mTrip);
         }
         else {

@@ -57,11 +57,13 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Data
     // get from main activity
     private int mTripIdFromMain = -1;
     private String mSpendAmount = "", mConvertedAmount = "";
+    private  Bundle mBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.expense_record_layout);
+mBundle=getIntent().getBundleExtra("bundle");
 
         Toolbar mTopToolbar = findViewById(R.id.toolbar_expenserecord);
         mTopToolbar.setTitle(R.string.toolBarTitle_expenseRecordEdit);
@@ -77,17 +79,18 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Data
     private void receiveDataFromAnotherActivity() {
 
         Intent intent = getIntent();
-        mExpenseId = intent.getIntExtra("expenseId", -1);
-        mTripId = intent.getIntExtra("tripId", -1);
-        mTripIdFromMain = intent.getIntExtra("tripIdFromMain", -1);
+        Bundle mBundle= intent.getBundleExtra("bundle");
+        mExpenseId = mBundle.getInt("expenseId", -1);
+        mTripId = mBundle.getInt("tripId", -1);
+        mTripIdFromMain = mBundle.getInt("tripIdFromMain", -1);
 
         if (mExpenseId != -1) { // edit
             new DatabaseOperations_Thread(ExpenseRecordEditActivity.this, Constants.TABLE.EXPENSE,
                     Constants.DATABASE_OPERATION.FETCH_SELECTED, this, mExpenseId).execute();
         }
         else if (mTripIdFromMain != -1){ // save expense from main activity
-            mSpendAmount = intent.getStringExtra("spendAmount");
-            mConvertedAmount = intent.getStringExtra("convertedAmount");
+            mSpendAmount = mBundle.getString("spendAmount");
+            mConvertedAmount = mBundle.getString("convertedAmount");
         }
     }
 
