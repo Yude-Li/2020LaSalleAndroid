@@ -1,32 +1,4 @@
 package threads;
-
-/*
-To get new currency by http or api
-API Key : c38d9184caab9be299cde8caedb13181
-Get all currency: http://data.fixer.io/api/latest?access_key=c38d9184caab9be299cde8caedb13181
-https://fixer.io/documentation#ssl
-
-Convert currency:
-API Key: a307308d10611c002ab8
-Example usage (Convert currency):
-https://free.currconv.com/api/v7/convert?q=USD_PHP&compact=ultra&apiKey=a307308d10611c002ab8
-
-Get all currency: https://free.currconv.com/api/v7/currencies?apiKey=a307308d10611c002ab8
-https://www.currencyconverterapi.com/docs
-*/
-
-
-
-/*
-The api provided by Eurpean Central Bank
-
-GET https://api.exchangeratesapi.io/latest?symbols=USD,GBP
-
-
-
- */
-
-
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
@@ -55,7 +27,9 @@ import java.util.Map;
 
 import DataConfig.CountryConfigAccess;
 import DataConfig.SettingConfigAccess;
+import Model.ApiResponseModel;
 import callbacks.ServerResponseNotifier;
+import commonutilities.Constants;
 
 public class HttpServiceThread extends Thread {
 
@@ -72,27 +46,26 @@ public class HttpServiceThread extends Thread {
     private String travelCurrencyName = "";
     private String originalCurrencyName = "";
 
-    ActionMode actionMode;
-    public enum ActionMode {
-        UPDATE_CURRENCY,
-        CONVERT_CURRENCY
-    }
+    Constants.ActionMode actionMode;
 
-    public HttpServiceThread(MyApplication componentInfo, Context ctx, ServerResponseNotifier mHandler, String body, int requestNo) {
-        this.componentInfo = componentInfo;
 
-        this.ctx = ctx;
-        //this.mHandler = mHandler;
-        this.serverResponseNotifier = mHandler;
-        this.bodyData = body;
+//    public HttpServiceThread(MyApplication componentInfo, Context ctx, ServerResponseNotifier mHandler, String body, int requestNo) {
+//        this.componentInfo = componentInfo;
+//
+//        this.ctx = ctx;
+//        //this.mHandler = mHandler;
+//        this.serverResponseNotifier = mHandler;
+//        this.bodyData = body;
+//
+//        this.requestNo = requestNo;
+//    }
 
-        this.requestNo = requestNo;
-    }
-
-    public HttpServiceThread(Context ctx, MyApplication componentInfo, ActionMode actionMode) {
+    public HttpServiceThread(Context ctx, MyApplication componentInfo, Constants.ActionMode actionMode,String body,ServerResponseNotifier mHandler) {
         this.ctx = ctx;
         this.componentInfo = componentInfo;
         this.actionMode = actionMode;
+        this.bodyData = body;
+        this.serverResponseNotifier = mHandler;
     }
 
     public void setConversionCurrencyBase(String newCurrency) {
@@ -100,7 +73,7 @@ public class HttpServiceThread extends Thread {
         SettingConfigAccess settingConfigAccess = new SettingConfigAccess(this.ctx);
         CountryConfigAccess countryConfigAccess = new CountryConfigAccess(this.ctx);
 
-        this.originalCurrencyName = countryConfigAccess.getCountryById(settingConfigAccess.getOriginalCountryId()).getCurrencyName();
+        this.originalCurrencyName = countryConfigAccess.getCountryById(settingConfigAccess.getOriginalCountryId()).getCurrencyCode();
     }
 
     public void setConversionCurrency(String currCurrency, String newCurrency) {
@@ -108,79 +81,18 @@ public class HttpServiceThread extends Thread {
         this.originalCurrencyName = currCurrency;
     }
 
-    private void postMessage(String webResponse, int requestNo) {
+    private void postMessage(ApiResponseModel webResponse, int requestNo) {
         if (componentInfo.isActivityRunning) {
 //            Message msg = new Message();
 //            msg.obj = webResponse;
 //            msg.arg1 = requestNo;
 //            mHandler.sendMessage(msg);
             // serverResponse.onServerResponse(message, requestNo);
-            serverResponseNotifier.onServerResponseRecieved(null, 200, false);
+
+            serverResponseNotifier.onServerResponseRecieved(webResponse, 200, true);
         }
     }
 
-//    @Override
-//    public void run() {
-//        if (interupt == false) {
-//
-//            String URL = "";
-//
-//            if (!interupt) {
-//
-//                try {
-//
-//                    Log.e("", "=========== HTTP REQUEST===========");
-//                    Log.e("", "Request Name  - " + apiName);
-//                    Log.e("", "Request Data  - " + bodyData);
-//                    Log.e("", "====================================");
-//
-//
-//                    java.net.URL url = new URL(baseUrl + bodyData);
-//
-//                    try {
-//                        connection = (HttpURLConnection) url.openConnection();
-//                    } catch (IOException e1) {
-//                        // TODO Auto-generated catch block
-//                        e1.printStackTrace();
-//                    }
-//                    connection.setConnectTimeout(60000);
-//
-//                    connection.connect();
-//                    InputStream inputStream = null;
-//                    inputStream = connection.getInputStream();
-//                    //readStream(inputStream);
-//
-//                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-//                    String str;
-//                    StringBuilder stringBuilder = new StringBuilder();
-//
-//                    while ((str = reader.readLine()) != null) {
-//                        stringBuilder.append(str);
-//                        webResponse = stringBuilder.toString();
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                Log.i("http end-" + requestNo, "Resquest Json --> " + bodyData);
-//                // Log.e("http end-" + requestNo, "Response Json  - image -> " + webResponse);
-//
-//                Log.i("", "=========== HTTP REQUEST===========");
-//                Log.i("", "Request Name  -   " + apiName);
-//                Log.i("", "Request Data  -   " + bodyData);
-//                Log.i("", "Response Data -   " + webResponse);
-//                Log.i("", "====================================");
-//                // Log.e("webResponse=========",webResponse);
-//
-//                connection.disconnect();
-//                connection = null;
-//
-//
-//            }
-//
-//            Log.i("" + requestNo, webResponse);
-//            postMessage(webResponse, requestNo);
-//        }
-//    }
 
     public void run()
     {
@@ -208,7 +120,7 @@ public class HttpServiceThread extends Thread {
             case CONVERT_CURRENCY: {
                 try {
                     //https://api.exchangeratesapi.io/latest?base=USD&symbols=GBP
-                    URL url = new URL(" https://api.exchangeratesapi.io/latest?base=" + this.originalCurrencyName + "&symbols=" + this.travelCurrencyName);
+                    URL url = new URL(" https://api.exchangeratesapi.io/latest?base=" + this.originalCurrencyName + "&symbols=" + this.bodyData);
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setConnectTimeout(60000);
                     int responseCode = connection.getResponseCode();
@@ -216,12 +128,20 @@ public class HttpServiceThread extends Thread {
                         InputStream input = connection.getInputStream();
                         String response = streamToString(input);
                         Log.d("GetCurrency", response);
-                        postMessage(response, responseCode);
+                        JSONObject object = new JSONObject(response);
+                        String[] country= bodyData.split("\\,");
+                        ApiResponseModel model = new ApiResponseModel(object.getString("base"), object.getJSONObject("rates").getDouble(country[0]),
+                                object.getJSONObject("rates").getDouble(country[1]));
+
+
+                        postMessage(model, responseCode);
                     }
                     connection.disconnect();
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -236,12 +156,12 @@ public class HttpServiceThread extends Thread {
             String rates = jsonGet.getString("rates");
             JSONObject jsonRate = new JSONObject(rates);
             Iterator<String> keysItr = jsonRate.keys();
-            List<ApiCurrencyModel> rateList = new ArrayList<>();
+            List<ApiResponseModel> rateList = new ArrayList<>();
             while(keysItr.hasNext()) {
                 String key = keysItr.next();
                 Double value = Double.valueOf(jsonRate.get(key).toString());
-                ApiCurrencyModel apiCurrencyModel = new ApiCurrencyModel(key, value);
-                rateList.add(apiCurrencyModel);
+                // ApiCurrencyModel apiCurrencyModel = new ApiCurrencyModel(key, value);
+                //rateList.add(apiCurrencyModel);
             }
 
         } catch (JSONException e) {
@@ -264,13 +184,5 @@ public class HttpServiceThread extends Thread {
     }
 }
 
-class ApiCurrencyModel {
-    private String currencyCode;
-    private double currencyRate;
 
-    public ApiCurrencyModel(String currencyCode, double currencyRate) {
-        this.currencyCode = currencyCode;
-        this.currencyRate = currencyRate;
-    }
-}
 
