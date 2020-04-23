@@ -28,6 +28,7 @@ import java.util.List;
 
 import DataConfig.CountryConfigAccess;
 import Model.ApiResponseModel;
+import Model.CountryModel;
 import Model.ExpenseModel;
 import Model.TripInfoModel;
 import callbacks.DatabaseOperationNotifier;
@@ -38,6 +39,7 @@ import currencies.CurrencyPicker;
 import currencies.CurrencyPickerListener;
 import currencies.ExtendedCurrency;
 import databaseinteraction.DatabaseOperations_Thread;
+import threads.HttpServiceThread;
 
 public class MainActivity extends AppCompatActivity implements ServerResponseNotifier,
         CurrencyPickerListener, AdapterView.OnItemSelectedListener, View.OnClickListener, SharedPreferences.OnSharedPreferenceChangeListener, DatabaseOperationNotifier {
@@ -62,6 +64,11 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
     private MyApplication mComponentInfo;
 
 
+    private TripInfoModel mTripInfoModel;
+    private   TripInfoModel[] tripInfoModels;
+    private String countryOneString="", countryTwoString="";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
         setSupportActionBar(mTopToolbar);
 
         mComponentInfo = (MyApplication) getApplicationContext();
-        performDB_Create();
+
 
 //        HttpServiceThread httpServiceThread = new HttpServiceThread(mComponentInfo,MainActivity.this,MainActivity.this,"USD,GBP",00);
 //        httpServiceThread.start();
@@ -79,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
 
         instantiateViews();
+        updateData();
 
 
     }
@@ -123,6 +131,17 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
     }
 
+    private void updateData(){
+        CountryModel model= mComponentInfo.countryConfig.getCountryById(mComponentInfo.settingConfig.getOriginalCountryId());
+        countryOneString =  model.getCurrencyCode();
+        countryTwoString =  model.getCurrencyCode();
+        mCurrencySelectionImage_One.setImageResource(model.getFlagId(MainActivity.this));
+        mCurrencySelectionImage_Second.setImageResource(model.getFlagId(MainActivity.this));
+        performDB_Create();
+        instantiateData();
+    }
+
+
     private void instantiateViews() {
 
         mSpinnerTripList = findViewById(R.id.spinner_triplist);
@@ -152,8 +171,8 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
         mNormalTip_Btn.setOnClickListener(this);
 
 
-        ArrayList<ExtendedCurrency> nc = new ArrayList<>();
-        for (ExtendedCurrency c : ExtendedCurrency.getAllCurrencies()) {
+        ArrayList<CountryModel> nc = new ArrayList<>();
+        for (CountryModel c : mComponentInfo.countryConfig.getCountriesList()) {
             //if (c.getSymbol().endsWith("0")) {
             nc.add(c);
             //}
@@ -163,12 +182,12 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
         mSharedPrefrences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         mSharedPrefrences.registerOnSharedPreferenceChangeListener(this);
 
-        mCurrencyPicker = CurrencyPicker.newInstance("Select Currency");
+        mCurrencyPicker = CurrencyPicker.newInstance("Select Currency", nc,MainActivity.this);
         mCurrencyPicker.setCurrenciesList(nc);
         // mCurrencyPicker.setCurrenciesList(mSharedPrefrences.getStringSet("selectedCurrencies", new HashSet<String>()));
 
         mCurrencyPicker.setListener(this);
-instantiateData();
+
 
 //        HttpServiceThread httpServiceThread= new HttpServiceThread(mComponentInfo, MainActivity.this,
 //                MainActivity.this, "USD,INR",101);
@@ -259,7 +278,17 @@ instantiateData();
 
             case R.id.spinner_triplist:
 
-                setUI_TripSelectionChange(position > 0 ? true : false);
+
+                mTripInfoModel= tripInfoModels[position];
+
+                if(mTripInfoModel.getTravelCountry()==9999){
+                         //  HttpServiceThread httpServiceThread = new HttpServiceThread(mComponentInfo,MainActivity.this,MainActivity.this,"USD,GBP",00);httpServiceThread.start();
+                    setUI_TripSelectionChange(position > 0 ? true : false);
+
+                }else{
+                    setUI_TripSelectionChange( false);
+
+                }
 
                 break;
 
@@ -480,9 +509,18 @@ instantiateData();
 
         if (mCurrencySelectedFirst) {
             mCurrencySelectionImage_One.setImageResource(flagDrawableResID);
+            countryOneString=code;
 
         } else {
             mCurrencySelectionImage_Second.setImageResource(flagDrawableResID);
+            countryTwoString=code;
+
+
+        HttpServiceThread httpServiceThread = new HttpServiceThread(mComponentInfo,MainActivity.this,MainActivity.this,countryOneString+","+countryTwoString,00);
+        httpServiceThread.start();
+
+
+
         }
 
         mCurrencySelectedFirst = !mCurrencySelectedFirst;
@@ -495,7 +533,7 @@ instantiateData();
             // mTextView.setText(sharedPreferences.getString(key, ""));
         }
         if (key.equals("selectedCurrencies")) {
-            mCurrencyPicker.setCurrenciesList(mSharedPrefrences.getStringSet("selectedCurrencies", new HashSet<String>()));
+           // mCurrencyPicker.setCurrenciesList(mSharedPrefrences.getStringSet("selectedCurrencies", new HashSet<String>()));
         }
     }
 
@@ -533,7 +571,7 @@ instantiateData();
 
         if(mAllTrips!=null){
 
-            TripInfoModel[] tripInfoModels = mAllTrips.toArray(new TripInfoModel[mAllTrips.size()]);
+       tripInfoModels = mAllTrips.toArray(new TripInfoModel[mAllTrips.size()]);
 
             Log.e("sac","sks"+mAllTrips);
 

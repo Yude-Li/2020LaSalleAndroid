@@ -1,3 +1,4 @@
+/*
 package currencies;
 
 import android.content.Context;
@@ -18,18 +19,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import Model.CountryModel;
 
+
+*/
 /**
  * Created by Bugalia on 24/03/2020.
- */
+ *//*
+
 public class MultiCurrencyListAdapter extends BaseAdapter implements CompoundButton.OnCheckedChangeListener {
     private Context mContext;
-    List<ExtendedCurrency> currencies;
+    List<CountryModel> currencies;
     LayoutInflater inflater;
     Set<String> selectedCurrencies;
     private SparseBooleanArray checkedCurrencies;
 
-    public MultiCurrencyListAdapter(Context context, List<ExtendedCurrency> currencies, Set<String> selectedCurrencies) {
+    public MultiCurrencyListAdapter(Context context, List<CountryModel> currencies, Set<String> selectedCurrencies) {
         super();
         this.mContext = context;
         this.currencies = currencies;
@@ -94,7 +99,8 @@ public class MultiCurrencyListAdapter extends BaseAdapter implements CompoundBut
         cell.checkBox.setTag(position);
         cell.checkBox.setOnCheckedChangeListener(this);
         cell.checkBox.setChecked(checkedCurrencies.get(position, false));
-        /*
+        */
+/*
         if(selectedCurrencies.contains(currency.getCode())){
             //cell.checkBox.setChecked(true);
         }
@@ -112,7 +118,8 @@ public class MultiCurrencyListAdapter extends BaseAdapter implements CompoundBut
             }
         });
 
-        */
+        *//*
+
         currency.loadFlagByCode(mContext);
         if (currency.getFlag() != -1)
             cell.imageView.setImageResource(currency.getFlag());
@@ -142,3 +149,4 @@ public class MultiCurrencyListAdapter extends BaseAdapter implements CompoundBut
         }
     }
 }
+*/

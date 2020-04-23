@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+
+import Model.CountryModel;
+
 /**
  * Created by Bugalia on 24/03/2020.
  */
@@ -30,24 +33,27 @@ public class CurrencyPicker extends DialogFragment {
     private EditText searchEditText;
     private ListView currencyListView;
     private CurrencyListAdapter adapter;
-    private List<ExtendedCurrency> currenciesList = new ArrayList<>();
-    private List<ExtendedCurrency> selectedCurrenciesList = new ArrayList<>();
+    private List<CountryModel> currenciesList = new ArrayList<>();
+    private List<CountryModel> selectedCurrenciesList = new ArrayList<>();
     private CurrencyPickerListener listener;
     private Context context;
 
     /**
      * To support show as dialog
      */
-    public static CurrencyPicker newInstance(String dialogTitle) {
+    public static CurrencyPicker newInstance(String dialogTitle, ArrayList<CountryModel> currencyList, Context mCtx) {
         CurrencyPicker picker = new CurrencyPicker();
         Bundle bundle = new Bundle();
         bundle.putString("dialogTitle", dialogTitle);
         picker.setArguments(bundle);
+        picker.setCurrenciesList(currencyList);
+        picker.context=mCtx;
         return picker;
     }
 
     public CurrencyPicker() {
-        setCurrenciesList(ExtendedCurrency.getAllCurrencies());
+
+       // setCurrenciesList();
     }
 
     @Override
@@ -77,9 +83,9 @@ public class CurrencyPicker extends DialogFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (listener != null) {
-                    ExtendedCurrency currency = selectedCurrenciesList.get(position);
-                    listener.onSelectCurrency(currency.getName(), currency.getCode(), currency.getSymbol(),
-                            currency.getFlag());
+                    CountryModel currency = selectedCurrenciesList.get(position);
+                    listener.onSelectCurrency(currency.getCurrencyName(), currency.getCurrencyCode(), currency.getCurrencySymbol(),
+                            currency.getFlagId(context));
                 }
             }
         });
@@ -119,23 +125,23 @@ public class CurrencyPicker extends DialogFragment {
     @SuppressLint("DefaultLocale")
     private void search(String text) {
         selectedCurrenciesList.clear();
-        for (ExtendedCurrency currency : currenciesList) {
-            if (currency.getName().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())) {
+        for (CountryModel currency : currenciesList) {
+            if (currency.getCurrencyName().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())) {
                 selectedCurrenciesList.add(currency);
             }
         }
         adapter.notifyDataSetChanged();
     }
 
-    public void setCurrenciesList(List<ExtendedCurrency> newCurrencies) {
+    public void setCurrenciesList(List<CountryModel> newCurrencies) {
         this.currenciesList.clear();
         this.currenciesList.addAll(newCurrencies);
     }
 
-    public void setCurrenciesList(Set<String> savedCurrencies) {
-        this.currenciesList.clear();
-        for(String code : savedCurrencies){
-            this.currenciesList.add(ExtendedCurrency.getCurrencyByISO(code));
-        }
-    }
+//    public void setCurrenciesList(Set<String> savedCurrencies) {
+//        this.currenciesList.clear();
+//        for(String code : savedCurrencies){
+//            this.currenciesList.add(ExtendedCurrency.getCurrencyByISO(code));
+//        }
+//    }
 }

@@ -1,3 +1,4 @@
+/*
 package currencies;
 
 import android.annotation.SuppressLint;
@@ -23,9 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import DataConfig.CountryConfigAccess;
+import Model.CountryModel;
+
+*/
 /**
  * Created by Bugalia on 24/03/2020.
- */
+ *//*
+
 public class MultiCurrencyPreference extends MultiSelectListPreference {
 
     private EditText searchEditText;
@@ -36,15 +42,15 @@ public class MultiCurrencyPreference extends MultiSelectListPreference {
     private MultiCurrencyListAdapter adapter;
     private int currentIndex = 0;
 
-    private List<ExtendedCurrency> currenciesList = new ArrayList<>();
-    private List<ExtendedCurrency> selectedCurrenciesList = new ArrayList<>();
+    private List<CountryModel> currenciesList = new ArrayList<>();
+    private List<CountryModel> selectedCurrenciesList = new ArrayList<>();
 
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
 
     public MultiCurrencyPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setCurrenciesList(ExtendedCurrency.getAllCurrencies());
+        setCurrenciesList(CountryConfigAccess.config.getAllCurrencies());
 
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         editor = preferences.edit();
@@ -108,18 +114,19 @@ public class MultiCurrencyPreference extends MultiSelectListPreference {
     @SuppressLint("DefaultLocale")
     private void search(String text) {
         this.selectedCurrenciesList.clear();
-        for (ExtendedCurrency currency : this.currenciesList) {
-            if (currency.getName().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())) {
+        for (CountryModel currency : this.currenciesList) {
+            if (currency.getCurrencyName().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())) {
                 this.selectedCurrenciesList.add(currency);
             }
         }
         adapter.notifyDataSetChanged();
     }
 
-    public void setCurrenciesList(List<ExtendedCurrency> newCurrencies) {
+    public void setCurrenciesList(List<CountryModel> newCurrencies) {
         this.currenciesList.clear();
         this.currenciesList.addAll(newCurrencies);
     }
 
 
 }
+*/
