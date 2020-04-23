@@ -141,7 +141,7 @@ try {
 
         // prepare note object
         TripInfoModel trip = new TripInfoModel(
-                cursor.getInt((int)cursor.getLong(1)),
+                cursor.getInt((int)cursor.getLong(cursor.getColumnIndex(Constants.COLUMN_ID))),
                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_TRIPNAME)),
                 cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_TRAVELCOUNTRY)),
                 cursor.getString(cursor.getColumnIndex(Constants.COLUMN_STARTDATE)),
@@ -269,7 +269,7 @@ try {
 
 
          ExpenseModel mExpense = new ExpenseModel(
-                 cursor.getInt((int)cursor.getLong(1)),
+                 cursor.getInt(cursor.getInt(cursor.getColumnIndex(Constants.COLUMN_ID))),
                  cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_NAME)),
                  cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_SPEND_AMOUNT)),
                  cursor.getString(cursor.getColumnIndex(Constants.COLUMN_EXPENSE_CONVERTED_AMOUNT)),
