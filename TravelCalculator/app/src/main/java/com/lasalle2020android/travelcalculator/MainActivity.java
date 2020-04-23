@@ -155,11 +155,11 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
 
         mInputTextView_One = findViewById(R.id.textView_firstAmount);
-        processInput('1');
-        processInput('0');
+       // processInput('1');
+       // processInput('0');
         mInputTextView_Second = findViewById(R.id.textView_secondC);
-
-        mInputTextView_Second.setText("");
+        processInput('0');
+        mInputTextView_One.setText(""); //change from two
         mSave_Btn = findViewById(R.id.btn_save);
         mSave_Btn.setOnClickListener(this);
         mBreakfast_Btn = findViewById(R.id.btn_breakfast);
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
     private void setMaxEnteredLength() {
         InputFilter[] fArray = new InputFilter[1];
         fArray[0] = new InputFilter.LengthFilter(maxEnteredLength);
-        mInputTextView_One.setFilters(fArray);
+        mInputTextView_Second.setFilters(fArray); //change
 
     }
 
@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
                 case 200:
 
                     calculateFinal();
-                    mInputTextView_Second.setText(Double.parseDouble(mEnteredString)*response.getCurrencyRateConvert()+"");
+                    mInputTextView_One.setText(Double.parseDouble(mEnteredString)*response.getCurrencyRateConvert()+""); //changed from two
 
 
                     break;
@@ -319,7 +319,7 @@ if(view!=null) {
         if (!isLastCharEnteredSymbol) {
 
             mEnteredString += inputChar;
-            mInputTextView_One.setText(mEnteredString);
+            mInputTextView_Second.setText(mEnteredString); //change
 
 
         }
@@ -365,7 +365,7 @@ if(mEnteredString.contains("+")||mEnteredString.contains("-")||mEnteredString.co
     result= result.setScale(2, RoundingMode.CEILING);
         mEnteredString = result + "";}
 
-        mInputTextView_One.setText(mEnteredString);
+        mInputTextView_Second.setText(mEnteredString);// change
     }
 
     private String calculateFinal(float tip,String amount) {
@@ -481,22 +481,22 @@ if(mEnteredString.contains("+")||mEnteredString.contains("-")||mEnteredString.co
                 break;
             case R.id.btn_breakfast:
                 calculateFinal();
-                mInputTextView_Second.setText(calculateFinal(mTripInfoModel.getBreakfastTip(),mEnteredString));
+                mInputTextView_One.setText(calculateFinal(mTripInfoModel.getBreakfastTip(),mEnteredString)); //change from two
                 break;
             case R.id.btn_lunch:
       calculateFinal();
-                mInputTextView_Second.setText(calculateFinal(mTripInfoModel.getLunchTip(),mEnteredString));
+                mInputTextView_One.setText(calculateFinal(mTripInfoModel.getLunchTip(),mEnteredString)); //change from two
 
                 break;
             case R.id.btn_dinner:
                 calculateFinal();
-                mInputTextView_Second.setText(calculateFinal(mTripInfoModel.getDinnerTip(),mEnteredString));
+                mInputTextView_One.setText(calculateFinal(mTripInfoModel.getDinnerTip(),mEnteredString));// change from two
 
                 break;
 
             case R.id.btn_normal:
                 calculateFinal();
-                mInputTextView_Second.setText(calculateFinal(mTripInfoModel.getLunchTip(),mEnteredString));
+                mInputTextView_One.setText(calculateFinal(mTripInfoModel.getLunchTip(),mEnteredString)); // change from second
                 break;
 
             case R.id.btn_save:
@@ -508,11 +508,18 @@ calculateFinal();
                 CountryModel model= mComponentInfo.countryConfig.getCountryById(mComponentInfo.settingConfig.getOriginalCountryId());
 
                 bundle.putString("baseCurrency",model.getCurrencyCode());
-                bundle.putInt("baseCountryId",model.getCountryNum());
+                bundle.putInt("baseCountryId",mTripInfoModel.getTravelCountry());
+
+                bundle.putInt("destinationCountryId", model.getCountryNum());
+
+
                 bundle.putString("destinationCurrency",countryTwoString);
-                bundle.putInt("destinationCountryId", mTripInfoModel.getTravelCountry());
+
+
+
+
                 bundle.putString("spendAmount",mEnteredString);
-                bundle.putString("convertedAmount",mInputTextView_Second.getText().toString());
+                bundle.putString("convertedAmount",mInputTextView_One.getText().toString()); //change from two
                 bundle.putString("currentDate","");
                 bundle.putInt("tripId",mTripInfoModel.getId());
                 bundle.putInt("expenseId",-1);
@@ -543,7 +550,7 @@ calculateFinal();
 
             }
             mEnteredString = mEnteredString.substring(0, mEnteredString.length() - 1);
-            mInputTextView_One.setText(mEnteredString);
+            mInputTextView_Second.setText(mEnteredString); ////change
         }
 
     }
