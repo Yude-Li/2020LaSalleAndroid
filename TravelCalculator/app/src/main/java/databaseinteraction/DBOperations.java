@@ -60,6 +60,13 @@ import commonutilities.Constants;
 
     public List<TripInfoModel> getAllTrips() {
         List<TripInfoModel> trips = new ArrayList<>();
+        TripInfoModel trip = new TripInfoModel();
+        trip.setId(99999);
+        trip.setTravelCountry(999999);
+        trip.setTripName("Select Trip");
+        trip.setStartDate("");
+        trips.add(trip);
+
 
         // Select All Query
         String selectQuery = "SELECT  * FROM " + Constants.TABLE_NAME_TRIPINFO + " ORDER BY " +
@@ -72,7 +79,7 @@ import commonutilities.Constants;
         if (cursor != null && cursor.getCount() > 0
                 && cursor.moveToFirst()) {
             do {
-                TripInfoModel trip = new TripInfoModel();
+                 trip = new TripInfoModel();
                 int coiIndex= cursor.getColumnIndex(Constants.COLUMN_ID);
                 trip.setId((int)cursor.getLong(cursor.getColumnIndex(Constants.COLUMN_ID)));
                 trip.setTripName(cursor.getString(cursor.getColumnIndex(Constants.COLUMN_TRIPNAME)));

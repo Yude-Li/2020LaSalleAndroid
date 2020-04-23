@@ -39,7 +39,10 @@ public class Constants {
 
 
 
-
+    public enum ActionMode {
+        UPDATE_CURRENCY,
+        CONVERT_CURRENCY
+    }
 
 
 

@@ -154,9 +154,11 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
 
         mInputTextView_One = findViewById(R.id.textView_firstAmount);
+        processInput('1');
+        processInput('0');
         mInputTextView_Second = findViewById(R.id.textView_secondC);
 
-
+        mInputTextView_Second.setText("");
         mSave_Btn = findViewById(R.id.btn_save);
         mSave_Btn.setOnClickListener(this);
         mBreakfast_Btn = findViewById(R.id.btn_breakfast);
@@ -254,17 +256,21 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
     public void onServerResponseRecieved(ApiResponseModel response, int resultCode, boolean useResponseDirectly) {
 
         if (useResponseDirectly) {
-
-        } else {
-
             switch (resultCode) {
 
                 case 200:
+
+                    calculateFinal();
+                    mInputTextView_Second.setText(Double.parseDouble(mEnteredString)*response.getCurrencyRateConvert()+"");
+
 
                     break;
 
 
             }
+        } else {
+
+
 
         }
 
@@ -273,27 +279,28 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+if(view!=null) {
+    switch (view.getId()) {
 
-        switch (view.getId()) {
-
-            case R.id.spinner_triplist:
-
-
-                mTripInfoModel= tripInfoModels[position];
-
-                if(mTripInfoModel.getTravelCountry()==9999){
-                         //  HttpServiceThread httpServiceThread = new HttpServiceThread(mComponentInfo,MainActivity.this,MainActivity.this,"USD,GBP",00);httpServiceThread.start();
-                    setUI_TripSelectionChange(position > 0 ? true : false);
-
-                }else{
-                    setUI_TripSelectionChange( false);
-
-                }
-
-                break;
+        case R.id.spinner_triplist:
 
 
-        }
+            mTripInfoModel = tripInfoModels[position];
+
+            if (mTripInfoModel.getTravelCountry() == 9999) {
+                //  HttpServiceThread httpServiceThread = new HttpServiceThread(mComponentInfo,MainActivity.this,MainActivity.this,"USD,GBP",00);httpServiceThread.start();
+                setUI_TripSelectionChange(false);
+
+            } else {
+                setUI_TripSelectionChange(true);
+
+            }
+
+            break;
+
+
+    }
+}
 
     }
 
@@ -346,12 +353,12 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
     private void calculateFinal() {
 
-
-        BigDecimal result = null;
-
+if(mEnteredString.contains("+")||mEnteredString.contains("-")||mEnteredString.contains("/")||mEnteredString.contains("*")||mEnteredString.contains(".")||mEnteredString.contains("%"))
+{    BigDecimal result = null;
+        mEnteredString=mEnteredString;
         Expression expression = new Expression(mEnteredString);
         result = expression.eval();
-        mEnteredString = result + "";
+        mEnteredString = result + "";}
 
         mInputTextView_One.setText(mEnteredString);
     }
@@ -516,7 +523,9 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
             countryTwoString=code;
 
 
-        HttpServiceThread httpServiceThread = new HttpServiceThread(mComponentInfo,MainActivity.this,MainActivity.this,countryOneString+","+countryTwoString,00);
+        HttpServiceThread httpServiceThread = new HttpServiceThread(MainActivity.this,mComponentInfo,Constants.ActionMode.CONVERT_CURRENCY,countryOneString+","+countryTwoString,MainActivity.this);
+        httpServiceThread.setConversionCurrencyBase(countryOneString);
+
         httpServiceThread.start();
 
 
@@ -570,7 +579,9 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
 
         if(mAllTrips!=null){
-
+if(mAllTrips.size()==1){
+    setUI_TripSelectionChange(false);
+}
        tripInfoModels = mAllTrips.toArray(new TripInfoModel[mAllTrips.size()]);
 
             Log.e("sac","sks"+mAllTrips);

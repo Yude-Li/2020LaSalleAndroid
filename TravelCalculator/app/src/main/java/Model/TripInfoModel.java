@@ -56,8 +56,8 @@ public class TripInfoModel  {
     }
 
     public String getStartDate() {
-        //return startDate;
-        return "18/11/2020";
+        return startDate;
+        //return "18/11/2020";
     }
 
     public void setStartDate(String startDate) {
@@ -65,8 +65,8 @@ public class TripInfoModel  {
     }
 
     public String getEndDate() {
-        //return endDate;
-        return "22/11/2020";
+        return endDate;
+       // return "22/11/2020";
     }
 
     public void setEndDate(String endDate) {

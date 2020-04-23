@@ -55,7 +55,6 @@ import java.util.Map;
 
 import DataConfig.CountryConfigAccess;
 import DataConfig.SettingConfigAccess;
-import Model.ApiCurrencyModel;
 import callbacks.ServerResponseNotifier;
 
 public class HttpServiceThread extends Thread {
@@ -72,7 +71,6 @@ public class HttpServiceThread extends Thread {
 
     private String travelCurrencyName = "";
     private String originalCurrencyName = "";
-    private static List<ApiCurrencyModel> rateList = new ArrayList<>();
 
     ActionMode actionMode;
     public enum ActionMode {
@@ -91,33 +89,18 @@ public class HttpServiceThread extends Thread {
         this.requestNo = requestNo;
     }
 
-    public HttpServiceThread(Context ctx, ActionMode actionMode) {
-        this.ctx = ctx;
-        this.actionMode = actionMode;
-
-        SettingConfigAccess settingConfigAccess = new SettingConfigAccess(this.ctx);
-        CountryConfigAccess countryConfigAccess = new CountryConfigAccess(this.ctx);
-
-        this.originalCurrencyName = countryConfigAccess.getCountryById(settingConfigAccess.getOriginalCountryId()).getCurrencyCode();
-    }
-
     public HttpServiceThread(Context ctx, MyApplication componentInfo, ActionMode actionMode) {
         this.ctx = ctx;
         this.componentInfo = componentInfo;
         this.actionMode = actionMode;
-
-        SettingConfigAccess settingConfigAccess = new SettingConfigAccess(this.ctx);
-        CountryConfigAccess countryConfigAccess = new CountryConfigAccess(this.ctx);
-
-        this.originalCurrencyName = countryConfigAccess.getCountryById(settingConfigAccess.getOriginalCountryId()).getCurrencyCode();
     }
 
-    public void setCurrencyBase() {
+    public void setConversionCurrencyBase(String newCurrency) {
         // Update currency base on the original country
         SettingConfigAccess settingConfigAccess = new SettingConfigAccess(this.ctx);
         CountryConfigAccess countryConfigAccess = new CountryConfigAccess(this.ctx);
 
-        this.originalCurrencyName = countryConfigAccess.getCountryById(settingConfigAccess.getOriginalCountryId()).getCurrencyCode();
+        this.originalCurrencyName = countryConfigAccess.getCountryById(settingConfigAccess.getOriginalCountryId()).getCurrencyName();
     }
 
     public void setConversionCurrency(String currCurrency, String newCurrency) {
@@ -233,7 +216,6 @@ public class HttpServiceThread extends Thread {
                         InputStream input = connection.getInputStream();
                         String response = streamToString(input);
                         Log.d("GetCurrency", response);
-                        parseConvertCurrencyJson(response);
                         postMessage(response, responseCode);
                     }
                     connection.disconnect();
@@ -247,39 +229,28 @@ public class HttpServiceThread extends Thread {
         }
     }
 
+
     public void parseAllCurrencyJson(String jsonString) {
         try {
             JSONObject jsonGet = new JSONObject(jsonString);
             String rates = jsonGet.getString("rates");
             JSONObject jsonRate = new JSONObject(rates);
             Iterator<String> keysItr = jsonRate.keys();
-            rateList.clear();
+            List<ApiCurrencyModel> rateList = new ArrayList<>();
             while(keysItr.hasNext()) {
                 String key = keysItr.next();
                 Double value = Double.valueOf(jsonRate.get(key).toString());
                 ApiCurrencyModel apiCurrencyModel = new ApiCurrencyModel(key, value);
                 rateList.add(apiCurrencyModel);
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     public void parseConvertCurrencyJson(String jsonString) {
-        // {"rates":{"GBP":0.809054937},"base":"USD","date":"2020-04-22"}
-        try {
-            JSONObject jsonGet = new JSONObject(jsonString);
-            String rates = jsonGet.getString("rates");
-            String base = jsonGet.getString("base");
 
-            JSONObject jsonRate = new JSONObject(rates);
-            Iterator<String> keysItr = jsonRate.keys();
-
-            String currency = keysItr.next();
-            Double value = Double.valueOf(jsonRate.get(currency).toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     public static String streamToString(InputStream is) throws IOException {
@@ -291,9 +262,15 @@ public class HttpServiceThread extends Thread {
         }
         return sb.toString();
     }
+}
 
-    public List<ApiCurrencyModel> GetAllCurrencyList() {
-        return rateList;
+class ApiCurrencyModel {
+    private String currencyCode;
+    private double currencyRate;
+
+    public ApiCurrencyModel(String currencyCode, double currencyRate) {
+        this.currencyCode = currencyCode;
+        this.currencyRate = currencyRate;
     }
 }
 
