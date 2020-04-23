@@ -182,7 +182,7 @@ public class ExpenseRecordEditActivity extends AppCompatActivity implements Data
             mExpenseInfo.setTripId(mTripId);
             mExpenseInfo.setSpendAmount(spendAmountEditText.getText().toString());
             mExpenseInfo.setConvertedAmount(convertedAmountTextView.getText().toString());
-            mExpenseInfo.setDate(expenseDescEditText.getText().toString());
+            mExpenseInfo.setDate(dateEditText.getText().toString());
             mExpenseInfo.setExpenseDesc(expenseDescEditText.getText().toString());
             return true;
         }
