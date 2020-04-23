@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.udojava.evalex.Expression;
 
@@ -66,8 +67,8 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
 
     private TripInfoModel mTripInfoModel;
-    private   TripInfoModel[] tripInfoModels;
-    private String countryOneString="", countryTwoString="";
+    private TripInfoModel[] tripInfoModels;
+    private String countryOneString = "", countryTwoString = "";
 
 
     @Override
@@ -85,9 +86,7 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 //        httpServiceThread.start();
 
 
-
         instantiateViews();
-        updateData();
 
 
     }
@@ -104,14 +103,15 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
         switch (id) {
             case R.id.action_toTripList: {
+
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), TripListActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
             break;
-            case R.id.action_toSetting:
-            {
+            case R.id.action_toSetting: {
+
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), UserSettingActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -132,12 +132,16 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
     }
 
-    private void updateData(){
-        CountryModel model= mComponentInfo.countryConfig.getCountryById(mComponentInfo.settingConfig.getOriginalCountryId());
-        countryOneString =  model.getCurrencyCode();
-        countryTwoString =  model.getCurrencyCode();
+    private void updateData() {
+        CountryModel model = mComponentInfo.countryConfig.getCountryById(mComponentInfo.settingConfig.getOriginalCountryId());
+        countryOneString = model.getCurrencyCode();
+        countryTwoString = model.getCurrencyCode();
         mCurrencySelectionImage_One.setImageResource(model.getFlagId(MainActivity.this));
         mCurrencySelectionImage_Second.setImageResource(model.getFlagId(MainActivity.this));
+        mInputTextView_One.setText("");
+        mInputTextView_Second.setText("");
+        mEnteredString="";
+        processInput('0');
         performDB_Create();
         instantiateData();
     }
@@ -155,8 +159,8 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
 
 
         mInputTextView_One = findViewById(R.id.textView_firstAmount);
-       // processInput('1');
-       // processInput('0');
+        // processInput('1');
+        // processInput('0');
         mInputTextView_Second = findViewById(R.id.textView_secondC);
         processInput('0');
         mInputTextView_One.setText(""); //change from two
@@ -185,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
         mSharedPrefrences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         mSharedPrefrences.registerOnSharedPreferenceChangeListener(this);
 
-        mCurrencyPicker = CurrencyPicker.newInstance("Select Currency", nc,MainActivity.this);
+        mCurrencyPicker = CurrencyPicker.newInstance("Select Currency", nc, MainActivity.this);
         mCurrencyPicker.setCurrenciesList(nc);
         // mCurrencyPicker.setCurrenciesList(mSharedPrefrences.getStringSet("selectedCurrencies", new HashSet<String>()));
 
@@ -198,8 +202,7 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
     }
 
 
-
-    private void instantiateData(){
+    private void instantiateData() {
 
 //        CountryConfigAccess countryConfigAccess= new CountryConfigAccess(MainActivity.this);
 //        countryConfigAccess.getCountryById(00);
@@ -208,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
                 Constants.DATABASE_OPERATION.FETCH_ALL, this).execute();
 
     }
+
     private void setInactive() {
 
     }
@@ -262,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
                 case 200:
 
                     calculateFinal();
-                    mInputTextView_One.setText(Double.parseDouble(mEnteredString)*response.getCurrencyRateConvert()+""); //changed from two
+                    mInputTextView_One.setText(Double.parseDouble(mEnteredString) * response.getCurrencyRateConvert() + ""); //changed from two
 
 
                     break;
@@ -272,39 +276,44 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
         } else {
 
 
-
         }
 
 
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        updateData();
+    }
+
+    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-if(view!=null) {
-    switch (parent.getId()) {
+        if (view != null) {
+            switch (parent.getId()) {
 
-        case R.id.spinner_triplist:
+                case R.id.spinner_triplist:
 
 
-            mTripInfoModel = tripInfoModels[position];
+                    mTripInfoModel = tripInfoModels[position];
 
-            if (mTripInfoModel.getTravelCountry() == 9999) {
-                //  HttpServiceThread httpServiceThread = new HttpServiceThread(mComponentInfo,MainActivity.this,MainActivity.this,"USD,GBP",00);httpServiceThread.start();
-                setUI_TripSelectionChange(false);
+                    if (mTripInfoModel.getTravelCountry() == 9999) {
+                        //  HttpServiceThread httpServiceThread = new HttpServiceThread(mComponentInfo,MainActivity.this,MainActivity.this,"USD,GBP",00);httpServiceThread.start();
+                        setUI_TripSelectionChange(false);
 
-            } else {
+                    } else {
 
-                mCurrencySelectionImage_Second.setImageResource(mComponentInfo.countryConfig.getCountryById(mTripInfoModel.getTravelCountry()).getFlagId(MainActivity.this));
+                        mCurrencySelectionImage_Second.setImageResource(mComponentInfo.countryConfig.getCountryById(mTripInfoModel.getTravelCountry()).getFlagId(MainActivity.this));
 
-                setUI_TripSelectionChange(true);
+                        setUI_TripSelectionChange(true);
+
+                    }
+
+                    break;
+
 
             }
-
-            break;
-
-
-    }
-}
+        }
 
     }
 
@@ -357,27 +366,71 @@ if(view!=null) {
 
     private void calculateFinal() {
 
-if(mEnteredString.contains("+")||mEnteredString.contains("-")||mEnteredString.contains("/")||mEnteredString.contains("*")||mEnteredString.contains(".")||mEnteredString.contains("%"))
-{    BigDecimal result = null;
-        mEnteredString=mEnteredString;
-        Expression expression = new Expression(mEnteredString);
-        result = expression.eval();
-    result= result.setScale(2, RoundingMode.CEILING);
-        mEnteredString = result + "";}
+        if (mEnteredString.contains("+") || mEnteredString.contains("-") || mEnteredString.contains("/") || mEnteredString.contains("*") || mEnteredString.contains(".") || mEnteredString.contains("%")) {
+            BigDecimal result = null;
+            mEnteredString = mEnteredString;
+            Expression expression = new Expression(mEnteredString);
+            result = expression.eval();
+            result = result.setScale(2, RoundingMode.CEILING);
+            mEnteredString = result + "";
+        }
 
         mInputTextView_Second.setText(mEnteredString);// change
     }
 
-    private String calculateFinal(float tip,String amount) {
+    private String calculateFinal(float tip, String amount, float tax, CountryModel model) {
 
-      String ret="";
+        String ret = "";
         BigDecimal result = null;
-        Expression expression = new Expression(amount+"*"+tip+"/"+"100");
+        double total = 0.0;
+        Expression expression;
+        if (tip > 0) {
+            expression = new Expression(amount + "*" + tip + "/" + "100");
+            result = expression.eval();
+            total = total + Double.parseDouble(result + "");
+        }
+        expression = new Expression(amount + "*" + tax + "/" + "100");
         result = expression.eval();
-        result= result.setScale(2, RoundingMode.CEILING);
+        total = total + Double.parseDouble(result + "");
 
 
-      return ret+result;
+        total = total + Double.parseDouble(amount + "");
+        if (model.getCurrency() > 0) {
+            expression = new Expression(total + "/" + model.getCurrency());
+            result = expression.eval();
+            result = result.setScale(2, RoundingMode.CEILING);
+
+            return ret + result;
+        } else {
+
+            return ret + total;
+        }
+
+
+    }
+
+    private String calculateFinal(float tip, String amount, float tax) {
+
+        String ret = "";
+        BigDecimal result = null;
+        double total = 0.0;
+        Expression expression;
+        if (tip > 0) {
+            expression = new Expression(amount + "*" + tip + "/" + "100");
+            result = expression.eval();
+            total = total + Double.parseDouble(result + "");
+        }
+        expression = new Expression(amount + "*" + tax + "/" + "100");
+        result = expression.eval();
+        total = total + Double.parseDouble(result + "");
+
+
+        total = total + Double.parseDouble(amount + "");
+
+
+        return ret + total;
+
+
     }
 
 
@@ -471,6 +524,7 @@ if(mEnteredString.contains("+")||mEnteredString.contains("-")||mEnteredString.co
                 break;
 
             case R.id.btn_customize_tip:
+                Toast.makeText(MainActivity.this, "Comming Soon", Toast.LENGTH_LONG).show();
 
                 break;
 
@@ -480,51 +534,92 @@ if(mEnteredString.contains("+")||mEnteredString.contains("-")||mEnteredString.co
 
                 break;
             case R.id.btn_breakfast:
-                calculateFinal();
-                mInputTextView_One.setText(calculateFinal(mTripInfoModel.getBreakfastTip(),mEnteredString)); //change from two
+
+                if (validateTotalAmount()) {
+                    calculateFinal();
+                    mInputTextView_One.setText(calculateFinal(mTripInfoModel.getBreakfastTip(),
+                            mEnteredString, mTripInfoModel.getTax(), mComponentInfo.countryConfig.getCountryById(mTripInfoModel.getTravelCountry()))); //change from two
+                    mInputTextView_Second.setText(calculateFinal(mTripInfoModel.getBreakfastTip(),
+                            mEnteredString, mTripInfoModel.getTax()));
+
+
+                } else {
+
+                    Toast.makeText(MainActivity.this, "Please enter calculate amount or enter greater than 0", Toast.LENGTH_LONG).show();
+                }
                 break;
             case R.id.btn_lunch:
-      calculateFinal();
-                mInputTextView_One.setText(calculateFinal(mTripInfoModel.getLunchTip(),mEnteredString)); //change from two
+                calculateFinal();
 
+                if (validateTotalAmount()) {
+                    calculateFinal();
+                    mInputTextView_One.setText(calculateFinal(mTripInfoModel.getLunchTip(),
+                            mEnteredString, mTripInfoModel.getTax(), mComponentInfo.countryConfig.getCountryById(mTripInfoModel.getTravelCountry()))); //change from two
+                    mInputTextView_Second.setText(calculateFinal(mTripInfoModel.getLunchTip(),
+                            mEnteredString, mTripInfoModel.getTax()));
+
+
+                } else {
+
+                    Toast.makeText(MainActivity.this, "Please enter calculate amount or enter greater than 0", Toast.LENGTH_LONG).show();
+                }
                 break;
             case R.id.btn_dinner:
-                calculateFinal();
-                mInputTextView_One.setText(calculateFinal(mTripInfoModel.getDinnerTip(),mEnteredString));// change from two
 
+                if (validateTotalAmount()) {
+                    calculateFinal();
+                    mInputTextView_One.setText(calculateFinal(mTripInfoModel.getDinnerTip(),
+                            mEnteredString, mTripInfoModel.getTax(), mComponentInfo.countryConfig.getCountryById(mTripInfoModel.getTravelCountry()))); //change from two
+                    mInputTextView_Second.setText(calculateFinal(mTripInfoModel.getDinnerTip(),
+                            mEnteredString, mTripInfoModel.getTax()));
+
+
+                } else {
+
+                    Toast.makeText(MainActivity.this, "Please enter calculate amount or enter greater than 0", Toast.LENGTH_LONG).show();
+                }
                 break;
 
             case R.id.btn_normal:
-                calculateFinal();
-                mInputTextView_One.setText(calculateFinal(mTripInfoModel.getLunchTip(),mEnteredString)); // change from second
+
+                if (validateTotalAmount()) {
+                    calculateFinal();
+                    mInputTextView_One.setText(calculateFinal(0,
+                            mEnteredString, mTripInfoModel.getTax(), mComponentInfo.countryConfig.getCountryById(mTripInfoModel.getTravelCountry()))); //change from two
+                    mInputTextView_Second.setText(calculateFinal(0,
+                            mEnteredString, mTripInfoModel.getTax()));
+
+
+                } else {
+
+                    Toast.makeText(MainActivity.this, "Please enter calculate amount or enter greater than 0", Toast.LENGTH_LONG).show();
+                }
                 break;
 
             case R.id.btn_save:
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), ExpenseRecordEditActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-calculateFinal();
+                calculateFinal();
                 Bundle bundle = new Bundle();
-                CountryModel model= mComponentInfo.countryConfig.getCountryById(mComponentInfo.settingConfig.getOriginalCountryId());
+                CountryModel model = mComponentInfo.countryConfig.getCountryById(mComponentInfo.settingConfig.getOriginalCountryId());
 
-                bundle.putString("baseCurrency",model.getCurrencyCode());
-                bundle.putInt("baseCountryId",mTripInfoModel.getTravelCountry());
+                bundle.putString("baseCurrency", model.getCurrencyCode());
+                bundle.putInt("baseCountryId", mTripInfoModel.getTravelCountry());
 
                 bundle.putInt("destinationCountryId", model.getCountryNum());
 
 
-                bundle.putString("destinationCurrency",countryTwoString);
+                bundle.putString("destinationCurrency", countryTwoString);
 
 
-
-
-                bundle.putString("spendAmount",mEnteredString);
-                bundle.putString("convertedAmount",mInputTextView_One.getText().toString()); //change from two
-                bundle.putString("currentDate","");
-                bundle.putInt("tripId",mTripInfoModel.getId());
-                bundle.putInt("expenseId",-1);
-                bundle.putInt("tripIdFromMain",1);
-                intent.putExtra("bundle",bundle);
+                bundle.putString("spendAmount", mEnteredString);
+                bundle.putString("convertedAmount", mInputTextView_One.getText().toString()); //change from two
+                bundle.putString("currentDate", "");
+                bundle.putInt("tripId", mTripInfoModel.getId());
+                bundle.putInt("expenseId", -1);
+                bundle.putInt("tripIdFromMain", 1);
+                intent.putExtra("bundle", bundle);
                 startActivity(intent);
                 break;
 
@@ -534,6 +629,27 @@ calculateFinal();
 
 
         }
+
+
+    }
+
+
+    private boolean validateTotalAmount() {
+        boolean ret = false;
+
+        try {
+            double amt = Double.parseDouble(mEnteredString);
+            if (amt >= 0) {
+                ret = true;
+
+
+            }
+
+        } catch (Exception e) {
+
+        }
+
+        return ret;
 
 
     }
@@ -565,18 +681,17 @@ calculateFinal();
 
         if (mCurrencySelectedFirst) {
             mCurrencySelectionImage_One.setImageResource(flagDrawableResID);
-            countryOneString=code;
+            countryOneString = code;
 
         } else {
             mCurrencySelectionImage_Second.setImageResource(flagDrawableResID);
-            countryTwoString=code;
+            countryTwoString = code;
 
 
-        HttpServiceThread httpServiceThread = new HttpServiceThread(MainActivity.this,mComponentInfo,Constants.ActionMode.CONVERT_CURRENCY,countryOneString+","+countryTwoString,MainActivity.this);
-        httpServiceThread.setConversionCurrencyBase(countryOneString);
+            HttpServiceThread httpServiceThread = new HttpServiceThread(MainActivity.this, mComponentInfo, Constants.ActionMode.CONVERT_CURRENCY, countryOneString + "," + countryTwoString, MainActivity.this);
+            httpServiceThread.setConversionCurrencyBase(countryOneString);
 
-        httpServiceThread.start();
-
+            httpServiceThread.start();
 
 
         }
@@ -591,7 +706,7 @@ calculateFinal();
             // mTextView.setText(sharedPreferences.getString(key, ""));
         }
         if (key.equals("selectedCurrencies")) {
-           // mCurrencyPicker.setCurrenciesList(mSharedPrefrences.getStringSet("selectedCurrencies", new HashSet<String>()));
+            // mCurrencyPicker.setCurrenciesList(mSharedPrefrences.getStringSet("selectedCurrencies", new HashSet<String>()));
         }
     }
 
@@ -610,9 +725,9 @@ calculateFinal();
     @Override
     public void onDB_BootCompleted(boolean isSuccess) {
 
-        if(isSuccess){
+        if (isSuccess) {
 
-             new DatabaseOperations_Thread(MainActivity.this, Constants.TABLE.TRIPINFO,
+            new DatabaseOperations_Thread(MainActivity.this, Constants.TABLE.TRIPINFO,
                     Constants.DATABASE_OPERATION.FETCH_ALL, this).execute();
         }
 
@@ -627,13 +742,13 @@ calculateFinal();
     public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
 
 
-        if(mAllTrips!=null){
-if(mAllTrips.size()==1){
-    setUI_TripSelectionChange(false);
-}
-       tripInfoModels = mAllTrips.toArray(new TripInfoModel[mAllTrips.size()]);
+        if (mAllTrips != null) {
+            if (mAllTrips.size() == 1) {
+                setUI_TripSelectionChange(false);
+            }
+            tripInfoModels = mAllTrips.toArray(new TripInfoModel[mAllTrips.size()]);
 
-            Log.e("sac","sks"+mAllTrips);
+            Log.e("sac", "sks" + mAllTrips);
 
 
             SpinnerAdapter spinnerArrayAdapter = new SpinnerAdapter(this,
@@ -641,12 +756,12 @@ if(mAllTrips.size()==1){
 
 
             mSpinnerTripList.setAdapter(spinnerArrayAdapter);
-                  //  mCurrencySelectionImage_Second.setImageResource( mComponentInfo.countryConfig.getCountryById(((TripInfoModel)mSpinnerTripList.getSelectedItem()).getTravelCountry()).getFlagId(MainActivity.this));
+            //  mCurrencySelectionImage_Second.setImageResource( mComponentInfo.countryConfig.getCountryById(((TripInfoModel)mSpinnerTripList.getSelectedItem()).getTravelCountry()).getFlagId(MainActivity.this));
 
-          //  mCurrencySelectionImage_Second.setEnabled(false);
+            //  mCurrencySelectionImage_Second.setEnabled(false);
             //mCurrencySelectionImage_One.setEnabled(false);
 
-        }else{
+        } else {
 
 
             setUI_TripSelectionChange(false);
