@@ -73,7 +73,7 @@ public class TripInfoModel  {
         this.endDate = endDate;
     }
 
-    public float getTax() {
+    public int getTax() {
         return tax;
     }
 
@@ -81,7 +81,7 @@ public class TripInfoModel  {
         this.tax = tax;
     }
 
-    public float getBreakfastTip() {
+    public int getBreakfastTip() {
         return breakfastTip;
     }
 
@@ -89,7 +89,7 @@ public class TripInfoModel  {
         this.breakfastTip = breakfastTip;
     }
 
-    public float getLunchTip() {
+    public int getLunchTip() {
         return lunchTip;
     }
 
@@ -97,7 +97,7 @@ public class TripInfoModel  {
         this.lunchTip = lunchTip;
     }
 
-    public float getDinnerTip() {
+    public int getDinnerTip() {
         return dinnerTip;
     }
 

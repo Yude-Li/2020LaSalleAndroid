@@ -225,6 +225,7 @@ public class DatabaseOperations_Thread extends AsyncTask {
                 }else if (mTableName == Constants.TABLE.EXPENSE) {
                     mDatabaseOperationNotifier.onSavePerformed(mLastOperationResult);
                 }
+                break;
             case UPDATE_RECORD:
 
                 if (mTableName == Constants.TABLE.TRIPINFO) {

@@ -360,6 +360,9 @@ boolean ret=false;
 
      public boolean updateTrips(TripInfoModel tripInfoModel) {
 
+
+//         String selection = "txnType = '"+ txnType+"'"
+//              ;
       long id=   database.update(Constants.TABLE_NAME_TRIPINFO, getTripValues(tripInfoModel),Constants.COLUMN_ID + " = ?",
                  new String[]{String.valueOf(tripInfoModel.getId())});
          close();

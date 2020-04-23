@@ -27,7 +27,7 @@ import callbacks.DatabaseOperationNotifier;
 import commonutilities.Constants;
 import databaseinteraction.DatabaseOperations_Thread;
 
-public class TripInfoEditActivity extends AppCompatActivity  implements DatabaseOperationNotifier, CountryPickerLietener, AdapterView.OnItemSelectedListener {
+public class TripInfoEditActivity extends AppCompatActivity implements DatabaseOperationNotifier, CountryPickerLietener, AdapterView.OnItemSelectedListener {
 
     // View objects
     EditText tripNameField;
@@ -67,8 +67,7 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
             // Get data from db
             new DatabaseOperations_Thread(TripInfoEditActivity.this, Constants.TABLE.TRIPINFO,
                     Constants.DATABASE_OPERATION.FETCH_SELECTED, this, tripId).execute();
-        }
-        else { // For create
+        } else { // For create
             initialViewObjects();
         }
     }
@@ -77,23 +76,22 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
     public void onBackPressed() {
         if (fieldCheck()) {
             new AlertDialog.Builder(TripInfoEditActivity.this)
-            .setTitle(R.string.backWithoutSave_NoticeTitle)
-            .setMessage(R.string.backWithoutSave_NoticeContent)
-            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    TripInfoEditActivity.super.onBackPressed();
-                    Intent intent = new Intent();
-                    intent.setClass(getApplicationContext(), TripListActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    finish();
-                }
-            })
-            .setNegativeButton(android.R.string.no, null)
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .show();
-        }
-        else {
+                    .setTitle(R.string.backWithoutSave_NoticeTitle)
+                    .setMessage(R.string.backWithoutSave_NoticeContent)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            TripInfoEditActivity.super.onBackPressed();
+                            Intent intent = new Intent();
+                            intent.setClass(getApplicationContext(), TripListActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        } else {
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), TripListActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -114,15 +112,14 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_saveTripInfo:
-            {
+            case R.id.action_saveTripInfo: {
                 if (tripId != -1) { // For edit, update db
-                    if (inputCheck()){
+                    if (inputCheck()) {
+                        tripInfo.setId(tripId);
                         new DatabaseOperations_Thread(TripInfoEditActivity.this, Constants.TABLE.TRIPINFO,
-                                Constants.DATABASE_OPERATION.UPDATE_RECORD, this, tripId).execute();
+                                Constants.DATABASE_OPERATION.UPDATE_RECORD, this, tripInfo, null).execute();
                     }
-                }
-                else { // For create, add db
+                } else { // For create, add db
                     if (inputCheck()) {
                         new DatabaseOperations_Thread(TripInfoEditActivity.this, Constants.TABLE.TRIPINFO,
                                 Constants.DATABASE_OPERATION.ADD_RECORD, this, tripInfo, null).execute();
@@ -155,10 +152,10 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
         DnTipField = findViewById(R.id.editText_tripinfo_dinner_tip);
 
         tripNameField.setText(mTrip.getTripName());
-        countryTaxField.setText(String.valueOf(mTrip.getTax()));
-        bfTipField.setText(String.valueOf(mTrip.getBreakfastTip()));
-        lnTipField.setText(String.valueOf(mTrip.getLunchTip()));
-        DnTipField.setText(String.valueOf(mTrip.getDinnerTip()));
+        countryTaxField.setText(mTrip.getTax() + "");
+        bfTipField.setText(mTrip.getBreakfastTip() + "");
+        lnTipField.setText(mTrip.getLunchTip() + "");
+        DnTipField.setText(mTrip.getDinnerTip() + "");
 
         selectedCountry = countryConfig.getCountryById(mTrip.getTravelCountry());
 
@@ -177,13 +174,13 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
     }
 
     private void SelectTravelCountry() {
-        travelCountry.setOnClickListener(new TextView.OnClickListener()
-        {
+        travelCountry.setOnClickListener(new TextView.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 // User can not edit travel country
-                if (tripId != -1) {  return; }
+                if (tripId != -1) {
+                    return;
+                }
 
                 mCountryPicker.show(getSupportFragmentManager(), "COUNTRY_PICKER");
             }
@@ -203,8 +200,7 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
             tripInfo.setBreakfastTip(Integer.valueOf(bfTipField.getText().toString()));
             tripInfo.setLunchTip(Integer.valueOf(lnTipField.getText().toString()));
             tripInfo.setDinnerTip(Integer.valueOf(DnTipField.getText().toString()));
-        }
-        else {
+        } else {
             Toast.makeText(TripInfoEditActivity.this, R.string.notice_FillupFields, Toast.LENGTH_LONG).show();
         }
         return completeInput;
@@ -225,7 +221,7 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
         alertDialog.setMessage(R.string.notice_saveSuccessContent);
 
         alertDialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), TripListActivity.class);
@@ -261,15 +257,19 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
 
     @Override
     public void onUpdatePerformed(boolean isSuccess) {
+        if (isSuccess) {
+            showSaveSuccessDialog();
+        } else {
+            Toast.makeText(TripInfoEditActivity.this, getString(R.string.updateDataFail), Toast.LENGTH_SHORT).show();
 
+        }
     }
 
     @Override
     public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
-        if (mTrip != null ) {
+        if (mTrip != null) {
             initialViewObjectsWithValue(mTrip);
-        }
-        else {
+        } else {
             Toast.makeText(TripInfoEditActivity.this, getString(R.string.fetchDataFail), Toast.LENGTH_SHORT).show();
         }
     }
