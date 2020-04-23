@@ -117,8 +117,10 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
             case R.id.action_saveTripInfo:
             {
                 if (tripId != -1) { // For edit, update db
-                    new DatabaseOperations_Thread(TripInfoEditActivity.this, Constants.TABLE.TRIPINFO,
-                            Constants.DATABASE_OPERATION.UPDATE_RECORD, this, tripInfo,null).execute();
+                    if (inputCheck()){
+                        new DatabaseOperations_Thread(TripInfoEditActivity.this, Constants.TABLE.TRIPINFO,
+                                Constants.DATABASE_OPERATION.UPDATE_RECORD, this, tripId).execute();
+                    }
                 }
                 else { // For create, add db
                     if (inputCheck()) {
@@ -158,10 +160,10 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
         lnTipField.setText(String.valueOf(mTrip.getLunchTip()));
         DnTipField.setText(String.valueOf(mTrip.getDinnerTip()));
 
-        CountryModel country = countryConfig.getCountryById(mTrip.getTravelCountry());
+        selectedCountry = countryConfig.getCountryById(mTrip.getTravelCountry());
 
         travelCountry = findViewById(R.id.tripinfo_countrylist);
-        travelCountry.setText(country.getDisplayName());
+        travelCountry.setText(selectedCountry.getDisplayName());
         SelectTravelCountry();
     }
 
@@ -195,6 +197,7 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
             completeInput = true;
             tripInfo = new TripInfoModel();
             tripInfo.setTripName(tripNameField.getText().toString());
+
             tripInfo.setTravelCountry(selectedCountry.getId());
             tripInfo.setTax(Integer.valueOf(countryTaxField.getText().toString()));
             tripInfo.setBreakfastTip(Integer.valueOf(bfTipField.getText().toString()));
