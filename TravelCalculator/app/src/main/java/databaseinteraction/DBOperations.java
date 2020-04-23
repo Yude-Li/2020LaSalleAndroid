@@ -115,15 +115,24 @@ import commonutilities.Constants;
         return count;
     }
 
-    public void deleteTrip(TripInfoModel trip) {
+    public boolean deleteTrip(TripInfoModel trip) {
+
+        long id=-1;
 try {
-    database.delete(Constants.TABLE_NAME_TRIPINFO, Constants.COLUMN_ID + " = ?",
+   id=  database.delete(Constants.TABLE_NAME_TRIPINFO, Constants.COLUMN_ID + " = ?",
             new String[]{String.valueOf(trip.getId())});
 }catch (Exception e){
 
 
 }
+
+
      close();
+        if(id==1){
+            return true;
+        }else {
+            return false;
+        }
     }
 
 
@@ -182,20 +191,23 @@ private ContentValues getTripValues(TripInfoModel trip){
     return  values;
 }
 
-    public long addTrip(TripInfoModel trip) {
+    public boolean addTrip(TripInfoModel trip) {
         // get writable database as we want to write data
 
-
+boolean ret=false;
 
 
         // insert row
         long id = database.insert(Constants.TABLE_NAME_TRIPINFO, null, getTripValues(trip));
 
         // close db connection
+        if(id==1){
+            ret=true;
+        }
         close();
 
         // return newly inserted row id
-        return id;
+        return ret;
     }
 
 
@@ -251,7 +263,7 @@ private ContentValues getTripValues(TripInfoModel trip){
          return  values;
      }
 
-     public long addExpense(ExpenseModel mExpenseModel) {
+     public boolean addExpense(ExpenseModel mExpenseModel) {
          // get writable database as we want to write data
 
 
@@ -263,7 +275,12 @@ private ContentValues getTripValues(TripInfoModel trip){
          close();
 
          // return newly inserted row id
-         return id;
+         if(id==1){
+             return true;
+         }else {
+             return false;
+         }
+
      }
 
 
@@ -312,27 +329,46 @@ private ContentValues getTripValues(TripInfoModel trip){
          return count;
      }
 
-     public void deleteExpense(ExpenseModel expenseModel) {
+     public boolean deleteExpense(ExpenseModel expenseModel) {
 
-         database.delete(Constants.TABLE_NAME_EXPENSE, Constants.COLUMN_ID + " = ?",
+        long id= database.delete(Constants.TABLE_NAME_EXPENSE, Constants.COLUMN_ID + " = ?",
                  new String[]{String.valueOf(expenseModel.getId())});
+
+
          close();
+         if(id==1){
+             return true;
+         }else {
+             return false;
+         }
      }
 
 
 
-     public void updateExpense(ExpenseModel expenseModel) {
+     public boolean updateExpense(ExpenseModel expenseModel) {
 
-         database.update(Constants.TABLE_NAME_EXPENSE, getExpenseValues(expenseModel),Constants.COLUMN_ID + " = ?",
+        long id=  database.update(Constants.TABLE_NAME_EXPENSE, getExpenseValues(expenseModel),Constants.COLUMN_ID + " = ?",
                  new String[]{String.valueOf(expenseModel.getId())});
          close();
+
+         if(id==1){
+             return true;
+         }else {
+             return false;
+         }
      }
 
-     public void updateTrips(TripInfoModel tripInfoModel) {
+     public boolean updateTrips(TripInfoModel tripInfoModel) {
 
-         database.update(Constants.TABLE_NAME_TRIPINFO, getTripValues(tripInfoModel),Constants.COLUMN_ID + " = ?",
+      long id=   database.update(Constants.TABLE_NAME_TRIPINFO, getTripValues(tripInfoModel),Constants.COLUMN_ID + " = ?",
                  new String[]{String.valueOf(tripInfoModel.getId())});
          close();
+
+         if(id==1){
+             return true;
+         }else {
+             return false;
+         }
      }
 
  }

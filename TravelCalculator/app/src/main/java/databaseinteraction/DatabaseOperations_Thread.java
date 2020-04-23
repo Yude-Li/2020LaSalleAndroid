@@ -27,6 +27,7 @@ public class DatabaseOperations_Thread extends AsyncTask {
     private TripInfoModel mTripInfoModel;
     private ExpenseModel mExpenseModel;
     private int rowID;
+    private boolean mLastOperationResult=false;
 
 
     public DatabaseOperations_Thread(Context mContext) {
@@ -122,19 +123,19 @@ public class DatabaseOperations_Thread extends AsyncTask {
             case DELETE_RECORD:
                 if (mTableName == Constants.TABLE.TRIPINFO) {
 
-                    dbOperations.deleteTrip(mTripInfoModel);
+                  mLastOperationResult=  dbOperations.deleteTrip(mTripInfoModel);
 
                 }else if (mTableName == Constants.TABLE.EXPENSE) {
-                    dbOperations.deleteExpense(mExpenseModel);
+                  mLastOperationResult=  dbOperations.deleteExpense(mExpenseModel);
                 }
                 break;
             case ADD_RECORD:
                 if (mTableName == Constants.TABLE.TRIPINFO) {
 
-                    dbOperations.addTrip(mTripInfoModel);
+                    mLastOperationResult=dbOperations.addTrip(mTripInfoModel);
 
                 }else if (mTableName == Constants.TABLE.EXPENSE) {
-                    dbOperations.addExpense(mExpenseModel);
+                  mLastOperationResult=  dbOperations.addExpense(mExpenseModel);
                 }
 
 
@@ -142,10 +143,10 @@ public class DatabaseOperations_Thread extends AsyncTask {
             case UPDATE_RECORD:
                 if (mTableName == Constants.TABLE.TRIPINFO) {
 
-                    dbOperations.updateTrips(mTripInfoModel);
+                 mLastOperationResult=   dbOperations.updateTrips(mTripInfoModel);
 
                 }else if (mTableName == Constants.TABLE.EXPENSE) {
-                    dbOperations.updateExpense(mExpenseModel);
+                   mLastOperationResult= dbOperations.updateExpense(mExpenseModel);
                 }
                 break;
 
@@ -196,9 +197,9 @@ public class DatabaseOperations_Thread extends AsyncTask {
 
             case DELETE_RECORD:
                 if (mTableName == Constants.TABLE.TRIPINFO) {
-                mDatabaseOperationNotifier.onDeletePerformed(true);
+                mDatabaseOperationNotifier.onDeletePerformed(mLastOperationResult);
                 } else if (mTableName == Constants.TABLE.EXPENSE) {
-                    mDatabaseOperationNotifier.onDeletePerformed(true);
+                    mDatabaseOperationNotifier.onDeletePerformed(mLastOperationResult);
                 }
 
 
@@ -219,14 +220,22 @@ public class DatabaseOperations_Thread extends AsyncTask {
             case ADD_RECORD:
                 if (mTableName == Constants.TABLE.TRIPINFO) {
 
-                    mDatabaseOperationNotifier.onSavePerformed(true);
+                    mDatabaseOperationNotifier.onSavePerformed(mLastOperationResult);
 
                 }else if (mTableName == Constants.TABLE.EXPENSE) {
-                    mDatabaseOperationNotifier.onSavePerformed(true);
+                    mDatabaseOperationNotifier.onSavePerformed(mLastOperationResult);
                 }
             case UPDATE_RECORD:
-                mDatabaseOperationNotifier.onUpdatePerformed(true);
+
+                if (mTableName == Constants.TABLE.TRIPINFO) {
+
+                    mDatabaseOperationNotifier.onUpdatePerformed(mLastOperationResult);
+
+                }else if (mTableName == Constants.TABLE.EXPENSE) {
+                    mDatabaseOperationNotifier.onUpdatePerformed(mLastOperationResult);
+                }
                 break;
+
 
 
         }
