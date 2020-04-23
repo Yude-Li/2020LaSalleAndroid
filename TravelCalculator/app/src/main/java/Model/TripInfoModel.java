@@ -9,8 +9,8 @@ public class TripInfoModel  {
     private int Id;
     private String tripName;
     private int travelCountry; // country Id
-    private String startDate;
-    private String endDate;
+    private String startDate = "8/11/2020";
+    private String endDate = "8/11/2020";
     private int tax;
     private int breakfastTip;
     private int lunchTip;

@@ -68,7 +68,7 @@ public class CountryConfigAccess {
             readJsontoList();
 
             HttpServiceThread httpServiceThread = new HttpServiceThread(context, Constants.ActionMode.UPDATE_CURRENCY);
-//            httpServiceThread.setCurrencyBase();
+            httpServiceThread.setConversionCurrencyBase();
             httpServiceThread.start();
             try{
                 httpServiceThread.join();

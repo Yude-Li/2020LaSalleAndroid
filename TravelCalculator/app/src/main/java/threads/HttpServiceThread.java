@@ -76,9 +76,15 @@ public class HttpServiceThread extends Thread {
         this.actionMode = actionMode;
     }
 
+    public void setConversionCurrencyBase(String name) {
+        // Update currency base on the original country
+        SettingConfigAccess settingConfigAccess = new SettingConfigAccess(this.ctx);
+        CountryConfigAccess countryConfigAccess = new CountryConfigAccess(this.ctx);
 
+        this.originalCurrencyName = countryConfigAccess.getCountryById(settingConfigAccess.getOriginalCountryId()).getCurrencyCode();
+    }
 
-    public void setConversionCurrencyBase(String newCurrency) {
+    public void setConversionCurrencyBase() {
         // Update currency base on the original country
         SettingConfigAccess settingConfigAccess = new SettingConfigAccess(this.ctx);
         CountryConfigAccess countryConfigAccess = new CountryConfigAccess(this.ctx);
