@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import DataConfig.SettingConfigAccess;
+import threads.HttpServiceThread;
 import threads.NetworkCheckStatus;
 
 public class MyBroadcastReceiver extends BroadcastReceiver {
@@ -33,7 +34,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
                 // User want to update currency only when using wifi
                 // if using wifi, update currency
                 if (networkCheckStatus.IsConnectionWifi()) {
-
+                    updateCurrencyFromApi(context);
                 }
                 else { // not using wifi, do nothing
                     return;
@@ -41,12 +42,17 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
             }
             else { // User accept update no matter what kind of connection is using
                 // Update the currency
-
+                updateCurrencyFromApi(context);
             }
         }
     }
 
-    private void updateCurrencyFromApi() {
+    private void updateCurrencyFromApi(Context context) {
         // Call api from http thread and update
+        HttpServiceThread httpServiceThread = new HttpServiceThread(context, HttpServiceThread.ActionMode.UPDATE_CURRENCY);
+        httpServiceThread.start();
+        try{
+            httpServiceThread.join();
+        }catch(InterruptedException ie){}
     }
 }

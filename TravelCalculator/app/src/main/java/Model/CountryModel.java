@@ -9,7 +9,7 @@ public class CountryModel {
     private String countryCode;
     private String displayName;
     private String currencyCode;
-    private float currency;
+    private double currency;
     private String currencyName;
     private String currencySymbol;
     private String flagId;
@@ -54,11 +54,11 @@ public class CountryModel {
         this.currencyCode = currencyCode;
     }
 
-    public float getCurrency() {
+    public double getCurrency() {
         return currency;
     }
 
-    public void setCurrency(float currency) {
+    public void setCurrency(double currency) {
         this.currency = currency;
     }
 

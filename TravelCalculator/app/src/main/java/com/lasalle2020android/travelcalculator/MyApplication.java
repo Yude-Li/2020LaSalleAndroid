@@ -27,23 +27,9 @@ public class MyApplication extends Application {
         boolean fisrtTime = settingConfig.getIsFirstTime();
         countryConfig.initConfigData(fisrtTime);
 
-        HttpServiceThread httpServiceThread = new HttpServiceThread(getApplicationContext(), this, HttpServiceThread.ActionMode.UPDATE_CURRENCY);
-        httpServiceThread.start();
-        try{
-            httpServiceThread.join();
-        }catch(InterruptedException ie){}
-
         if (fisrtTime) {
             settingConfig.setIsFirstTime(false);
-
-            // get all currency from api
-//            HttpServiceThread httpServiceThread = new HttpServiceThread(getApplicationContext(), this, HttpServiceThread.ActionMode.UPDATE_CURRENCY);
-//            httpServiceThread.start();
-//            try{
-//                httpServiceThread.join();
-//            }catch(InterruptedException ie){}
         }
-
     }
 
     @Override

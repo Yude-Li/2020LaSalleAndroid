@@ -274,7 +274,7 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
 
     // region Dialog Fragment callback
     @Override
-    public void onSelectCountry(int Id, String displayName, int countryNum, String countryCode, String currencyCode, float currency, String currencyName, String currencySymbol, int flagDrawableResID) {
+    public void onSelectCountry(int Id, String displayName, int countryNum, String countryCode, String currencyCode, double currency, String currencyName, String currencySymbol, int flagDrawableResID) {
         selectedCountry = new CountryModel();
         selectedCountry.setId(Id);
         selectedCountry.setDisplayName(displayName);
