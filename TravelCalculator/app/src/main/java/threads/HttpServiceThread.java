@@ -48,6 +48,9 @@ public class HttpServiceThread extends Thread {
 
     Constants.ActionMode actionMode;
 
+    private static List<ApiResponseModel> rateList = new ArrayList<>();
+
+
 
 //    public HttpServiceThread(MyApplication componentInfo, Context ctx, ServerResponseNotifier mHandler, String body, int requestNo) {
 //        this.componentInfo = componentInfo;
@@ -67,6 +70,13 @@ public class HttpServiceThread extends Thread {
         this.bodyData = body;
         this.serverResponseNotifier = mHandler;
     }
+
+    public HttpServiceThread(Context context, Constants.ActionMode updateCurrency) {
+        this.ctx = ctx;
+        this.actionMode = actionMode;
+    }
+
+
 
     public void setConversionCurrencyBase(String newCurrency) {
         // Update currency base on the original country
@@ -170,7 +180,20 @@ public class HttpServiceThread extends Thread {
     }
 
     public void parseConvertCurrencyJson(String jsonString) {
+        // {"rates":{"GBP":0.809054937},"base":"USD","date":"2020-04-22"}
+        try {
+            JSONObject jsonGet = new JSONObject(jsonString);
+            String rates = jsonGet.getString("rates");
+            String base = jsonGet.getString("base");
 
+            JSONObject jsonRate = new JSONObject(rates);
+            Iterator<String> keysItr = jsonRate.keys();
+
+            String currency = keysItr.next();
+            Double value = Double.valueOf(jsonRate.get(currency).toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public static String streamToString(InputStream is) throws IOException {
@@ -181,6 +204,10 @@ public class HttpServiceThread extends Thread {
             sb.append(line);
         }
         return sb.toString();
+    }
+
+    public List<ApiResponseModel> GetAllCurrencyList() {
+        return rateList;
     }
 }
 
