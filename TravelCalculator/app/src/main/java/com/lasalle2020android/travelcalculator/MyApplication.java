@@ -6,9 +6,12 @@ import android.util.Log;
 
 import DataConfig.CountryConfigAccess;
 import DataConfig.SettingConfigAccess;
+import Model.ApiResponseModel;
+import callbacks.ServerResponseNotifier;
+import commonutilities.Constants;
 import threads.HttpServiceThread;
 
-public class MyApplication extends Application {
+public class MyApplication extends Application implements ServerResponseNotifier {
 
     SettingConfigAccess settingConfig;
     CountryConfigAccess countryConfig;
@@ -27,7 +30,7 @@ public class MyApplication extends Application {
         boolean fisrtTime = settingConfig.getIsFirstTime();
         countryConfig.initConfigData(fisrtTime);
 
-        HttpServiceThread httpServiceThread = new HttpServiceThread(getApplicationContext(), this, HttpServiceThread.ActionMode.UPDATE_CURRENCY);
+        HttpServiceThread httpServiceThread = new HttpServiceThread(getApplicationContext(), this, Constants.ActionMode.UPDATE_CURRENCY,"",this);
         httpServiceThread.start();
         try{
             httpServiceThread.join();
@@ -62,6 +65,11 @@ public class MyApplication extends Application {
 
     public static void activityPaused() {
         isActivityRunning = false;// this will set false when activity paused
+
+    }
+
+    @Override
+    public void onServerResponseRecieved(ApiResponseModel response, int resultCode, boolean useResponseDirectly) {
 
     }
 }
