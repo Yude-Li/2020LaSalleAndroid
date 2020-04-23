@@ -118,7 +118,7 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
             {
                 if (tripId != -1) { // For edit, update db
                     new DatabaseOperations_Thread(TripInfoEditActivity.this, Constants.TABLE.TRIPINFO,
-                            Constants.DATABASE_OPERATION.UPDATE_RECORD, this, tripId).execute();
+                            Constants.DATABASE_OPERATION.UPDATE_RECORD, this, tripInfo,null).execute();
                 }
                 else { // For create, add db
                     if (inputCheck()) {
@@ -257,8 +257,13 @@ public class TripInfoEditActivity extends AppCompatActivity  implements Database
     }
 
     @Override
+    public void onUpdatePerformed(boolean isSuccess) {
+
+    }
+
+    @Override
     public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
-        if (mTrip != null && mAllTrips.size()>1) {
+        if (mTrip != null ) {
             initialViewObjectsWithValue(mTrip);
         }
         else {

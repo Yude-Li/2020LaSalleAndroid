@@ -165,26 +165,31 @@ try {
     }
 
 
+private ContentValues getTripValues(TripInfoModel trip){
 
+    ContentValues values = new ContentValues();
+    // `id` and `timestamp` will be inserted automatically.
+    // no need to add them
+    values.put(Constants.COLUMN_TRIPNAME, trip.getTripName());
+    values.put(Constants.COLUMN_TRAVELCOUNTRY, trip.getTravelCountry());
+    values.put(Constants.COLUMN_STARTDATE, trip.getStartDate());
+    values.put(Constants.COLUMN_ENDDATE, trip.getEndDate());
+    values.put(Constants.COLUMN_TAX, trip.getTax());
+    values.put(Constants.COLUMN_BREAKFAST_TIP, trip.getBreakfastTip());
+    values.put(Constants.COLUMN_LUNCH_TIP, trip.getLunchTip());
+    values.put(Constants.COLUMN_DINNER_TIP, trip.getDinnerTip());
+
+    return  values;
+}
 
     public long addTrip(TripInfoModel trip) {
         // get writable database as we want to write data
 
 
-        ContentValues values = new ContentValues();
-        // `id` and `timestamp` will be inserted automatically.
-        // no need to add them
-        values.put(Constants.COLUMN_TRIPNAME, trip.getTripName());
-        values.put(Constants.COLUMN_TRAVELCOUNTRY, trip.getTravelCountry());
-        values.put(Constants.COLUMN_STARTDATE, trip.getStartDate());
-        values.put(Constants.COLUMN_ENDDATE, trip.getEndDate());
-        values.put(Constants.COLUMN_TAX, trip.getTax());
-        values.put(Constants.COLUMN_BREAKFAST_TIP, trip.getBreakfastTip());
-        values.put(Constants.COLUMN_LUNCH_TIP, trip.getLunchTip());
-        values.put(Constants.COLUMN_DINNER_TIP, trip.getDinnerTip());
+
 
         // insert row
-        long id = database.insert(Constants.TABLE_NAME_TRIPINFO, null, values);
+        long id = database.insert(Constants.TABLE_NAME_TRIPINFO, null, getTripValues(trip));
 
         // close db connection
         close();
@@ -231,10 +236,7 @@ try {
          return trips;
      }
 
-
-     public long addExpense(ExpenseModel mExpenseModel) {
-         // get writable database as we want to write data
-
+     private ContentValues getExpenseValues(ExpenseModel mExpenseModel){
 
          ContentValues values = new ContentValues();
          // `id` and `timestamp` will be inserted automatically.
@@ -245,8 +247,17 @@ try {
          values.put(Constants.COLUMN_EXPENSE_CONVERTED_AMOUNT, mExpenseModel.getConvertedAmount());
          values.put(Constants.COLUMN_EXPENSE_DESCRIPTION, mExpenseModel.getExpenseDesc());
          values.put(Constants.COLUMN_TRIP_ID, mExpenseModel.getTripId());
+
+         return  values;
+     }
+
+     public long addExpense(ExpenseModel mExpenseModel) {
+         // get writable database as we want to write data
+
+
+
          // insert row
-         long id = database.insert(Constants.TABLE_NAME_EXPENSE, null, values);
+         long id = database.insert(Constants.TABLE_NAME_EXPENSE, null, getExpenseValues(mExpenseModel));
 
          // close db connection
          close();
@@ -305,6 +316,22 @@ try {
 
          database.delete(Constants.TABLE_NAME_EXPENSE, Constants.COLUMN_ID + " = ?",
                  new String[]{String.valueOf(expenseModel.getId())});
+         close();
+     }
+
+
+
+     public void updateExpense(ExpenseModel expenseModel) {
+
+         database.update(Constants.TABLE_NAME_EXPENSE, getExpenseValues(expenseModel),Constants.COLUMN_ID + " = ?",
+                 new String[]{String.valueOf(expenseModel.getId())});
+         close();
+     }
+
+     public void updateTrips(TripInfoModel tripInfoModel) {
+
+         database.update(Constants.TABLE_NAME_TRIPINFO, getTripValues(tripInfoModel),Constants.COLUMN_ID + " = ?",
+                 new String[]{String.valueOf(tripInfoModel.getId())});
          close();
      }
 

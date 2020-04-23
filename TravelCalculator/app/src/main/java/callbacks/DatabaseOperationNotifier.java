@@ -11,6 +11,7 @@ public interface DatabaseOperationNotifier {
     void onCurrencyRetrivePerformed(boolean isSuccess);
     void onDB_BootCompleted(boolean isSuccess);
     void onDeletePerformed(boolean isSuccess );
+    void onUpdatePerformed(boolean isSuccess);
 
     void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip );
     void getExpenses_INFO(List<ExpenseModel> mAllExpense, int mCount, ExpenseModel mExpense );

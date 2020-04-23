@@ -238,6 +238,11 @@ public class TripListActivity extends AppCompatActivity implements DatabaseOpera
     }
 
     @Override
+    public void onUpdatePerformed(boolean isSuccess) {
+
+    }
+
+    @Override
     public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
         if (mAllTrips != null && mAllTrips.size()>1) {
 

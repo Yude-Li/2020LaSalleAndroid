@@ -298,6 +298,11 @@ mBundle=getIntent().getBundleExtra("bundle");
     }
 
     @Override
+    public void onUpdatePerformed(boolean isSuccess) {
+
+    }
+
+    @Override
     public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
         if (mTrip != null) {
             mTripInfo = mTrip;

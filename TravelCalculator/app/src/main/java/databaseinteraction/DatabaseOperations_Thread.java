@@ -139,6 +139,15 @@ public class DatabaseOperations_Thread extends AsyncTask {
 
 
                 break;
+            case UPDATE_RECORD:
+                if (mTableName == Constants.TABLE.TRIPINFO) {
+
+                    dbOperations.updateTrips(mTripInfoModel);
+
+                }else if (mTableName == Constants.TABLE.EXPENSE) {
+                    dbOperations.updateExpense(mExpenseModel);
+                }
+                break;
 
 
         }
@@ -215,6 +224,9 @@ public class DatabaseOperations_Thread extends AsyncTask {
                 }else if (mTableName == Constants.TABLE.EXPENSE) {
                     mDatabaseOperationNotifier.onSavePerformed(true);
                 }
+            case UPDATE_RECORD:
+                mDatabaseOperationNotifier.onUpdatePerformed(true);
+                break;
 
 
         }

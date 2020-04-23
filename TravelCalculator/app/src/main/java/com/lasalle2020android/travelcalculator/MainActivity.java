@@ -739,6 +739,11 @@ public class MainActivity extends AppCompatActivity implements ServerResponseNot
     }
 
     @Override
+    public void onUpdatePerformed(boolean isSuccess) {
+
+    }
+
+    @Override
     public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
 
 

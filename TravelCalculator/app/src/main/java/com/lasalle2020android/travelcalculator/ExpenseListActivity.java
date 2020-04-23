@@ -257,6 +257,11 @@ public class ExpenseListActivity extends AppCompatActivity implements DatabaseOp
     }
 
     @Override
+    public void onUpdatePerformed(boolean isSuccess) {
+
+    }
+
+    @Override
     public void getTrips_INFO(List<TripInfoModel> mAllTrips, int mCount, TripInfoModel mTrip) {
 
     }
