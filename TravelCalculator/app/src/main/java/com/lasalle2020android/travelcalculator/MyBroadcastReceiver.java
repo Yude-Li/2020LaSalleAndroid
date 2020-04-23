@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import DataConfig.SettingConfigAccess;
+import commonutilities.Constants;
 import threads.HttpServiceThread;
 import threads.NetworkCheckStatus;
 
@@ -49,7 +50,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 
     private void updateCurrencyFromApi(Context context) {
         // Call api from http thread and update
-        HttpServiceThread httpServiceThread = new HttpServiceThread(context, HttpServiceThread.ActionMode.UPDATE_CURRENCY);
+        HttpServiceThread httpServiceThread = new HttpServiceThread(context, Constants.ActionMode.UPDATE_CURRENCY);
         httpServiceThread.start();
         try{
             httpServiceThread.join();
