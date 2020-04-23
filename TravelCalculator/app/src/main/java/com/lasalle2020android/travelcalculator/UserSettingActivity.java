@@ -54,10 +54,8 @@ public class UserSettingActivity extends AppCompatActivity implements CountryPic
         settingConfig = new SettingConfigAccess(getApplicationContext());
         originalCountryTextView = findViewById(R.id.usersetting_textview_countrylist);
 
-        settingConfig.setOriginalCountryId(18); // Give a default country id, 18 is Canada.
-
         for (CountryModel c: countryConfig.getCountriesList()) {
-            if (c.getId() == 18) {
+            if (c.getId() == settingConfig.getOriginalCountryId()) {
                 originalCountryTextView.setText(c.getDisplayName());
                 break;
             }
